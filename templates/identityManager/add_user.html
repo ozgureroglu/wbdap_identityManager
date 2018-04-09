@@ -1,0 +1,28 @@
+{%  extends "identityManager/identityManager_app_template.html" %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+
+{% block content %}
+
+{% include 'identityManager/user_list.html' %}
+<br>
+<hr>
+
+    {% crispy form %}
+
+
+{#<div class="formstyle">#}
+{#    <form method="post" action="" class="">#}
+        {% csrf_token %}
+{#        <table cellpadding="0">{{ form.as_table }}</table>#}
+{#        <br>#}
+{#        <input type="submit" value="Add User">#}
+{#    </form>#}
+{#</div>#}
+    
+{% endblock %}
+
+
+
+

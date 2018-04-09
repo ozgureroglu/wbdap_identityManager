@@ -1,0 +1,49 @@
+<div class="col-lg-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {{ profileOwner.username | capfirst }} {{ profileOwner.last_name | capfirst }}
+
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+
+            {# USer photo#}
+            <div class="col-lg-3">
+                <div class="panel ">
+                    <img src="{{ STATIC_URL }}identityManager/images/default_profile.jpg" class="img-thumbnail"
+                         alt="Cinque Terre" width="304" height="236">
+                </div>
+            </div>
+
+            <div class="col-lg-9">
+                <div class="panel panel-default panel-default" style="border: 0">
+                    <div class="panel-body">
+                        <p>
+                            <small>
+                                {{ profile.aboutMe }}
+                            </small>
+                        </p>
+                    </div>
+                    {% include "identityManager/modal/edit_personal_details_Modal.html" %}
+                </div>
+            </div>
+
+            <div class="col-lg-9">
+                <div class="panel panel-default panel-default" style="border: 0">
+                    <div class="panel-body">
+                        <u><strong>Studied@{{ educationalRec.count }} schools</strong> <br></u>
+                        {% for record in educationalRec %}
+                            <strong>{{ record.school }},</strong> {{ record.degree }},{{ record.grade}}<br>
+                        {% endfor %}
+                    </div>
+                    {% include "identityManager/modal/edit_personal_details_Modal.html" %}
+                </div>
+            </div>
+
+
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel .chat-panel -->
+</div>
+<!-- /.col-lg-4 -->

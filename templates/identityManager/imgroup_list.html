@@ -1,0 +1,37 @@
+<div id="jsGrid"></div>
+{% csrf_token %}
+
+<div class="main">
+
+    <div class="panel panel-default">
+        <div class="panel-heading clearfix">
+            <div class="panel-title">
+                Groups
+
+                <button type="button" class="btn btn-success identityObjectAdd_FormRequest_Button btn-sm pull-right"
+                        data-target="#addIdentityObjectModal"
+                        id="showIdentityAddModal_button">
+
+                    Add Group
+                </button>
+            </div>
+
+        </div>
+        <div class="panel-body">
+            <table id="wbdap_imgroup_list_table" class="display">
+                <thead>
+                <tr style="text-align: center">
+
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Active</th>
+                    <th>Member Users</th>
+                    <th>Member Groups</th>
+                    <th style="column-span: 4;text-align: center">Operations</th>
+                </tr>
+                </thead>
+
+            </table>
+        </div>
+    </div>
+</div>

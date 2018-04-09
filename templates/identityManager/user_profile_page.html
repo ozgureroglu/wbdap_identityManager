@@ -1,0 +1,95 @@
+{% extends "identityManager/identityManager_app_template.html" %}
+{#{% extends "projectCore/wide_page_template.html" %}#}
+{% block title %}{{ profileOwner | capfirst }} Profile{% endblock %}
+
+
+
+{% block application_head_stylesheet %}
+    {{ block.super }}
+    <style>
+        .toggler {
+            width: 500px;
+            height: 200px;
+        }
+
+        #button {
+            padding: .5em 1em;
+            text-decoration: none;
+        }
+
+        #effect {
+            position: relative;
+        }
+
+        .panel-body svg {
+            margin-right: 20px;
+        }
+
+
+        #effect h3 {
+            margin: 0;
+            padding: 0.4em;
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
+
+{% block page_content %}
+    {{ block.super }}
+    {% include "identityManager/user_profile_content.html" %}
+
+
+{% endblock %}
+
+{% block application_body_jscript %}
+    {{ block.super }}
+
+    <script>
+        $(function () {
+            // run the currently selected effect
+            function runEffect(target_id) {
+                // get effect type from
+                {#      var selectedEffect = $( "#effectTypes" ).val();#}
+                var selectedEffect = "fade";
+
+                // Most effect types need no options passed by default
+                var options = {};
+                // some effects have required parameters
+                if (selectedEffect === "scale") {
+                    options = {percent: 50};
+                } else if (selectedEffect === "size") {
+                    options = {to: {width: 200, height: 60}};
+                }
+
+                // Run the effect
+                $("#" + target_id + "").toggle(selectedEffect, options, 500, callback);
+            }
+
+            // Callback function to bring a hidden box back
+            function callback() {
+                {#      setTimeout(function() {#}
+                {#        $( "#effect" ).removeAttr( "style" ).hide().fadeIn();#}
+                {#      }, 1000 );#}
+            }
+
+            // Set effect from select menu value
+            $(".togglerButton").on("click", function () {
+                var target_id = this.getAttribute('data-target-divid');
+
+                runEffect(target_id);
+            });
+
+            // Set effect from select menu value
+            $("#addEducationRecord").on("click", function () {
+                alert('add');
+            });
+
+            // Set effect from select menu value
+            $("#addWorkExperienceRecord").on("click", function () {
+                alert('add');
+            });
+        });
+    </script>
+
+{% endblock %}

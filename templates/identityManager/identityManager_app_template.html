@@ -1,0 +1,21 @@
+{% extends "projectCore/template_level_3_common_content.html" %}
+
+{% load i18n %}
+{% load staticfiles %}
+
+{% block title %}{{ file }}{% endblock %}
+
+{% block head_stylesheet %}
+        {{ block.super }}
+        <link href="{{ STATIC_URL }}identityManager/css/identityManager.css" rel="stylesheet">
+{% endblock %}
+
+
+{% block body_jscript %}
+    {{ block.super }}
+    <script src="{{ STATIC_URL }}identityManager/jscript/csrfUtil.js" ></script>
+    <script src="{{ STATIC_URL }}identityManager/jscript/table_ops.js" ></script>
+
+{% endblock %}
+
+

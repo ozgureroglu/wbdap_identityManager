@@ -1,0 +1,19 @@
+{% include '/user_list.html' %}
+<br>
+<hr>
+
+<div class="formstyle">
+    <form method="post" action="" class="">
+        {% csrf_token %}
+        <table cellpadding="0">{{ form.as_table }}</table>
+        <br>
+        <input type="submit" value="Add User">
+    </form>
+</div>
+
+<div style="clear: both"></div>
+
+
+
+
+

@@ -1,0 +1,20 @@
+[
+{
+  "model": "identityManager.imuser",
+  "pk": 1,
+  "fields": {
+    "ss": "ff",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 22,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]

@@ -1,0 +1,22 @@
+{#{% extends "identityManager/identityManager_app_template.html" %}#}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+
+{% block page_content%}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Edit USer</div>
+                    <div class="panel-body">
+                            {% crispy form %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

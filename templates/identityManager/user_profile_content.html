@@ -1,0 +1,56 @@
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header">Profile page
+                of {{ profileOwner.first_name | capfirst }} {{ profileOwner.last_name | capfirst }}</h3>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    <a href="#" class="togglerButton" data-target-divid="educationDiv">
+                        <i class="fa fa-graduation-cap fa-5x pull-left" title="Educational Details"></i></a>
+
+                    <a href="#" class="togglerButton" data-target-divid="workExperienceDiv">
+                        <i class="fa fa-briefcase fa-5x pull-left" title="Working Experience"></i></a>
+
+                    <a href="#" class="togglerButton" data-target-divid="personalTimeLineDiv">
+                        <i class="fa fa-history fa-5x pull-left" title="Personal Time Line"></i></a>
+
+
+                    <a href="#" class="togglerButton" data-target-divid="personalDetailsDiv">
+                        <i class="fa fa-camera-retro fa-5x  pull-left" title="Details"></i></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        {% include "identityManager/summary.html" %}
+        {% include "identityManager/basicInfo.html" %}
+    </div>
+
+
+    <div class="row">
+
+
+        {#        Edit Modal #}
+        {% include "identityManager/modal/edit_personal_details_Modal.html" %}
+
+
+        {% include "identityManager/personal_time_line.html" %}
+        {% include "identityManager/education.html" %}
+        {% include "identityManager/workExperience.html" %}
+
+
+        <!-- /.row -->
+    </div>
+</div>

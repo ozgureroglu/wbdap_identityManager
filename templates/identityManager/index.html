@@ -1,0 +1,246 @@
+{% extends "identityManager/identityManager_app_template.html" %}
+{% load i18n %}
+
+{% block title %}{{ file }}{% endblock %}
+
+{% block page_content %}
+    {{ block.super }}
+    {% csrf_token %}
+
+    <div id="container">
+
+        <!-- Large EDIT modal -->
+        <div class="modal fade" id="edit-row-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Edit Row</h3>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-primary btn-ok">Send</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DELETE Modal -->
+        <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Delete
+                    </div>
+                    <div class="modal-body">
+                        Are you sure?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-danger btn-ok">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+
+                {% include "identityManager/modal/addIdentityObjectModal.html" %}
+
+                <div class="row">
+
+                    {# Nesne listelerini goster#}
+                    <div class="col-sm-12 col-lg-12">
+
+                        <h2><i class="fa fa-id-card"></i> Identity Manager</h2>
+                        <hr>
+
+                        {% if request.path == '/identityManager/user/' %}
+                            {% include "identityManager/user_list.html" %}
+                        {% elif request.path == '/identityManager/imgroup/' %}
+                            {% include "identityManager/imgroup_list.html" %}
+                        {% elif request.path == '/identityManager/role/' %}
+                            {% include "identityManager/imrole_list.html" %}
+                        {% else %}
+
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block body_jscript %}
+    {{ block.super }}
+    <script src="{{ STATIC_URL }}identityManager/jscript/identityManager.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+
+            $('#wbdap_imuser_list_table').wbdap_api_backed_datatable({
+                table: '#wbdap_imuser_list_table',
+                list_url: "/api/v1/identityManager/imusers/?format=json",
+                create_url: "/api/v1/identityManager/imusers/",
+                edit_url: "/api/v1/identityManager/imusers/_id_/",
+                remove_url: "/api/v1/identityManager/imusers/_id_/",
+                table_columns: [
+                    {
+                        data: null,
+                        defaultContent: '',
+                        className: 'select-checkbox not_editable',
+                        orderable: false
+                    },
+                    {"data": "username"},
+                    {"data": "first_name"},
+                    {"data": "last_name"},
+                    {"data": "email"},
+                    {
+                        "data": "is_superuser",
+                        render: function (data, type, row) {
+                            if (type === 'display') {
+                                return '<input type="checkbox" class="datatable-is_superuser">';
+                            }
+                            return data;
+                        },
+                        className: "dt-body-center"
+                    },
+                    {
+                        data: "is_staff",
+                        render: function (data, type, row) {
+                            if (type === 'display') {
+                                return '<input type="checkbox" class="datatable-is_staff">';
+                            }
+                            return data;
+                        },
+                        className: "dt-body-center"
+                    },
+                    {
+                        data: "is_active",
+                        render: function (data, type, row) {
+                            if (type === 'display') {
+                                return '<input type="checkbox" class="datatable-is_active">';
+                            }
+                            return data;
+                        },
+                        className: "dt-body-center"
+                    },
+
+                    {"data": "last_login", className:"not_editable"},
+
+                ],
+                editor_fields: [
+
+                    {
+                        label: "Username:",
+                        name: "username"
+                    }, {
+                        label: "First name:",
+                        name: "first_name"
+                    }, {
+                        label: "Last name:",
+                        name: "last_name"
+                    }, {
+                        label: "Email:",
+                        name: "email"
+                    }, {
+                        label: "Superuser:",
+                        name: "is_superuser",
+                        type: "checkbox",
+                        separator: "|",
+                        options: [
+                            {label: '', value: true},
+                            {#{label: '', value: false},#}
+                        ]
+                    }, {
+                        label: "Staff:",
+                        name: "is_staff",
+                        type: "checkbox",
+                        separator: "|",
+                        options: [
+                            {label: '', value: true},
+                            {#{label: '', value: false},#}
+                        ]
+                    }, {
+                        label: "Active:",
+                        name: "is_active",
+                        type: "checkbox",
+                        separator: "|",
+                        options: [
+                            {label: '', value: true},
+                            {#{label: '', value: false},#}
+                        ]
+                    }
+                ]
+            });
+
+
+
+
+
+            $('#wbdap_imgroup_list_table').wbdap_api_backed_datatable({
+                table: '#wbdap_imgroup_list_table',
+                list_url: "/identityManager/api/groups/?format=json",
+                create_url: "/identityManager/api/groups/",
+                edit_url: "/identityManager/api/groups/_id_/",
+                remove_url: "/identityManager/api/groups/_id_/",
+                table_columns: [
+                    {"data": "name"},
+                    {"data": "description"},
+                    {"data": "active"},
+                    {"data": "memberUsers[, ].username"},
+                    {"data": "memberGroups[, ].name"},
+
+                    {
+                        "data": null,
+                        "defaultContent": "" +
+                        "<a href='#' class='edit_link'><i class=\"fa fa-pencil-alt\" aria-hidden=\"true\"\n" +
+                        "type=\"button\" class=\"btn btn-primary\" data-toggle=\"modal\" data-target=\"#edit-row-modal-lg\"" +
+                        "data-toggle=\"tooltip\"\n" +
+                        "data-placement=\"left\" title=\"Edit\"></i></a>" +
+                        "" +
+                        "<a href='#' class='edit_link'><i class=\"fa fa-lock\" aria-hidden=\"true\"\n" +
+                        "data-toggle=\"tooltip\"\n" +
+                        "data-placement=\"left\" title=\"Edit\"></i></a>" +
+                        "" +
+                        "<a href='#' class='edit_link'><i class=\"fa fa-trash-alt\" aria-hidden=\"true\" \n" +
+                        "style = \"color:red\" " +
+                        "data-toggle=\"tooltip\"\n" +
+                        "data-placement=\"left\" title=\"Edit\"></i></a>"
+                    }
+                ],
+                editor_fields: [{
+                    label: "Name:",
+                    name: "name"
+                }, {
+                    label: "Description:",
+                    name: "description"
+                }, {
+                    label: "Active:",
+                    name: "active"
+                }, {
+                    label: "Member Users:",
+                    name: "memberUsers"
+                }, {
+                    label: "Member Groups:",
+                    name: "memberGroups[, ].name"
+                }
+                ]
+            });
+
+            {% if messageType == "Exception" %}
+                $.notify("{{ message }}", "error");
+            {% endif %}
+        });
+
+    </script>
+
+{% endblock %}
+

@@ -1,0 +1,412 @@
+{% extends "identityManager/identityManager_app_template.html" %}
+{% load i18n %}
+
+{% block title %}{{ file }}{% endblock %}
+
+{% block page_content %}
+    {{ block.super }}
+
+    <div class="container-fluid">
+        <div class="row">
+
+            {% include "identityManager/modal/addIdentityObjectModal.html" %}
+
+            <div class="row">
+                <div class="col-lg-2">
+                    {# <h1 class="page-header">{{ user.first_name }} {{ user.last_name }}</h1>#}
+                </div>
+
+                {# Nesne listelerini goster#}
+                <div class="col-lg-8">
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><h3>Group: {{ imgroup.name }}</h3></div>
+                        <div class="panel-body">
+                            <p>{{ imgroup.description }}</p>
+
+
+                            <div class="row">
+                                <div class="col-md-1"><h3><span class="label label-primary">{{ users.count }} Users</span></h3></div>
+                                <div class="col-md-1"><h3><span class="label label-primary">{{ groups.count }} Groups</span></h3></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                <h7>Member Users</h7>
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
+                                            data-target="#memberUserAddModal">Add Member User
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="panel-body">
+
+
+                            <div class="row">
+
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                    <tr style="text-align: center">
+                                        <th>ID</th>
+                                        <th>Username</th>
+                                        <th>Name</th>
+                                        <th>Surname</th>
+                                        <th>Email</th>
+                                        <th>Admin</th>
+                                        <th>Status</th>
+                                        <th style="column-span: 4;text-align: center">Operations</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    {% for user in users %}
+
+                                        <tr>
+                                            <td>{{ user.id }}</td>
+
+                                            <td>
+                                                <a href="{% url 'identityManager:profileView' user.id %}">{{ user.username }}</a>
+                                            </td>
+
+                                            <td>{{ user.first_name }}</td>
+
+                                            <td>{{ user.last_name }}</td>
+                                            <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
+                                            <td>{% if  user.is_superuser %}
+                                                <span class="label label-success">Yes</span>
+                                            {% else %}
+                                                <span class="label label-danger">No</span>
+                                            {% endif %}</td>
+                                            <td>{% if  user.is_active %}
+                                                <span class="label label-success">Active</span>
+                                            {% else %}
+                                                <span class="label label-danger">Locked</span>
+                                            {% endif %}</td>
+                                            <td style="text-align: center">
+                                                <a href="/identityManager/user/update/{{ user.id }}/"><i
+                                                        class="fa fa-pencil"
+                                                        aria-hidden="true"
+                                                        data-toggle="tooltip"
+                                                        data-placement="left"
+                                                        title="Edit"></i></a>&nbsp;&nbsp;&nbsp;
+                                                <a href="changePasswd"><i class="fa fa-key" aria-hidden="true"
+                                                                          data-toggle="tooltip"
+                                                                          data-placement="left"
+                                                                          title="Change Password"></i></a>&nbsp;&nbsp;&nbsp;
+                                                <a href="lock/{{ user.id }}"><i class="fa fa-lock" aria-hidden="true"
+                                                                                data-toggle="tooltip"
+                                                                                data-placement="left"
+                                                                                title="Lock Account"></i></a>&nbsp;&nbsp;&nbsp;
+                                                <a href="memberUser/remove/{{ user.id }}/"><i class="fa fa-trash"
+                                                                                              aria-hidden="true"
+                                                                                              data-toggle="tooltip"
+                                                                                              data-placement="left"
+                                                                                              title="Remove User From Group"></i></a>
+                                            </td>
+                                        </tr>
+
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                <h7>Member Groups</h7>
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
+                                            data-target="#memberGroupAddModal">Add Member Group
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="panel-body">
+
+
+                            <div class="row">
+                                {#                                {% for user in users %}#}
+                                {#                                    <div class="col-md-1">#}
+                                {#                                        <div class="checkbox">#}
+                                {#                                            <label><input type="checkbox" value="">{{ user.first_name | capfirst }} {{ user }}</label>#}
+                                {#                                        </div>#}
+                                {#                                    </div>#}
+                                {#                                {% endfor %}#}
+                                {#                            #}
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                    <tr style="text-align: center">
+                                        <th>ID</th>
+                                        <th>Group Name</th>
+                                        <th>Description</th>
+
+                                        <th>Status</th>
+                                        <th style="column-span: 4;text-align: center">Operations</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    {% for group in groups %}
+
+                                        <tr>
+                                            <td>{{ group.id }}</td>
+
+
+                                            <td>
+                                                <a href="{% url 'identityManager:imgroup_home' group.id %}">{{ group.name }}</a>
+                                            </td>
+
+                                            <td>{{ group.description }}</td>
+
+                                            <td>{% if  group.active %}
+                                                <span class="label label-success">Active</span>
+                                            {% else %}
+                                                <span class="label label-danger">Locked</span>
+                                            {% endif %}</td>
+                                            <td style="text-align: center">
+                                                <a href="/identityManager/group/update/{{ user.id }}/"><i
+                                                        class="fa fa-pencil"
+                                                        aria-hidden="true"
+                                                        data-toggle="tooltip"
+                                                        data-placement="left"
+                                                        title="Edit"></i></a>&nbsp;&nbsp;&nbsp;
+
+                                                <a href="lock/{{ user.id }}"><i class="fa fa-lock" aria-hidden="true"
+                                                                                data-toggle="tooltip"
+                                                                                data-placement="left"
+                                                                                title="Lock Group"></i></a>&nbsp;&nbsp;&nbsp;
+                                                <a href="memberGroup/remove/{{ group.id }}/"><i class="fa fa-trash"
+                                                                                                aria-hidden="true"
+                                                                                                data-toggle="tooltip"
+                                                                                                data-placement="left"
+                                                                                                title="Remove Group From Group"></i></a>
+                                            </td>
+                                        </tr>
+
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    {#            <h1 class="page-header">{{ user.first_name }} {{ user.last_name }}</h1>#}
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FORM Modals -->
+    <div id="memberUserAddModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add Group Member</h4>
+                </div>
+                <form id="addUserToGroupForm" action="{% url "identityManager:addMemberUser" imgroup.id %}"
+                      method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <p>Type to search user.</p>
+
+                        <div class="ui-widget">
+                            <label for="users">Users: </label>
+                            <textarea name="users" id="users" style="width: 100%"></textarea>
+
+                        </div>
+
+                        {#                        <div class="ui-widget" style="margin-top:2em; font-family:Arial">#}
+                        {#                            Selected Users:<br>#}
+                        {#                        <textarea id="log" disabled=True style="height: 200px; width: 300px; overflow: auto;"#}
+                        {#                                  class="ui-widget-content"></textarea>#}
+                        {#                        </div>#}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary pull-left" id="addSelectedUsers">Add</button>
+                        <button type="reset" class="btn btn-warning">Reset</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="memberGroupAddModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add Group Member</h4>
+                </div>
+                <form id="addUserToGroupForm" action="{% url "identityManager:addMemberGroup" imgroup.id %}"
+                      method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <p>Type to search group.</p>
+
+                        <div class="ui-widget">
+                            <label for="groups">Groups: </label>
+                            <textarea name="groups" id="groups" style="width: 100%"></textarea>
+
+                        </div>
+
+                        {#                        <div class="ui-widget" style="margin-top:2em; font-family:Arial">#}
+                        {#                            Selected Users:<br>#}
+                        {#                        <textarea id="log" disabled=True style="height: 200px; width: 300px; overflow: auto;"#}
+                        {#                                  class="ui-widget-content"></textarea>#}
+                        {#                        </div>#}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary pull-left" id="addSelectedUsers">Add</button>
+                        <button type="reset" class="btn btn-warning">Reset</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+
+
+{% block application_body_jscript %}
+    {{ block.super }}
+    <script src="{{ STATIC_URL }}identityManager/jscript/identityManager.js"></script>
+
+    <script>
+
+
+        $(function () {
+
+            function split(val) {
+                return val.split(/,\s*/);
+            }
+
+            function extractLast(term) {
+                return split(term).pop();
+            }
+
+
+            $("#users")
+            // don't navigate away from the field on tab when selecting an item
+                .on("keydown", function (event) {
+                    if (event.keyCode === $.ui.keyCode.TAB &&
+                        $(this).autocomplete("instance").menu.active) {
+                        event.preventDefault();
+                    }
+                })
+                .autocomplete({
+                    minLength: 0,
+                    {#                        source: function (request, response) {#}
+                    {#                            // delegate back to autocomplete, but extract the last term#}
+                    {#                            response($.ui.autocomplete.filter(#}
+                    {#                                    availableTags, extractLast(request.term)));#}
+                    {#                        },#}
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "/identityManager/user/autocompleteUsers",
+                            dataType: "jsonp",
+                            data: {
+                                term: extractLast(request.term)
+                            },
+                            success: function (data) {
+                                response(data);
+                            }
+                        });
+                    },
+                    focus: function () {
+                        // prevent value inserted on focus
+                        return false;
+                    },
+                    appendTo: "#memberUserAddModal",
+                    select: function (event, ui) {
+                        var terms = split(this.value);
+
+                        // remove the current input
+                        terms.pop();
+                        // add the selected item
+                        terms.push(ui.item.value);
+                        // add placeholder to get the comma-and-space at the end
+                        terms.push("");
+                        this.value = terms.join(", ");
+                        return false;
+                    }
+                });
+
+            $("#groups")
+            // don't navigate away from the field on tab when selecting an item
+                .on("keydown", function (event) {
+                    if (event.keyCode === $.ui.keyCode.TAB &&
+                        $(this).autocomplete("instance").menu.active) {
+                        event.preventDefault();
+                    }
+                })
+                .autocomplete({
+                    minLength: 0,
+                    {#                        source: function (request, response) {#}
+                    {#                            // delegate back to autocomplete, but extract the last term#}
+                    {#                            response($.ui.autocomplete.filter(#}
+                    {#                                    availableTags, extractLast(request.term)));#}
+                    {#                        },#}
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "/identityManager/imgroup/autocompleteGroups",
+                            dataType: "jsonp",
+                            data: {
+                                term: extractLast(request.term)
+                            },
+                            success: function (data) {
+                                response(data);
+                            }
+                        });
+                    },
+                    focus: function () {
+                        // prevent value inserted on focus
+                        return false;
+                    },
+                    appendTo: "#memberGroupAddModal",
+                    select: function (event, ui) {
+                        var terms = split(this.value);
+
+                        // remove the current input
+                        terms.pop();
+                        // add the selected item
+                        terms.push(ui.item.value);
+                        // add placeholder to get the comma-and-space at the end
+                        terms.push("");
+                        this.value = terms.join(", ");
+                        return false;
+                    }
+                });
+
+
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% load crispy_forms_tags %}
+{% crispy form %}
+
+<hr>
+{% if request.path == '/identityManager/user/add/' %}
+    <button type="submit" class="button-class-addIdentityObject btn btn-primary">Add User</button>
+{#    {% include "identityManager/modal/addUser_ModalContent.html" %}#}
+{% elif request.path == '/identityManager/imgroup/add/' %}
+    <button type="submit" class="button-class-addIdentityObject btn btn-primary">Add Group</button>
+{#    {% include "identityManager/modal/addGroup_ModalContent.html" %}#}
+{% elif request.path == '/identityManager/role/add/' %}
+    <button type="submit" class="button-class-addIdentityObject btn btn-primary">Add Role</button>
+{#    {% include "identityManager/modal/addRole_ModalContent.html" %}#}
+{% endif %}
+
