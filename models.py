@@ -24,7 +24,7 @@ class IMUser(User):
 
 @admin.register(IMUser)
 class IMUserAdmin(admin.ModelAdmin):
-    list_display = ('first_name',)
+    list_display = ('first_name','last_name')
 
 
 # class Hider(object):

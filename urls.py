@@ -1,7 +1,7 @@
 __author__ = 'ozgur'
 
 from django.urls import path, include
-from identityManager.views import *
+from .views import *
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -40,9 +40,9 @@ urlpatterns = [
     path('imgroup/',imGroup,name='imGroup'),
     path('imgroup/<int:pk>/', imgroup_home, name='imgroup_home'),
     path('imgroup/<int:pk>/memberUser/add/', addMemberUser, name='addMemberUser'),
-    path('imgroup/<int:pk>/memberUser/remove/<id>/', removeMemberUser, name='removeMemberUser'),
+    path('imgroup/<int:pk>/memberUser/remove/<int:id>/', removeMemberUser, name='removeMemberUser'),
     path('imgroup/<int:pk>/memberGroup/add/', addMemberGroup, name='addMemberGroup'),
-    path('imgroup/<int:pk>/memberGroup/remove/<id>/', removeMemberGroup, name='removeMemberGroup'),
+    path('imgroup/<int:pk>/memberGroup/remove/<int:id>/', removeMemberGroup, name='removeMemberGroup'),
     path('imgroup/add/', add_group, name='addGroup'),
     path('imgroup/delete/<int:pk>/', delete_imgroup, name='deleteIMGroup'),
     path('imgroup/autocompleteGroups/',autocompleteGroups,name='autocompleteGroups'),
@@ -53,7 +53,7 @@ urlpatterns = [
     path('role/<int:pk>/assignedUser/add', assignUsersToRole, name='assignUsersToRole'),
     path('role/<int:pk>/assignedGroup/add', assignGroupsToRole, name='assignGroupsToRole'),
     path('role/<int:pk>/permission/add', addPermissionToRole, name='addPermissionToRole'),
-    path('role/<int:pk>/permission/remove/<id>/', removePermissionFromRole, name='removePermissionFromRole'),
+    path('role/<int:pk>/permission/remove/<int:id>/', removePermissionFromRole, name='removePermissionFromRole'),
     path('role/add/', add_imrole, name='add_imrole '),
     path('role/delete/<int:pk>/', delete_imrole, name='deleteIMRole'),
 

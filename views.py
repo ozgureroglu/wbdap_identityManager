@@ -14,8 +14,8 @@ from django.views.generic import UpdateView
 from formtools.wizard.views import SessionWizardView
 from rest_framework import viewsets
 
-from identityManager.forms import *
-from identityManager.models import IMUser, IMGroup, IMRole, IMUserProfile
+from .forms import *
+from .models import IMUser, IMGroup, IMRole, IMUserProfile
 from rest_framework.response import Response
 import django_filters.rest_framework
 from rest_framework import filters
@@ -23,7 +23,7 @@ from rest_framework import filters
 
 
 #Get an instance of the logger: Name should be the name of the logger in settings LOGGING field
-from identityManager.serializers import *
+from .serializers import *
 from projectCore.datatable_viewset import ModifiedViewSet
 
 logger = logging.getLogger('django.request')
