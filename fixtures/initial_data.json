@@ -1,16 +1,11 @@
+Operations to perform:
+  Apply all migrations: realEstateRecommender
+Running migrations:
+  No migrations to apply.
 [
 {
   "model": "identityManager.imuser",
-  "pk": 1,
-  "fields": {
-    "ss": "ff",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "identityManager.imuser",
-  "pk": 22,
+  "pk": 21,
   "fields": {
     "ss": "",
     "groups": [],
