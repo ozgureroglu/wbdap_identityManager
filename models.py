@@ -37,8 +37,8 @@ class IMUserAdmin(admin.ModelAdmin):
 
 
 class IMGroup(Group):
-    memberGroups = models.ManyToManyField('self', blank=True, symmetrical=False)
-    memberUsers = models.ManyToManyField(IMUser, blank=True, related_name='group')
+    memberGroups = models.ManyToManyField('self', blank=True, null=True, symmetrical=False, related_name='member_groups')
+    memberUsers = models.ManyToManyField(IMUser, blank=True, null=True, related_name='member_users')
     description = models.CharField(max_length=200, null=False, blank=False)
     active = models.BooleanField(null=False, blank=True, default=False)
 
@@ -107,17 +107,20 @@ class IMGroupAdmin(admin.ModelAdmin):
 #     list_display = ('name', 'description', 'active',)
 
 
-class IMRole(Group):
-    roleName = models.CharField(max_length=50, null=False, blank=False)
+class IMRole(models.Model):
+    name = models.CharField(max_length=50, null=False, blank=False)
     description = models.CharField(max_length=500, null=False, blank=False)
     # permission = models.ManyToManyField(Permission, related_name="im_role")
     memberGroups = models.ManyToManyField(IMGroup, related_name='group_roles', blank=True)
     memberUsers = models.ManyToManyField(IMUser, related_name='user_roles', blank=True)
 
+    class Meta:
+        verbose_name = 'IM Role'
+        verbose_name_plural = 'IM Roles'
 
 @admin.register(IMRole)
 class IMRoleAdmin(admin.ModelAdmin):
-    list_display = ('roleName', 'description')
+    list_display = ('name', 'description')
 
 
 class IMUserProfile(models.Model):

@@ -81,8 +81,10 @@
     {{ block.super }}
     <script src="{{ STATIC_URL }}identityManager/jscript/identityManager.js"></script>
 
+
     <script>
         $(document).ready(function () {
+            var csrftoken = $("input[name='csrfmiddlewaretoken']").attr('value');
 
 
             $('#wbdap_imuser_list_table').wbdap_api_backed_datatable({
@@ -133,7 +135,7 @@
                         className: "dt-body-center"
                     },
 
-                    {"data": "last_login", className:"not_editable"},
+                    {"data": "last_login", className: "not_editable"},
 
                 ],
                 editor_fields: [
@@ -182,42 +184,69 @@
             });
 
 
+            {#------------------------------------------------------------------------------------------------------#}
 
 
+            imgroup_editor = new $.fn.dataTable.Editor({
+                ajax: {
+                    create: {
+                        type: 'POST',
+                        url: '/api/v1/identityManager/imgroups/',
+                        headers: {
+                            'X-CSRFToken': csrftoken
+                        },
+                        contentType: 'application/json',
+                        data: function (d) {
+                            var keys = Object.keys(d.data);
+                            ndata = JSON.stringify(d.data[keys[0]]);
+                            return ndata;
+                        },
+                    },
+                    edit: {
+                        type: 'PUT',
+                        url: '/api/v1/identityManager/imgroups/_id_/',
+                        headers: {
+                            'X-CSRFToken': csrftoken
+                        },
+                        contentType: 'application/json',
+                        data: function (d) {
+                            console.log(d)
+                            var row_id = Object.keys(d.data)
+                            var jdata = d.data[row_id]
 
-            $('#wbdap_imgroup_list_table').wbdap_api_backed_datatable({
-                table: '#wbdap_imgroup_list_table',
-                list_url: "/identityManager/api/groups/?format=json",
-                create_url: "/identityManager/api/groups/",
-                edit_url: "/identityManager/api/groups/_id_/",
-                remove_url: "/identityManager/api/groups/_id_/",
-                table_columns: [
-                    {"data": "name"},
-                    {"data": "description"},
-                    {"data": "active"},
-                    {"data": "memberUsers[, ].username"},
-                    {"data": "memberGroups[, ].name"},
+                            var jdata_keys = Object.keys(jdata);
+                            $.each(jdata_keys, function (k, v) {
+                                if (v.startsWith('is_')) {
+                                    if (jdata[v] === "") {
+                                        // alert(v+" is empty valued")
+                                        delete jdata[v];
+                                        jdata[v] = 'false';
+                                    }
+                                }
+                            })
 
-                    {
-                        "data": null,
-                        "defaultContent": "" +
-                        "<a href='#' class='edit_link'><i class=\"fa fa-pencil-alt\" aria-hidden=\"true\"\n" +
-                        "type=\"button\" class=\"btn btn-primary\" data-toggle=\"modal\" data-target=\"#edit-row-modal-lg\"" +
-                        "data-toggle=\"tooltip\"\n" +
-                        "data-placement=\"left\" title=\"Edit\"></i></a>" +
-                        "" +
-                        "<a href='#' class='edit_link'><i class=\"fa fa-lock\" aria-hidden=\"true\"\n" +
-                        "data-toggle=\"tooltip\"\n" +
-                        "data-placement=\"left\" title=\"Edit\"></i></a>" +
-                        "" +
-                        "<a href='#' class='edit_link'><i class=\"fa fa-trash-alt\" aria-hidden=\"true\" \n" +
-                        "style = \"color:red\" " +
-                        "data-toggle=\"tooltip\"\n" +
-                        "data-placement=\"left\" title=\"Edit\"></i></a>"
+                            ndata = JSON.stringify(jdata);
+                            return ndata;
+                        },
+
+                    },
+                    remove: {
+                        type: 'DELETE',
+                        url: '/api/v1/identityManager/imgroups/_id_/',
+                        headers: {
+                            'X-CSRFToken': csrftoken
+                        }, contentType: 'application/json',
+                        data: function (d) {
+                            var keys = Object.keys(d.data);
+                            ndata = JSON.stringify(d.data[keys[0]]);
+                            return ndata;
+                        },
                     }
-                ],
-                editor_fields: [{
-                    label: "Name:",
+                },
+                table: "#wbdap_imgroup_list_table",
+                idSrc: 'id',
+                fields: [{
+                    label: "Group Name:",
                     name: "name"
                 }, {
                     label: "Description:",
@@ -225,16 +254,208 @@
                 }, {
                     label: "Active:",
                     name: "active"
+                }
+
+                ]
+            });
+
+
+            $('#wbdap_imgroup_list_table').DataTable({
+                "scrollY": "500px",
+                "scrollCollapse": true,
+                "dom": 'Bfrtip',
+                "paging": true,
+                "select": true,
+                "info": false,
+                "ordering": true,
+                "processing": true,
+                "serverSide": true,
+                {#"order": [[ 1, 'asc' ], [ 2, 'asc' ]],#}
+                "ajax": {
+                    url: "/api/v1/identityManager/imgroups/?format=json",
+                    dataSrc: 'results',
+                    data: function (d) {
+                        var keys = Object.keys(d);
+
+                        var offset = d["start"];
+                        var limit = d["length"];
+                        var search = d["search"];
+                        var ordering = d["order"][0]["column"];
+                        var order_val = d.columns[ordering]['data'];
+
+                        d["offset"] = offset;
+                        d["limit"] = limit;
+                        d["order"][0]["column"] = order_val;
+                        delete d["start"];
+                        delete d["length"];
+                    },
+                    dataFilter: function (d) {
+                        var json = jQuery.parseJSON(d);
+                        json.recordsTotal = json.count;
+                        json.recordsFiltered = json.count;
+                        json.data = json.results;
+
+                        return JSON.stringify(json); // return JSON string
+                    }
+                },
+                "columns": [
+                    {
+                        data: null,
+                        defaultContent: '',
+                        className: 'select-checkbox not_editable',
+                        orderable: false
+                    },
+                    {"data": "name", orderData: 1, targets: 1},
+                    {"data": "description", orderData: 2, targets: 2},
+                    {
+                        data: null,
+                        defaultContent: '',
+                        orderable: false
+                    },
+                ],
+                select: true,
+                buttons: [
+                    {extend: "create", editor: imgroup_editor},
+                    {extend: "edit", editor: imgroup_editor},
+                    {extend: "remove", editor: imgroup_editor}
+                ]
+            });
+
+
+            {#------------------------------------------------------------------------------------------------------#}
+
+
+            imrole_editor = new $.fn.dataTable.Editor({
+                ajax: {
+                    create: {
+                        type: 'POST',
+                        url: '/api/v1/identityManager/imroles/',
+                        headers: {
+                            'X-CSRFToken': csrftoken
+                        },
+                        contentType: 'application/json',
+                        data: function (d) {
+                            var keys = Object.keys(d.data);
+                            ndata = JSON.stringify(d.data[keys[0]]);
+                            return ndata;
+                        },
+                    },
+                    edit: {
+                        type: 'PUT',
+                        url: '/api/v1/identityManager/imroles/_id_/',
+                        headers: {
+                            'X-CSRFToken': csrftoken
+                        },
+                        contentType: 'application/json',
+                        data: function (d) {
+                            console.log(d)
+                            var row_id = Object.keys(d.data)
+                            var jdata = d.data[row_id]
+
+                            var jdata_keys = Object.keys(jdata);
+                            $.each(jdata_keys, function (k, v) {
+                                if (v.startsWith('is_')) {
+                                    if (jdata[v] === "") {
+                                        // alert(v+" is empty valued")
+                                        delete jdata[v];
+                                        jdata[v] = 'false';
+                                    }
+                                }
+                            })
+
+                            ndata = JSON.stringify(jdata);
+                            return ndata;
+                        },
+
+                    },
+                    remove: {
+                        type: 'DELETE',
+                        url: '/api/v1/identityManager/imroles/_id_/',
+                        headers: {
+                            'X-CSRFToken': csrftoken
+                        }, contentType: 'application/json',
+                        data: function (d) {
+                            var keys = Object.keys(d.data);
+                            ndata = JSON.stringify(d.data[keys[0]]);
+                            return ndata;
+                        },
+                    }
+                },
+                table: "#wbdap_imrole_list_table",
+                idSrc: 'id',
+                fields: [{
+                    label: "Role Name:",
+                    name: "name"
                 }, {
-                    label: "Member Users:",
-                    name: "memberUsers"
-                }, {
-                    label: "Member Groups:",
-                    name: "memberGroups[, ].name"
+                    label: "Description:",
+                    name: "description"
                 }
                 ]
             });
 
+
+            $('#wbdap_imrole_list_table').DataTable({
+                "scrollY": "500px",
+                "scrollCollapse": true,
+                "dom": 'Bfrtip',
+                "paging": true,
+                "select": true,
+                "info": false,
+                "ordering": true,
+                "processing": true,
+                "serverSide": true,
+                {#"order": [[ 1, 'asc' ], [ 2, 'asc' ]],#}
+                "ajax": {
+                    url: "/api/v1/identityManager/imroles/?format=json",
+                    dataSrc: 'results',
+                    data: function (d) {
+                        var keys = Object.keys(d);
+
+                        var offset = d["start"];
+                        var limit = d["length"];
+                        var search = d["search"];
+                        var ordering = d["order"][0]["column"];
+                        var order_val = d.columns[ordering]['data'];
+
+                        d["offset"] = offset;
+                        d["limit"] = limit;
+                        d["order"][0]["column"] = order_val;
+                        delete d["start"];
+                        delete d["length"];
+                    },
+                    dataFilter: function (d) {
+                        var json = jQuery.parseJSON(d);
+                        json.recordsTotal = json.count;
+                        json.recordsFiltered = json.count;
+                        json.data = json.results;
+
+                        return JSON.stringify(json); // return JSON string
+                    }
+                },
+                "columns": [
+                    {
+                        data: null,
+                        defaultContent: '',
+                        className: 'select-checkbox not_editable',
+                        orderable: false
+                    },
+                    {"data": "name", orderData: 1, targets: 1},
+                    {"data": "description", orderData: 2, targets: 2},
+                    {
+                        data: null,
+                        defaultContent: '',
+                        orderable: false
+                    },
+                ],
+                select: true,
+                buttons: [
+                    {extend: "create", editor: imrole_editor},
+                    {extend: "edit", editor: imrole_editor},
+                    {extend: "remove", editor: imrole_editor}
+                ]
+            });
+
+            {#-------------------------------------------------------------------------------------------------------------------#}
             {% if messageType == "Exception" %}
                 $.notify("{{ message }}", "error");
             {% endif %}

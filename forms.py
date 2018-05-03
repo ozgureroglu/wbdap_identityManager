@@ -69,7 +69,7 @@ class AddRoleForm(ModelForm):
         #     'username': TextInput(attrs={'class':'form-control input-md','required':''}),
         # }
         # exclude = ('is_staff', 'last_login', 'date_joined', 'groups', 'user_permissions')
-        fields = ('roleName','description')
+        fields = ('name','description')
 
 
 

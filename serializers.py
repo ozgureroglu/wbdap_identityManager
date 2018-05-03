@@ -36,5 +36,5 @@ class IMRoleSerializer(serializers.HyperlinkedModelSerializer):
     # answer = serializers.StringRelatedField(many=True)
     class Meta:
         model=IMRole
-        fields = ('text','examName','chapter','level','questionType')
+        fields = ('id','name','description')
 
