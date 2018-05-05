@@ -141,7 +141,7 @@ def imRole_home(request, pk):
                   {'imrole':imrole,
                    'groups': imrole.memberGroups.all(),
                    'users': imrole.memberUsers.all(),
-                   'permissions': imrole.permissions.all(),
+                   # 'permissions': imrole.permissions.all(),
                    })
 
 

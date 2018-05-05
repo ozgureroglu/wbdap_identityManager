@@ -1,20 +1,22 @@
 [
 {
-  "model": "identityManager.imuser",
+  "model": "identityManager.imrole",
   "pk": 1,
   "fields": {
-    "ss": "ff",
-    "groups": [],
-    "user_permissions": []
+    "name": "asdf",
+    "description": "asdf",
+    "memberGroups": [],
+    "memberUsers": []
   }
 },
 {
-  "model": "identityManager.imuser",
-  "pk": 22,
+  "model": "identityManager.imrole",
+  "pk": 2,
   "fields": {
-    "ss": "",
-    "groups": [],
-    "user_permissions": []
+    "name": "grp1",
+    "description": "grp2",
+    "memberGroups": [],
+    "memberUsers": []
   }
 }
 ]

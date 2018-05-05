@@ -21,13 +21,13 @@ class MemberGroupSerializer(serializers.ModelSerializer):
 
 class IMGroupSerializer(serializers.HyperlinkedModelSerializer):
     # answer = serializers.StringRelatedField(many=True)
-    memberUsers = IMUserSerializer(read_only=True,many=True)
-    memberGroups = MemberGroupSerializer(read_only=False,many=True)
+    # memberUsers = IMUserSerializer(read_only=True,many=True)
+    # memberGroups = MemberGroupSerializer(read_only=False,many=True)
     url = serializers.HyperlinkedIdentityField(view_name="v1:imgroup-detail")
 
     class Meta:
         model=IMGroup
-        fields = ('id','url','name','description','active','memberUsers','memberGroups')
+        fields = ('id','url','name','description','active')
 
         def __str__(self):
             return self.name

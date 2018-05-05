@@ -157,6 +157,8 @@
                         name: "is_superuser",
                         type: "checkbox",
                         separator: "|",
+                        unselectedValue: "false",
+
                         options: [
                             {label: '', value: true},
                             {#{label: '', value: false},#}
@@ -166,6 +168,8 @@
                         name: "is_staff",
                         type: "checkbox",
                         separator: "|",
+                        unselectedValue: "false",
+
                         options: [
                             {label: '', value: true},
                             {#{label: '', value: false},#}
@@ -175,6 +179,8 @@
                         name: "is_active",
                         type: "checkbox",
                         separator: "|",
+                        unselectedValue: "false",
+
                         options: [
                             {label: '', value: true},
                             {#{label: '', value: false},#}
@@ -252,8 +258,14 @@
                     label: "Description:",
                     name: "description"
                 }, {
-                    label: "Active:",
-                    name: "active"
+                    label: "Staus:",
+                    type: "checkbox",
+                    name: "active",
+                    unselectedValue: "false",
+                    separator: '',
+                    options: [
+                        {label: "Active", value: true}
+                    ],
                 }
 
                 ]
@@ -308,8 +320,20 @@
                     {"data": "name", orderData: 1, targets: 1},
                     {"data": "description", orderData: 2, targets: 2},
                     {
+                        "data": function (row, type, val, meta) {
+                            if (row.active) {
+                                return "Active"
+                            } else {
+                                return "Not active"
+                            }
+                        }
+                    },
+                    {
                         data: null,
-                        defaultContent: '',
+                        "render": function (data, type, row, meta) {
+                            return '<a href="/identityManager/imgroup/' + data.id + '/">Home</a>';
+                        },
+
                         orderable: false
                     },
                 ],
@@ -443,7 +467,13 @@
                     {"data": "description", orderData: 2, targets: 2},
                     {
                         data: null,
-                        defaultContent: '',
+                        "render": function (data, type, row, meta) {
+                            return '<a href="/identityManager/role/' + data.id + '">Home</a>';
+                        },
+                        {#defaultContent: function (d) {#}
+                        {#    var link = '<a href="' + d.id + '" class="editor_edit">Home</a>';#}
+                        {#    return link;#}
+                        //{#},#}
                         orderable: false
                     },
                 ],

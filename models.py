@@ -27,54 +27,17 @@ class IMUserAdmin(admin.ModelAdmin):
     list_display = ('first_name','last_name')
 
 
-# class Hider(object):
-#     def __get__(self,instance,owner):
-#         raise AttributeError("Hidden attribute")
-#
-#     def __set__(self, obj, val):
-#         raise AttributeError("Hidden attribute")
-#
-
-
-class IMGroup(Group):
-    memberGroups = models.ManyToManyField('self', blank=True, null=True, symmetrical=False, related_name='member_groups')
-    memberUsers = models.ManyToManyField(IMUser, blank=True, null=True, related_name='member_users')
+class IMGroup(models.Model):
+    name = models.CharField(max_length=50, null=False, blank=False)
+    # A group may be the member of another group, then all users of it will be the member of new group
+    memberGroups = models.ManyToManyField("self", blank=True, symmetrical=False, related_name='member_groups')
+    memberUsers = models.ManyToManyField(IMUser, blank=True, related_name='member_users')
     description = models.CharField(max_length=200, null=False, blank=False)
     active = models.BooleanField(null=False, blank=True, default=False)
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         print('saving object')
         super().save(force_insert, force_update, using, update_fields)
-
-    # TODO: Bu sinifin asagaidaki gibi permissions'a yazmasi engellenmeli
-
-    # def __getattribute__(self, name):
-    #     if name in ("permissions"):
-    #         # print("Immutable value of "+name)
-    #         # return super().__getattribute__(name)
-    #         raise AttributeError("%s is an immutable attribute.")
-    #     else:
-    #         # This should trigger the default behavior for any other
-    #         # attribute name.
-    #         # raise AttributeError()
-    #         return super().__getattribute__(name)
-    #
-    # def __setattr__(self, name, value):
-    #     if name in self.getAttributes():
-    #         super().__setattr__(name, value)
-    #     else:
-    #         # How do I request the default behavior?
-    #         raise AttributeError("%s is an immutable attribute.")
-    #
-    #
-    # def __getattr__(self, name):
-    #     if name in ("permissions"):
-    #         print('getting permissions attribute')
-    #         return super().__getattribute__(name)
-    #     else:
-    #         # How do I request the default behavior?
-    #         super().__getattr__(self,name)
-
 
     def __str__(self):
         return self.name
@@ -86,33 +49,17 @@ class IMGroupAdmin(admin.ModelAdmin):
     exclude = ('permissions',)
 
 
-# class IMGroup(models.Model):
-#     # group = models.OneToOneField(Group, related_name="im_group")
-#     name = models.CharField(max_length=80, null=False, blank=False)
-#     member = models.ManyToManyField(IMUser, blank=True, symmetrical=True)
-#     group = models.ManyToManyField('self', blank=True, symmetrical=False)
-#     description = models.CharField(max_length=200, null=False, blank=False)
-#     active = models.BooleanField(null=False, blank=True, default=False)
-#
-#     def __str__(self):
-#         return self.name
-#
-#     def get_members(self):
-#         for im_group in self.group.all():
-#             print(im_group.name)
-#
-#
-# @admin.register(IMGroup)
-# class IMGroupAdmin(admin.ModelAdmin):
-#     list_display = ('name', 'description', 'active',)
-
-
 class IMRole(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)
     description = models.CharField(max_length=500, null=False, blank=False)
     # permission = models.ManyToManyField(Permission, related_name="im_role")
     memberGroups = models.ManyToManyField(IMGroup, related_name='group_roles', blank=True)
     memberUsers = models.ManyToManyField(IMUser, related_name='user_roles', blank=True)
+    permissions = models.ManyToManyField(Permission, verbose_name=('permissions'), blank=True, )
+
+    def __str__(self):
+        return self.name
+
 
     class Meta:
         verbose_name = 'IM Role'
