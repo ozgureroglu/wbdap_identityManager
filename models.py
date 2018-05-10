@@ -7,13 +7,6 @@ from django.db import models
 class IMUser(User):
     ss = models.CharField(max_length=10, blank=True)
 
-    # def createProfile(self, user):
-    #     self.user = user
-    #     self.save()
-    #     userProfile = UserProfile()
-    #     userProfile.user = self
-    #     userProfile.save()
-
     def __str__(self):
         return self.first_name
 
@@ -46,20 +39,19 @@ class IMGroup(models.Model):
 @admin.register(IMGroup)
 class IMGroupAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'active',)
-    exclude = ('permissions',)
+
 
 
 class IMRole(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)
     description = models.CharField(max_length=500, null=False, blank=False)
     # permission = models.ManyToManyField(Permission, related_name="im_role")
-    memberGroups = models.ManyToManyField(IMGroup, related_name='group_roles', blank=True)
-    memberUsers = models.ManyToManyField(IMUser, related_name='user_roles', blank=True)
+    assigned_groups = models.ManyToManyField(IMGroup, related_name='assigned_groups', blank=True)
+    assigned_users = models.ManyToManyField(IMUser, related_name='assigned_users', blank=True)
     permissions = models.ManyToManyField(Permission, verbose_name=('permissions'), blank=True, )
 
     def __str__(self):
         return self.name
-
 
     class Meta:
         verbose_name = 'IM Role'
@@ -81,6 +73,7 @@ class IMUserProfile(models.Model):
     siteUrl = models.URLField(max_length=50, null=True, blank=True)
     company = models.URLField(max_length=50, null=True, blank=True)
     gender = models.NullBooleanField(blank=True)
+
 
     def __str__(self):
         return self.owner.first_name
@@ -192,35 +185,4 @@ class CompletedProjectAdmin(admin.ModelAdmin):
     pass
 
 
-class RoleManager(models.Manager):
-    """
-    Lets us do querysets limited to families that have
-    currently enrolled students, e.g.:
-        Family.has_students.all()
-    """
 
-    def get_query_set(self):
-        return super(RoleManager, self).get_query_set().filter(student__enrolled=True).distinct()
-
-
-class Role(Group):
-    notes = models.TextField(blank=True)
-
-    # Two managers for this model - the first is default
-    # (so all families appear in the admin).
-    # The second is only invoked when we call
-    # Family.has_students.all()
-    objects = models.Manager()
-    has_students = RoleManager()
-
-    class Meta:
-        verbose_name_plural = "Families"
-        ordering = ['name']
-
-    def __unicode__(self):
-        return u'%s' % (self.name)
-
-
-@admin.register(Role)
-class RoleAdmin(admin.ModelAdmin):
-    list_display = ('notes',)

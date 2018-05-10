@@ -26,18 +26,18 @@ urlpatterns = [
 
 
     # path('',index_page,name='index'),
-    path('',landing_page,name='landing-page'),
-    path('user/', imUser, name='imUser'),
-    path('user/add/', add_imuser, name='addUser'),
-    path('user/make_superuser/<int:pk>/', make_superuser, name='make_superuser'),
-    path('user/make_staff/<int:pk>/', make_staff, name='make_staff'),
-    path('user/lock/<int:pk>/', lock, name='lock'),
-    path('user/update/<int:pk>/', UserUpdate.as_view(), name='user-update'),
-    path('user/delete/<int:pk>/', delete_user, name='deleteUser'),
-    path('user/autocompleteUsers/',autocompleteUsers,name='autocompleteUsers'),
+    path('', landing_page, name='landing-page'),
+    path('imuser/', imUser, name='imUser'),
+    path('imuser/add/', add_imuser, name='addUser'),
+    path('imuser/make_superuser/<int:pk>/', make_superuser, name='make_superuser'),
+    path('imuser/make_staff/<int:pk>/', make_staff, name='make_staff'),
+    path('imuser/lock/<int:pk>/', lock, name='lock'),
+    path('imuser/update/<int:pk>/', UserUpdate.as_view(), name='user-update'),
+    path('imuser/delete/<int:pk>/', delete_user, name='deleteUser'),
+    path('imuser/autocompleteUsers/', autocompleteUsers,name='autocompleteUsers'),
     # ------------------------------------------------------------
 
-    path('imgroup/',imGroup,name='imGroup'),
+    path('imgroup/', imGroup, name='imGroup'),
     path('imgroup/<int:pk>/', imgroup_home, name='imgroup_home'),
     path('imgroup/<int:pk>/memberUser/add/', addMemberUser, name='addMemberUser'),
     path('imgroup/<int:pk>/memberUser/remove/<int:id>/', removeMemberUser, name='removeMemberUser'),
@@ -45,17 +45,18 @@ urlpatterns = [
     path('imgroup/<int:pk>/memberGroup/remove/<int:id>/', removeMemberGroup, name='removeMemberGroup'),
     path('imgroup/add/', add_group, name='addGroup'),
     path('imgroup/delete/<int:pk>/', delete_imgroup, name='deleteIMGroup'),
-    path('imgroup/autocompleteGroups/',autocompleteGroups,name='autocompleteGroups'),
+    path('imgroup/autocompleteGroups/', autocompleteGroups, name='autocompleteGroups'),
     # ------------------------------------------------------------
 
-    path('role/', imRole, name='imRole'),
-    path('role/<int:pk>/', imRole_home, name='imRole_home'),
-    path('role/<int:pk>/assignedUser/add', assignUsersToRole, name='assignUsersToRole'),
-    path('role/<int:pk>/assignedGroup/add', assignGroupsToRole, name='assignGroupsToRole'),
-    path('role/<int:pk>/permission/add', addPermissionToRole, name='addPermissionToRole'),
-    path('role/<int:pk>/permission/remove/<int:id>/', removePermissionFromRole, name='removePermissionFromRole'),
-    path('role/add/', add_imrole, name='add_imrole '),
-    path('role/delete/<int:pk>/', delete_imrole, name='deleteIMRole'),
+    path('imrole/', imRole, name='imRole'),
+    path('imrole/<int:pk>/', imRole_home, name='imRole_home'),
+    path('imrole/<int:pk>/assignedUser/add', assignUsersToRole, name='assignUsersToRole'),
+    path('imrole/<int:pk>/assignedGroup/add', assignGroupsToRole, name='assignGroupsToRole'),
+    path('imrole/<int:pk>/permission/add', addPermissionToRole, name='addPermissionToRole'),
+    path('imrole/<int:pk>/permission/remove/<int:id>/', removePermissionFromRole, name='removePermissionFromRole'),
+    path('imrole/add/', add_imrole, name='add_imrole '),
+    path('imrole/delete/<int:pk>/', delete_imrole, name='deleteIMRole'),
+    path('imrole/autocompletePermissions/', autocompletePermissions, name='autocompletePermissions'),
 
     # ------------------------------------------------------------
     path('permission/autocompletePermissions/',autocompletePermissions,name='autocompletePermissions'),
@@ -67,7 +68,7 @@ urlpatterns = [
 
     # ------------------------------------------------------------
 
-    path('dashboard/',user_dashboard,name='dashboard'),
+    path('dashboard/', user_dashboard, name='dashboard'),
 
     # User'lari id degerlerine gore istiyorum
     # Asagidaki ikinci RE opsiyonel bir d bolumu iceriyor.

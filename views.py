@@ -14,6 +14,7 @@ from django.views.generic import UpdateView
 from formtools.wizard.views import SessionWizardView
 from rest_framework import viewsets
 
+
 from .forms import *
 from .models import IMUser, IMGroup, IMRole, IMUserProfile
 from rest_framework.response import Response
@@ -46,7 +47,7 @@ def landing_page(request):
 @login_required()
 def imUser(request):
     user_list = IMUser.objects.all()
-    paginator=Paginator(user_list,30)
+    paginator=Paginator(user_list, 30)
     page = request.GET.get('page')
 
     try:
@@ -59,7 +60,7 @@ def imUser(request):
         contacts = paginator.page(paginator.num_pages)
 
     return render(request,
-        'identityManager/index.html', {'users':users}
+        'identityManager/index.html',
         # 'identityManager/index2.html', {'users': users, 'form': AddUserForm}
     )
 
@@ -128,8 +129,6 @@ def imgroup_home(request, pk):
     imgroup = IMGroup.objects.get(id=pk)
     return render(request, 'identityManager/imgroup_home.html',
                   {'imgroup':imgroup,
-                   'users':imgroup.memberUsers.all(),
-                   'groups': imgroup.memberGroups.all(),
                    })
 
 
@@ -139,8 +138,8 @@ def imRole_home(request, pk):
     imrole = IMRole.objects.get(id=pk)
     return render(request, 'identityManager/imrole_home.html',
                   {'imrole':imrole,
-                   'groups': imrole.memberGroups.all(),
-                   'users': imrole.memberUsers.all(),
+                   # 'groups': imrole.memberGroups.all(),
+                   # 'users': imrole.memberUsers.all(),
                    # 'permissions': imrole.permissions.all(),
                    })
 
@@ -292,12 +291,18 @@ def removeMemberGroup(request,pk,id):
 
 @login_required()
 def autocompleteUsers(request):
-    search_qs = IMUser.objects.filter(first_name__startswith=request.GET['term'])
+    search_qs = IMUser.objects.filter(username__startswith=request.GET['term'])
+
     results = []
     for r in search_qs:
-        results.append(r.first_name+" "+r.last_name)
+        person = {}
+        person['username']=r.username
+        person['first_name'] = r.first_name
+        person['last_name'] = r.last_name
+        results.append(person)
 
     resp = request.GET['callback'] + '(' + simplejson.dumps(results) + ');'
+
     return HttpResponse(resp, content_type='application/json')
 
 
@@ -306,19 +311,27 @@ def autocompleteGroups(request):
     search_qs = IMGroup.objects.filter(name__startswith=request.GET['term'])
     results = []
     for r in search_qs:
-        results.append(r.name+":"+r.description)
+        grp = {}
+        grp['name'] = r.name
+        grp['description'] = r.description
+        results.append(grp)
 
     resp = request.GET['callback'] + '(' + simplejson.dumps(results) + ');'
     return HttpResponse(resp, content_type='application/json')
 
 
+
+
 @login_required()
 def autocompletePermissions(request):
-    search_qs = Permission.objects.filter(content_type__app_label="projectManager",
-                                          codename__startswith=request.GET['term'])
+    search_qs = Permission.objects.filter(content_type__app_label__startswith=request.GET['term'])
     results = []
-    for perm in search_qs:
-        results.append(perm.content_type.app_label+":"+perm.codename+":"+perm.name)
+    for permi in search_qs:
+        perm ={}
+        perm['app_label'] = permi.content_type.app_label
+        perm['codename'] = permi.content_type.model
+        perm['name'] = permi.name
+        results.append(perm)
 
     resp = request.GET['callback'] + '(' + simplejson.dumps(results) + ');'
 

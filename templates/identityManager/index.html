@@ -10,7 +10,7 @@
     <div id="container">
 
         <!-- Large EDIT modal -->
-        <div class="modal fade" id="edit-row-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal fade" id="user-list-lg-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -59,11 +59,11 @@
                         <h2><i class="fa fa-id-card"></i> Identity Manager</h2>
                         <hr>
 
-                        {% if request.path == '/identityManager/user/' %}
+                        {% if request.path == '/identityManager/imuser/' %}
                             {% include "identityManager/user_list.html" %}
                         {% elif request.path == '/identityManager/imgroup/' %}
                             {% include "identityManager/imgroup_list.html" %}
-                        {% elif request.path == '/identityManager/role/' %}
+                        {% elif request.path == '/identityManager/imrole/' %}
                             {% include "identityManager/imrole_list.html" %}
                         {% else %}
 
@@ -468,7 +468,7 @@
                     {
                         data: null,
                         "render": function (data, type, row, meta) {
-                            return '<a href="/identityManager/role/' + data.id + '">Home</a>';
+                            return '<a href="/identityManager/imrole/' + data.id + '">Home</a>';
                         },
                         {#defaultContent: function (d) {#}
                         {#    var link = '<a href="' + d.id + '" class="editor_edit">Home</a>';#}
