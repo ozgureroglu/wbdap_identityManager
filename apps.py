@@ -29,6 +29,9 @@ class UserManagementAppConfig(AppConfig):
 
     # Sadece bir kere uygulama baslatildiginda calistirilmakta
     def ready(self):
+
+        import identityManager.signals.handlers
+
         if not self.db_table_exists('identityManager_'):
             try:
                 call_command('migrate', 'identityManager')

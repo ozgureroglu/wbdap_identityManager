@@ -137,11 +137,7 @@ def imgroup_home(request, pk):
 def imRole_home(request, pk):
     imrole = IMRole.objects.get(id=pk)
     return render(request, 'identityManager/imrole_home.html',
-                  {'imrole':imrole,
-                   # 'groups': imrole.memberGroups.all(),
-                   # 'users': imrole.memberUsers.all(),
-                   # 'permissions': imrole.permissions.all(),
-                   })
+                  {'imrole':imrole, })
 
 
 
