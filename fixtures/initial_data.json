@@ -1,22 +1,1035 @@
 [
 {
-  "model": "identityManager.imrole",
+  "model": "identityManager.imuser",
   "pk": 1,
   "fields": {
-    "name": "asdf",
-    "description": "asdf",
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 2,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 3,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 31,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 33,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 34,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 35,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 36,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 37,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 38,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 39,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 40,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 41,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 42,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 43,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 44,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 45,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 46,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 48,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 50,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 51,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 52,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 53,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 54,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 55,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 57,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 58,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 59,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 60,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 61,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 62,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 63,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 64,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 65,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 66,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 67,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 68,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 69,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 70,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 71,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 72,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 73,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 74,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 75,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 76,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 77,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 78,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 79,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 80,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 81,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 82,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 83,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 84,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 85,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 86,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 87,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 88,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 89,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 90,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 91,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 92,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 94,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 95,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 96,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 97,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 98,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 99,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 100,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 101,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 102,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 103,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 104,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 106,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 107,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 109,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 111,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 112,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 113,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 114,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 115,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 116,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 117,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 118,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 119,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 121,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 122,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 123,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 124,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 125,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 126,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 127,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 128,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 129,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 130,
+  "fields": {
+    "ss": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imgroup",
+  "pk": 1,
+  "fields": {
+    "name": "superusers",
+    "description": "super users group",
+    "active": true,
+    "memberGroups": [
+      3,
+      5
+    ],
+    "memberUsers": [
+      36,
+      37,
+      52,
+      64,
+      66,
+      98
+    ]
+  }
+},
+{
+  "model": "identityManager.imgroup",
+  "pk": 2,
+  "fields": {
+    "name": "grp2",
+    "description": "lkajsdhflkj a aljksdfl asdlkfj asdkjfal djks fhasd dfsdf sdf s df sd f sd f s d f   s dfsd fsd fs",
+    "active": false,
+    "memberGroups": [],
+    "memberUsers": []
+  }
+},
+{
+  "model": "identityManager.imgroup",
+  "pk": 3,
+  "fields": {
+    "name": "grp3",
+    "description": "lkajsdhflkj a aljksdfl asdlkfj asdkjfaldjksfhasd",
+    "active": false,
+    "memberGroups": [],
+    "memberUsers": []
+  }
+},
+{
+  "model": "identityManager.imgroup",
+  "pk": 4,
+  "fields": {
+    "name": "grp4",
+    "description": "lkajsdhflkj a aljksdfl asdlkfj asdkjfaldjksfhasd",
+    "active": false,
+    "memberGroups": [],
+    "memberUsers": []
+  }
+},
+{
+  "model": "identityManager.imgroup",
+  "pk": 5,
+  "fields": {
+    "name": "grp5",
+    "description": "lkajsdhflkj a aljksdfl asdlkfj asdkjfaldjksfhasd",
+    "active": false,
+    "memberGroups": [],
+    "memberUsers": []
+  }
+},
+{
+  "model": "identityManager.imgroup",
+  "pk": 6,
+  "fields": {
+    "name": "grp6",
+    "description": "lkajsdhflkj a aljksdfl asdlkfj asdkjfaldjksfhasd",
+    "active": false,
+    "memberGroups": [],
+    "memberUsers": []
+  }
+},
+{
+  "model": "identityManager.imgroup",
+  "pk": 7,
+  "fields": {
+    "name": "grp7",
+    "description": "lkajsdhflkj a aljksdfl asdlkfj asdkjfaldjksfhasd",
+    "active": false,
+    "memberGroups": [],
+    "memberUsers": []
+  }
+},
+{
+  "model": "identityManager.imgroup",
+  "pk": 8,
+  "fields": {
+    "name": "grp8",
+    "description": "lkajsdhflkj a aljksdfl asdlkfj asdkjfaldjksfhasd",
+    "active": false,
     "memberGroups": [],
     "memberUsers": []
   }
 },
 {
   "model": "identityManager.imrole",
+  "pk": 1,
+  "fields": {
+    "name": "admin",
+    "description": "admin",
+    "assigned_groups": [
+      1,
+      5
+    ],
+    "assigned_users": [
+      33,
+      50,
+      66,
+      82
+    ],
+    "permissions": [
+      70,
+      94,
+      217
+    ]
+  }
+},
+{
+  "model": "identityManager.imrole",
   "pk": 2,
   "fields": {
-    "name": "grp1",
-    "description": "grp2",
-    "memberGroups": [],
-    "memberUsers": []
+    "name": "user",
+    "description": "user",
+    "assigned_groups": [],
+    "assigned_users": [],
+    "permissions": []
+  }
+},
+{
+  "model": "identityManager.imrole",
+  "pk": 3,
+  "fields": {
+    "name": "r1",
+    "description": "r1",
+    "assigned_groups": [],
+    "assigned_users": [],
+    "permissions": []
+  }
+},
+{
+  "model": "identityManager.imrole",
+  "pk": 4,
+  "fields": {
+    "name": "r2",
+    "description": "r2",
+    "assigned_groups": [],
+    "assigned_users": [],
+    "permissions": []
+  }
+},
+{
+  "model": "identityManager.imrole",
+  "pk": 5,
+  "fields": {
+    "name": "r3",
+    "description": "r3",
+    "assigned_groups": [],
+    "assigned_users": [],
+    "permissions": []
+  }
+},
+{
+  "model": "identityManager.imrole",
+  "pk": 6,
+  "fields": {
+    "name": "r4",
+    "description": "r4",
+    "assigned_groups": [],
+    "assigned_users": [],
+    "permissions": []
+  }
+},
+{
+  "model": "identityManager.imrole",
+  "pk": 7,
+  "fields": {
+    "name": "r5",
+    "description": "r5",
+    "assigned_groups": [],
+    "assigned_users": [],
+    "permissions": []
   }
 }
 ]
