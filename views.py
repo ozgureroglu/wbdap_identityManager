@@ -66,10 +66,6 @@ def imUser(request):
     print(perms)
 
 
-
-
-
-
     return render(request,
         'identityManager/index.html',
         # 'identityManager/index2.html', {'users': users, 'form': AddUserForm}

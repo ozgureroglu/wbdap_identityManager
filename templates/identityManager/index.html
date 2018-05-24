@@ -100,7 +100,15 @@
                         className: 'select-checkbox not_editable',
                         orderable: false
                     },
-                    {"data": "username"},
+                    {
+                        "data": "username",
+                        render : function (data, type, row) {
+                            if (type === 'display') {
+                                return '<a href="/identityManager/profile/'+row.id+'/">'+row.username+'</a>';
+                            }
+                            return data;
+                        },
+                    },
                     {"data": "first_name"},
                     {"data": "last_name"},
                     {"data": "email"},
