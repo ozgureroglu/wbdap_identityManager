@@ -10,7 +10,7 @@ class IMUser(User):
     def __str__(self):
         return self.first_name
 
-    class Meta:
+    class Meta(User.Meta):
         verbose_name = 'IM User'
         verbose_name_plural = 'IM Users'
 
@@ -27,6 +27,43 @@ class IMGroup(models.Model):
     memberUsers = models.ManyToManyField(IMUser, blank=True, related_name='member_users')
     description = models.CharField(max_length=200, null=False, blank=False)
     active = models.BooleanField(null=False, blank=True, default=False)
+    permissions = None
+
+
+
+    def _get_descendent_groups(self):
+        """
+        As the relations of groups and subgroups forms a graph we will use dfs or bfs to get all subgroups :
+        following is the DFS
+
+        :return: set of descendent groups
+        """
+        visited = set()
+        stack = [self]
+
+        while stack:
+            vertex = stack.pop()
+            if vertex not in visited:
+                visited.add(vertex)
+                stack.extend(set(vertex.memberGroups.all()) - visited)
+        return visited
+
+
+
+    def _get_descendent_users(self):
+        """
+        Returns all of the users from the descendents
+        :return: set of users
+        """
+        users = set()
+
+        dgroups = self._get_descendent_groups()
+        for dg in dgroups:
+            for u in dg.memberUsers.all():
+                users.add(u)
+        return users
+
+
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         print('saving object')
@@ -46,8 +83,8 @@ class IMRole(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)
     description = models.CharField(max_length=500, null=False, blank=False)
     # permission = models.ManyToManyField(Permission, related_name="im_role")
-    assigned_groups = models.ManyToManyField(IMGroup, related_name='assigned_groups', blank=True)
-    assigned_users = models.ManyToManyField(IMUser, related_name='assigned_users', blank=True)
+    assigned_groups = models.ManyToManyField(IMGroup, related_name='roles', blank=True)
+    assigned_users = models.ManyToManyField(IMUser, related_name='roles', blank=True)
     permissions = models.ManyToManyField(Permission, verbose_name=('permissions'), blank=True, )
 
     def __str__(self):

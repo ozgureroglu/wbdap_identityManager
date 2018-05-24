@@ -59,6 +59,17 @@ def imUser(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         contacts = paginator.page(paginator.num_pages)
 
+
+    u = IMUser.objects.get(id='2')
+
+    perms = u.get_all_permissions()
+    print(perms)
+
+
+
+
+
+
     return render(request,
         'identityManager/index.html',
         # 'identityManager/index2.html', {'users': users, 'form': AddUserForm}
@@ -114,6 +125,14 @@ def add_imuser(request):
 @login_required()
 def imGroup(request):
     imgroups = IMGroup.objects.all()
+
+
+    root = IMGroup.objects.get(name='G1')
+    print(root._get_descendent_groups())
+
+    print(root._get_descendent_users())
+
+
     return render(request,
         'identityManager/index.html', {'imgroups':imgroups}
     )
@@ -127,6 +146,8 @@ def delete_imgroup(request, pk):
 @login_required()
 def imgroup_home(request, pk):
     imgroup = IMGroup.objects.get(id=pk)
+
+
     return render(request, 'identityManager/imgroup_home.html',
                   {'imgroup':imgroup,
                    })
