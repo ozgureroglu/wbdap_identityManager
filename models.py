@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.contrib import admin
 from django.contrib.auth.models import User, Group, Permission
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -160,7 +162,7 @@ class Education(models.Model):
     school = models.ForeignKey(School, related_name='schoolin_educations',on_delete=models.CASCADE)
     field = models.CharField(max_length=50, null=False, blank=True)
     degree = models.ForeignKey(Degree, related_name='in_educations',on_delete=models.CASCADE)
-    grade = models.FloatField(validators = [MinValueValidator(0), MaxValueValidator(4)],blank=True,null=True)
+    grade = models.DecimalField(validators=[MinValueValidator(0.01), MaxValueValidator(4.00)], blank=True, null=True, max_digits=3, decimal_places=2)
     startDate = models.DateField(null=True)
     finishDate = models.DateField(null=True)
     activities = models.TextField(max_length=250, null=True, blank=True)
