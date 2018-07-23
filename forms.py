@@ -1,16 +1,10 @@
-from crispy_forms.layout import ButtonHolder, Fieldset, Submit, Reset
-
-
-from identityManager.models import IMRole, IMGroup, IMUser
-
 
 __author__ = 'ozgur'
 
-from crispy_forms.helper import FormHelper,Layout
-
-from django.contrib.auth.models import User
+from crispy_forms.layout import ButtonHolder, Fieldset, Submit, Reset
+from identityManager.models import IMRole, IMGroup, IMUser, Education, Address, WorkExperience, CompletedProject
+from crispy_forms.helper import FormHelper, Layout
 from django.forms import *
-from django import forms
 
 
 class AddUserForm(ModelForm):
@@ -74,40 +68,33 @@ class AddRoleForm(ModelForm):
 
 
 
-class AddressForm(forms.Form):
-    username = forms.CharField()
-    is_active = forms.BooleanField()
+class AddressForm(ModelForm):
 
     class Meta:
-        model = User
+        model = Address
         exclude = ('is_staff', 'is_superuser', 'last_login', 'date_joined', 'groups', 'user_permissions')
 
 
 
-class EducationForm(forms.Form):
-    username = forms.CharField()
-    is_active = forms.BooleanField()
+class EducationForm(ModelForm):
 
     class Meta:
-        model = User
+        model = Education
         exclude = ('is_staff', 'is_superuser', 'last_login', 'date_joined', 'groups', 'user_permissions')
 
 
-class ExperienceForm(forms.Form):
-    username = forms.CharField()
-    is_active = forms.BooleanField()
+class ExperienceForm(ModelForm):
 
     class Meta:
-        model = User
+        model = WorkExperience
         exclude = ('is_staff', 'is_superuser', 'last_login', 'date_joined', 'groups', 'user_permissions')
 
 
-class ProjectsForm(forms.Form):
-    username = forms.CharField()
-    is_active = forms.BooleanField()
+class CompletedProjectsForm(ModelForm):
+
 
     class Meta:
-        model = User
+        model = CompletedProject
         exclude = ('is_staff', 'is_superuser', 'last_login', 'date_joined', 'groups', 'user_permissions')
 
 

@@ -59,7 +59,7 @@ urlpatterns = [
     path('imrole/autocompletePermissions/', autocompletePermissions, name='autocompletePermissions'),
 
     # ------------------------------------------------------------
-    path('permission/autocompletePermissions/',autocompletePermissions,name='autocompletePermissions'),
+    path('permission/autocompletePermissions/', autocompletePermissions,name='autocompletePermissions'),
 
     # ------------------------------------------------------------
 
@@ -68,7 +68,7 @@ urlpatterns = [
 
     # ------------------------------------------------------------
 
-    path('dashboard/', user_dashboard, name='dashboard'),
+    path('dashboard/', dashboard, name='dashboard'),
 
     # User'lari id degerlerine gore istiyorum
     # Asagidaki ikinci RE opsiyonel bir d bolumu iceriyor.
@@ -78,6 +78,6 @@ urlpatterns = [
     # ------------------------------------------------------------
 
     path('profile/<int:pk>/', view_user_profile, name='profileView'),
-    path('profile/edit/<int:pk>/', ProfileWizard.as_view(FORMS))
+    path('profile/<int:pk>/edit/', ProfileWizard.as_view(FORMS), name='edit-profile')
 
 ]

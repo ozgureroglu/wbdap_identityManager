@@ -3,102 +3,53 @@
 
 {% block title %}{{ file }}{% endblock %}
 
-{% block page_content %}
-    {{ block.super }}
 
-    <div id="page-wrapper">
+{% block modals %}
 
-        <!-- Modal -->
-        <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        Delete
-                    </div>
-                    <div class="modal-body">
-                        Are you sure?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-danger btn-ok">Delete</a>
-                    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Delete
                 </div>
-            </div>
-        </div>
-
-        <div class="container-fluid">
-            <div class="row">
-
-                {% include "identityManager/modal/addIdentityObjectModal.html" %}
-
-                <div class="row">
-                    <div class="col-lg-2">
-                        {# <h1 class="page-header">{{ user.first_name }} {{ user.last_name }}</h1>#}
-                    </div>
-
-                    {# Nesne listelerini goster#}
-                    <div class="col-sm-12 col-lg-12">
-
-                        {##}
-                        {#                        {% if request.path != '/identityManager/' %}#}
-                        {#                            <div class="row">#}
-                        {#                                <div class="col-xs-3 col-sm-3 placeholder">#}
-                        {#                                    <button type="button" class="btn btn-success identityObjectAdd_FormRequest_Button"#}
-                        {#                                        data-toggle="modal"#}
-                        {#                                            data-target="#addIdentityObjectModal"#}
-                        {#                                            id="showIdentityAddModal_button">#}
-                        {##}
-                        {#                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>#}
-                        {#                                        {% if request.path == '/identityManager/user/' %}#}
-                        {#                                            Add User#}
-                        {#                                        {% elif request.path == '/identityManager/imgroup/' %}#}
-                        {#                                            Add Group#}
-                        {#                                        {% elif request.path == '/identityManager/role/' %}#}
-                        {#                                            Add Role#}
-                        {#                                        {% endif %}#}
-                        {#                                    </button>#}
-                        {#                                    <hr>#}
-                        {#                                </div>#}
-                        {#                            </div>#}
-                        {#                        {% else %}#}
-                        {##}
-                        {#                            <h2>Identity Manager</h2>#}
-                        {#                            <hr>#}
-                        {#                        {% endif %}#}
-
-                        <h2><i class="fa fa-id-card"></i> Identity Manager</h2>
-                        <hr>
-
-
-
-
-                        {% if request.path == '/identityManager/user/' %}
-                            {% include "identityManager/user_list.html" %}
-                        {% elif request.path == '/identityManager/imgroup/' %}
-                            {% include "identityManager/imgroup_list.html" %}
-                        {% elif request.path == '/identityManager/role/' %}
-                            {% include "identityManager/imrole_list.html" %}
-                        {% else %}
-
-                        {% endif %}
-
-                    </div>
-
-                    <div class="col-lg-2">
-                        {#            <h1 class="page-header">{{ user.first_name }} {{ user.last_name }}</h1>#}
-                    </div>
-
+                <div class="modal-body">
+                    Are you sure?
                 </div>
-
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger btn-ok">Delete</a>
+                </div>
             </div>
         </div>
     </div>
+
+{% endblock %}
+
+
+{% block page_content %}
+    {{ block.super }}
+    <div class="card">
+        <div class="card-header clearfix">
+            <div class="card-title">
+                Dashboard
+
+            </div>
+
+
+        </div>
+        <div class="card-body">
+
+
+        </div>
+    </div>
+
 {% endblock %}
 
 
 
-{% block body_jscript %}
+{% block application_body_jscript %}
     {{ block.super }}
     <script src="{{ STATIC_URL }}identityManager/jscript/identityManager.js"></script>
 

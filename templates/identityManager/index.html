@@ -3,73 +3,40 @@
 
 {% block title %}{{ file }}{% endblock %}
 
-{% block page_content %}
-    {{ block.super }}
-    {% csrf_token %}
+{% block modals %}
 
-    <div id="container">
+    <!-- Large EDIT modal -->
+    <div class="modal fade" id="user-list-lg-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Edit Row</h3>
+                </div>
+                <div class="modal-body">
 
-        <!-- Large EDIT modal -->
-        <div class="modal fade" id="user-list-lg-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3>Edit Row</h3>
-                    </div>
-                    <div class="modal-body">
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-primary btn-ok">Send</a>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary btn-ok">Send</a>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- DELETE Modal -->
-        <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        Delete
-                    </div>
-                    <div class="modal-body">
-                        Are you sure?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-danger btn-ok">Delete</a>
-                    </div>
+    <!-- DELETE Modal -->
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Delete
                 </div>
-            </div>
-        </div>
-
-        <div class="container-fluid">
-            <div class="row">
-
-                {% include "identityManager/modal/addIdentityObjectModal.html" %}
-
-                <div class="row">
-
-                    {# Nesne listelerini goster#}
-                    <div class="col-sm-12 col-lg-12">
-
-                        <h2><i class="fa fa-id-card"></i> Identity Manager</h2>
-                        <hr>
-
-                        {% if request.path == '/identityManager/imuser/' %}
-                            {% include "identityManager/user_list.html" %}
-                        {% elif request.path == '/identityManager/imgroup/' %}
-                            {% include "identityManager/imgroup_list.html" %}
-                        {% elif request.path == '/identityManager/imrole/' %}
-                            {% include "identityManager/imrole_list.html" %}
-                        {% else %}
-
-                        {% endif %}
-
-                    </div>
+                <div class="modal-body">
+                    Are you sure?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger btn-ok">Delete</a>
                 </div>
             </div>
         </div>
@@ -77,7 +44,40 @@
 {% endblock %}
 
 
-{% block body_jscript %}
+
+
+{% block page_content %}
+    {{ block.super }}
+    {% csrf_token %}
+
+    <div class="container-fluid">
+        {% include "identityManager/modal/addIdentityObjectModal.html" %}
+
+        <div class="row">
+
+            {# Nesne listelerini goster#}
+            <div class="col-sm-12 col-lg-12">
+
+                <h2><i class="fa fa-id-card"></i> Identity Manager</h2>
+                <hr>
+
+                {% if request.path == '/identityManager/imuser/' %}
+                    {% include "identityManager/user_list.html" %}
+                {% elif request.path == '/identityManager/imgroup/' %}
+                    {% include "identityManager/imgroup_list.html" %}
+                {% elif request.path == '/identityManager/imrole/' %}
+                    {% include "identityManager/imrole_list.html" %}
+                {% else %}
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block application_body_jscript %}
     {{ block.super }}
     <script src="{{ STATIC_URL }}identityManager/jscript/identityManager.js"></script>
 
@@ -102,9 +102,9 @@
                     },
                     {
                         "data": "username",
-                        render : function (data, type, row) {
+                        render: function (data, type, row) {
                             if (type === 'display') {
-                                return '<a href="/identityManager/profile/'+row.id+'/">'+row.username+'</a>';
+                                return '<a href="/identityManager/profile/' + row.id + '/">' + row.username + '</a>';
                             }
                             return data;
                         },

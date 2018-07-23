@@ -1,19 +1,35 @@
-{% include '/user_list.html' %}
-<br>
-<hr>
+{#{% include '/user_list.html' %}#}
+{% extends "identityManager/identityManager_app_template.html" %}
 
-<div class="formstyle">
-    <form method="post" action="" class="">
-        {% csrf_token %}
-        <table cellpadding="0">{{ form.as_table }}</table>
-        <br>
-        <input type="submit" value="Add User">
-    </form>
-</div>
+{% load i18n %}
+{% load crispy_forms_tags %}
 
-<div style="clear: both"></div>
+{% block head %}
+{{ wizard.form.media }}
+{% endblock %}
 
-
-
+{% block page_content %}
+<p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
+<form action="" method="post">{% csrf_token %}
+<table>
+{{ wizard.management_form }}
+{% if wizard.form.forms %}
+{#    {{ wizard.form.management_form }}#}
+    {% crispy wizard.form.management_form %}
+    {% for form in wizard.form.forms %}
+        {% crispy form %}
+    {% endfor %}
+{% else %}
+{#    {{ wizard.form }}#}
+    {% crispy  wizard.form %}
+{% endif %}
+</table>
+{% if wizard.steps.prev %}
+<button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">{% trans "first step" %}</button>
+<button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% trans "prev step" %}</button>
+{% endif %}
+<input type="submit" value="{% trans "submit" %}"/>
+</form>
+{% endblock %}
 
 

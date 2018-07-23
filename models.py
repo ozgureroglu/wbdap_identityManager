@@ -5,7 +5,9 @@ from django.contrib.auth.models import User, Group, Permission
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
+
 # Uygulamanin asil kullanicisina dogrudan bagli olan tek field bu olacak.
+# Dolayisi ile bu alanin dumpi her alindiginda user listesi dump'ida alinmalidir.
 class IMUser(User):
     ss = models.CharField(max_length=10, blank=True)
 
@@ -19,7 +21,7 @@ class IMUser(User):
 
 @admin.register(IMUser)
 class IMUserAdmin(admin.ModelAdmin):
-    list_display = ('first_name','last_name')
+    list_display = ('first_name', 'last_name')
 
 
 class IMGroup(models.Model):
@@ -30,8 +32,6 @@ class IMGroup(models.Model):
     description = models.CharField(max_length=200, null=False, blank=False)
     active = models.BooleanField(null=False, blank=True, default=False)
     permissions = None
-
-
 
     def _get_descendent_groups(self):
         """
@@ -50,8 +50,6 @@ class IMGroup(models.Model):
                 stack.extend(set(vertex.memberGroups.all()) - visited)
         return visited
 
-
-
     def _get_descendent_users(self):
         """
         Returns all of the users from the descendents
@@ -65,8 +63,6 @@ class IMGroup(models.Model):
                 users.add(u)
         return users
 
-
-
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         print('saving object')
         super().save(force_insert, force_update, using, update_fields)
@@ -78,7 +74,6 @@ class IMGroup(models.Model):
 @admin.register(IMGroup)
 class IMGroupAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'active',)
-
 
 
 class IMRole(models.Model):
@@ -96,6 +91,7 @@ class IMRole(models.Model):
         verbose_name = 'IM Role'
         verbose_name_plural = 'IM Roles'
 
+
 @admin.register(IMRole)
 class IMRoleAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
@@ -107,12 +103,11 @@ class IMUserProfile(models.Model):
     jobTitle = models.CharField(max_length=25, null=True, blank=True)
     dateOfBirth = models.DateField(null=True, blank=True)
     aboutMe = models.TextField(max_length=500, null=True, blank=True)
-    address = models.TextField(max_length=500, null=True, blank=True)
+    # address = models.TextField(max_length=500, null=True, blank=True)
     cellularPhone = models.TextField(max_length=500, null=True, blank=True)
     siteUrl = models.URLField(max_length=50, null=True, blank=True)
     company = models.URLField(max_length=50, null=True, blank=True)
     gender = models.NullBooleanField(blank=True)
-
 
     def __str__(self):
         return self.owner.first_name
@@ -158,11 +153,33 @@ class SchoolAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
 
+class Address(models.Model):
+    name = models.CharField( "Full name", max_length=1024, default='home address' )
+    address1 = models.CharField("Address line 1", max_length=1024, default='address1')
+    address2 = models.CharField( "Address line 2", max_length=1024, default='address2')
+    zip_code = models.CharField("ZIP / Postal code", max_length=12, default='0000')
+    city = models.CharField( "City", max_length=1024,default='ankara')
+    country = models.CharField("Country", max_length=3, default= 'turkey')
+    profile = models.ForeignKey(IMUserProfile, on_delete=models.CASCADE, )
+
+    class Meta:
+        verbose_name = "Shipping Address"
+        verbose_name_plural = "Shipping Addresses"
+
+
+    def __str__(self):
+        return self.profile.name + '_address'
+
+    def __unicode__(self):
+        return self.profile.name + '_address'
+
+
 class Education(models.Model):
-    school = models.ForeignKey(School, related_name='schoolin_educations',on_delete=models.CASCADE)
+    school = models.ForeignKey(School, related_name='schoolin_educations', on_delete=models.CASCADE)
     field = models.CharField(max_length=50, null=False, blank=True)
-    degree = models.ForeignKey(Degree, related_name='in_educations',on_delete=models.CASCADE)
-    grade = models.DecimalField(validators=[MinValueValidator(0.01), MaxValueValidator(4.00)], blank=True, null=True, max_digits=3, decimal_places=2)
+    degree = models.ForeignKey(Degree, related_name='in_educations', on_delete=models.CASCADE)
+    grade = models.DecimalField(validators=[MinValueValidator(0.01), MaxValueValidator(4.00)], blank=True, null=True,
+                                max_digits=3, decimal_places=2)
     startDate = models.DateField(null=True)
     finishDate = models.DateField(null=True)
     activities = models.TextField(max_length=250, null=True, blank=True)
@@ -222,6 +239,3 @@ class CompletedProject(models.Model):
 @admin.register(CompletedProject)
 class CompletedProjectAdmin(admin.ModelAdmin):
     pass
-
-
-

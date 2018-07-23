@@ -7,30 +7,49 @@
 {% block application_head_stylesheet %}
     {{ block.super }}
     <style>
-        .toggler {
-            width: 500px;
-            height: 200px;
-        }
-
-        #button {
-            padding: .5em 1em;
-            text-decoration: none;
-        }
-
-        #effect {
-            position: relative;
-        }
-
-        .panel-body svg {
-            margin-right: 20px;
-        }
-
-
-        #effect h3 {
-            margin: 0;
-            padding: 0.4em;
+        #profilecard {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+            margin: auto;
             text-align: center;
+            font-family: arial;
         }
+
+        #profile_component {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            margin: auto;
+            font-family: arial;
+        }
+
+        .profiletitle {
+            color: grey;
+            font-size: 18px;
+        }
+
+        .profilebutton {
+            border: none;
+            outline: 0;
+            display: inline-block;
+            padding: 8px;
+            color: white;
+            background-color: #000;
+            text-align: center;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+        }
+
+        a {
+            text-decoration: none;
+            font-size: 22px;
+            color: black;
+        }
+
+        profilebutton:hover, a:hover {
+            opacity: 0.7;
+        }
+
+
     </style>
 {% endblock %}
 
@@ -38,9 +57,8 @@
 {% block page_content %}
     {{ block.super }}
     {% include "identityManager/user_profile_content.html" %}
-
-
 {% endblock %}
+
 
 {% block application_body_jscript %}
     {{ block.super }}

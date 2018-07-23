@@ -3,24 +3,24 @@ import logging
 import simplejson
 from django import http
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import Permission, User
 from django.core import serializers
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import resolve
+from django.urls import resolve, reverse
 from django.views.generic import UpdateView
 from formtools.wizard.views import SessionWizardView
-from rest_framework import viewsets
-
+from django.shortcuts import render, redirect
+from django.contrib import messages
 
 from .forms import *
 from .models import IMUser, IMGroup, IMRole, IMUserProfile
 from rest_framework.response import Response
 import django_filters.rest_framework
 from rest_framework import filters
-
+from rest_framework import viewsets
 
 
 #Get an instance of the logger: Name should be the name of the logger in settings LOGGING field
@@ -60,17 +60,17 @@ def imUser(request):
         contacts = paginator.page(paginator.num_pages)
 
 
-    u = IMUser.objects.get(id='2')
-
-    perms = u.get_all_permissions()
-    print(perms)
+    #permissions test
+    # u = IMUser.objects.get(id='2')
+    #
+    # perms = u.get_all_permissions()
+    # print(perms)
 
 
     return render(request,
         'identityManager/index.html',
         # 'identityManager/index2.html', {'users': users, 'form': AddUserForm}
     )
-
 
 @login_required()
 def add_imuser(request):
@@ -117,17 +117,16 @@ def add_imuser(request):
     variables = {'form': form, 'users': users}
     return render(request, 'identityManager/modal/addIdentity_ModalContent.html', variables)
 
-
 @login_required()
 def imGroup(request):
     imgroups = IMGroup.objects.all()
 
-
-    root = IMGroup.objects.get(name='G1')
-    print(root._get_descendent_groups())
-
-    print(root._get_descendent_users())
-
+    #
+    # root = IMGroup.objects.get(name='G1')
+    # print(root._get_descendent_groups())
+    #
+    # print(root._get_descendent_users())
+    #
 
     return render(request,
         'identityManager/index.html', {'imgroups':imgroups}
@@ -148,15 +147,11 @@ def imgroup_home(request, pk):
                   {'imgroup':imgroup,
                    })
 
-
-
 @login_required()
 def imRole_home(request, pk):
     imrole = IMRole.objects.get(id=pk)
     return render(request, 'identityManager/imrole_home.html',
                   {'imrole':imrole, })
-
-
 
 @login_required()
 def addMemberUser(request,pk):
@@ -183,7 +178,6 @@ def addMemberUser(request,pk):
         pass
     return HttpResponseRedirect('/identityManager/imgroup/'+str(pk)+"/")
 
-
 @login_required()
 def assignUsersToRole(request,pk):
     if request.method=='POST':
@@ -202,7 +196,6 @@ def assignUsersToRole(request,pk):
     else:
         pass
     return HttpResponseRedirect('/identityManager/role/'+str(pk)+"/")
-
 
 @login_required()
 def assignGroupsToRole(request,pk):
@@ -223,9 +216,6 @@ def assignGroupsToRole(request,pk):
         pass
     return HttpResponseRedirect('/identityManager/role/'+str(pk)+"/")
 
-
-
-
 @login_required()
 def addMemberGroup(request,pk):
     if request.method=='POST':
@@ -245,7 +235,6 @@ def addMemberGroup(request,pk):
     else:
         pass
     return HttpResponseRedirect('/identityManager/imgroup/'+str(pk)+"/")
-
 
 @login_required()
 def addPermissionToRole(request,pk):
@@ -269,7 +258,6 @@ def addPermissionToRole(request,pk):
         pass
     return HttpResponseRedirect('/identityManager/role/'+str(pk)+"/")
 
-
 @login_required()
 def removePermissionFromRole(request,pk,id):
     try:
@@ -279,10 +267,6 @@ def removePermissionFromRole(request,pk,id):
         logger.warning("Unable to remove permission from role")
     return HttpResponseRedirect('/identityManager/role/'+str(pk)+"/")
 
-
-
-
-
 @login_required()
 def removeMemberUser(request,pk,id):
     try:
@@ -291,7 +275,6 @@ def removeMemberUser(request,pk,id):
     except:
         logger.warning("Unable to remove users from group")
     return HttpResponseRedirect('/identityManager/imgroup/'+str(pk)+"/")
-
 
 @login_required()
 def removeMemberGroup(request,pk,id):
@@ -318,7 +301,6 @@ def autocompleteUsers(request):
 
     return HttpResponse(resp, content_type='application/json')
 
-
 @login_required()
 def autocompleteGroups(request):
     search_qs = IMGroup.objects.filter(name__startswith=request.GET['term'])
@@ -331,9 +313,6 @@ def autocompleteGroups(request):
 
     resp = request.GET['callback'] + '(' + simplejson.dumps(results) + ');'
     return HttpResponse(resp, content_type='application/json')
-
-
-
 
 @login_required()
 def autocompletePermissions(request):
@@ -349,10 +328,6 @@ def autocompletePermissions(request):
     resp = request.GET['callback'] + '(' + simplejson.dumps(results) + ');'
 
     return HttpResponse(resp, content_type='application/json', status=200)
-
-
-
-
 
 @login_required()
 def add_group(request):
@@ -385,7 +360,6 @@ def add_group(request):
     imgroups = IMGroup.objects.all()
     variables = {'form': form, 'imgroups': imgroups}
     return render(request, 'identityManager/modal/addIdentity_ModalContent.html', variables)
-
 
 @login_required()
 def imRole(request):
@@ -444,7 +418,6 @@ def get_user_list(request):
         'identityManager/user_list.html',{'users':users}
     )
 
-
 @login_required()
 def lock(request,pk):
     user = User.objects.get(id=pk)
@@ -455,8 +428,6 @@ def lock(request,pk):
         user.is_active = False
     user.save()
     return HttpResponseRedirect('/identityManager/user/')
-
-
 
 @login_required()
 def make_superuser(request,pk):
@@ -470,8 +441,6 @@ def make_superuser(request,pk):
     user.save()
     return HttpResponseRedirect('/identityManager/user/')
 
-
-
 @login_required()
 def make_staff(request,pk):
     user = User.objects.get(id=pk)
@@ -484,12 +453,10 @@ def make_staff(request,pk):
     user.save()
     return HttpResponseRedirect('/identityManager/user/')
 
-
 @login_required()
 def changePassword(request):
     variables = {'users': User.objects.all()}
     return render(request,'user_list.html', variables)
-
 
 @login_required()
 def delete_user(request, pk):
@@ -504,9 +471,8 @@ def user_edit_profile(request, id):
     variables={'user':user,'form':form}
     return render(request,'user_profile.html',variables)
 
-
 @login_required
-def user_dashboard(request):
+def dashboard(request):
 
     if request.user.is_authenticated:
         loggedInUser = request.user
@@ -515,11 +481,9 @@ def user_dashboard(request):
             'username': loggedInUser.username,
         }
 
-        return render(request,'identityManager/user_dashboard.html', variables)
+        return render(request, 'identityManager/dashboard.html', variables)
     else:
-        return render(request,'login')
-
-
+        return render(request, 'login')
 
 # TODO : Profillerin gorunmesi icin login gerekli olmayabilir: ornegin Linkedin public profile secenegi var.
 @login_required
@@ -543,19 +507,26 @@ def view_user_profile(request, pk):
             pk = requestingUser.id
 
         # print("PK of the user is "+ str(pk))
+        try:
+            profile_owner = IMUser.objects.get(id=pk)
+        except Exception as e:
+            print(e)
+            mess = "No profile for the user exists"
+            messages.add_message(request, messages.ERROR, mess)
+            return render(request, 'identityManager/dashboard.html')
 
-        profile_owner = IMUser.objects.get(id=pk)
 
         # Eger userprofile var ise
         if(IMUserProfile.objects.filter(owner_id=pk).exists()):
+
             logger.info("User has profile")
             # Lets create a profile for this user, however it should already have one while registering
             profile = profile_owner.user_profile
 
         else:
-            # If user does not have a profile create one
+            # If user does not have a profile create one; first of all it should have an IMUser correspondence
             logger.warning("User has no profile; creating")
-            profile=IMUserProfile(owner_id=pk)
+            profile = IMUserProfile(owner_id=pk)
             profile.save()
 
         educationalRec = profile.education_set.all()
@@ -566,9 +537,9 @@ def view_user_profile(request, pk):
         variables =  {
             'username': requestingUser.username,
 
-            'profile':profile,
-            'profileOwner' : profile_owner,
-            'educationalRec':educationalRec,
+            'profile': profile,
+            'profileOwner': profile_owner,
+            'educationalRec': educationalRec,
             'workExperienceRec': workExperienceRec,
             # 'extendeduserdata':extendeduserdata,
             # 'ownedTasks': getOwnedTasks(loggedInUser),
@@ -582,23 +553,19 @@ def view_user_profile(request, pk):
     else:
         return render(request,'login')
 
-
-
 def editProfile():
     pass
-
-
-
-TEMPLATES={"address": "examApp/forms/addressForm.html",
-           "education": "examApp/forms/addressForm.html",
-           "experience": "examApp/forms/addressForm.html",
-           "projects": "examApp/forms/addressForm.html"}
 
 FORMS = [("address", AddressForm),
          ("education", EducationForm),
          ("experience", ExperienceForm),
-         ("projects", ProjectsForm)]
+         ("projects", CompletedProjectsForm)]
 
+
+TEMPLATES = {"address": "identityManager/forms/wizard_form.html",
+           "education": "identityManager/forms/addressForm.html",
+           "experience": "identityManager/forms/addressForm.html",
+           "projects": "identityManager/forms/addressForm.html"}
 
 def prot(ProfileWizard):
     pass
@@ -609,11 +576,10 @@ class ProfileWizard(SessionWizardView):
         logger.info(self.steps.current)
         return [TEMPLATES[self.steps.current]]
 
-    def done(self, form_list, **kwargs):
-
+    def done(self, form_list, form_dict, **kwargs):
+        print(kwargs['pk'])
         # do_something_with_the_form_data(form_list)
-        return HttpResponseRedirect('/examApp/profile/')
-
+        return HttpResponseRedirect(reverse('identityManager:profileView'))
 
 class UserUpdate(UpdateView):
     model = User

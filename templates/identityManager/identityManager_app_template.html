@@ -1,4 +1,4 @@
-{% extends "projectCore/template_level_3_common_content.html" %}
+{% extends "projectCore/template_level_400_application_interface.html" %}
 
 {% load i18n %}
 {% load staticfiles %}
@@ -11,11 +11,14 @@
 {% endblock %}
 
 
-{% block body_jscript %}
+
+{% block application_body_jscript %}
     {{ block.super }}
     <script src="{{ STATIC_URL }}identityManager/jscript/csrfUtil.js" ></script>
     <script src="{{ STATIC_URL }}identityManager/jscript/table_ops.js" ></script>
-
 {% endblock %}
 
 
+{% block offcanvas-app-nav %}
+    {% include 'identityManager/sidebar.html' %}
+{% endblock %}

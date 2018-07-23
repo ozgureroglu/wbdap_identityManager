@@ -9,41 +9,36 @@
     <div class="container-fluid">
         <div class="row">
 
-            {% include "identityManager/modal/addIdentityObjectModal.html" %}
+{#            {% include "identityManager/modal/addIdentityObjectModal.html" %}#}
 
             {% csrf_token %}
-
-            <div class="row">
-                <div class="col-lg-2">
-                    {# <h1 class="page-header">{{ user.first_name }} {{ user.last_name }}</h1>#}
-                </div>
 
                 {# Nesne listelerini goster#}
                 <div class="col-lg-12">
 
-                    <div class="panel panel-default">
-                        <div class="panel-heading"><h3>Group: {{ imgroup.name }}</h3></div>
-                        <div class="panel-body">
+                    <div class="card mt-4">
+                        <div class="card-header"><h3>Group: {{ imgroup.name }}</h3></div>
+                        <div class="card-body">
                             <p>{{ imgroup.description }}</p>
 
                             <div class="row">
-                                <div class="col-md-1"><h3><span
+                                <div class="col-md-2"><h3><span
                                         class="label label-primary">{{ imgroup.memberUsers.count }} Users</span></h3></div>
-                                <div class="col-md-1"><h3><span
+                                <div class="col-md-2"><h3><span
                                         class="label label-primary">{{ imgroup.memberGroups.count }} Groups</span></h3></div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <div class="panel-title">
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <div class="card-title">
                                 <h7>Member Users</h7>
                                 <div class="pull-right">
                                 </div>
                             </div>
                         </div>
-                        <div class="panel-body">
+                        <div class="card-body">
                             <table id="wbdap_imgroup_member_user_list_table" class="display">
                                 <thead>
                                 <tr style="text-align: center">
@@ -60,16 +55,16 @@
                         </div>
                     </div>
 
-                    <div class="panel panel-default">
+                    <div class="card">
                         <div class="panel-heading">
-                            <div class="panel-title">
+                            <div class="card-title">
                                 <h7>Member Groups</h7>
                                 <div class="pull-right">
                                 </div>
                             </div>
 
                         </div>
-                        <div class="panel-body">
+                        <div class="card-body">
                             <table id="wbdap_imgroup_member_group_list_table" class="display">
                                 <thead>
                                 <tr style="text-align: center">
@@ -85,11 +80,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-2">
-                    {#            <h1 class="page-header">{{ user.first_name }} {{ user.last_name }}</h1>#}
-                </div>
-
-            </div>
 
         </div>
     </div>
@@ -99,7 +89,7 @@
 
 
 
-{% block body_jscript %}
+{% block application_body_jscript %}
     {{ block.super }}
     <script src="{{ STATIC_URL }}identityManager/jscript/identityManager.js"></script>
 
@@ -546,138 +536,128 @@
 
 
     </script>
-
-
-
-{% endblock %}
-
-
-{% block application_body_jscript %}
-    {{ block.super }}
-
-
-    <script>
-
-
-        $(function () {
-
-            function split(val) {
-                return val.split(/,\s*/);
-            }
-
-            function extractLast(term) {
-                return split(term).pop();
-            }
-
-
-            $("#users")
-            // don't navigate away from the field on tab when selecting an item
-                .on("keydown", function (event) {
-                    if (event.keyCode === $.ui.keyCode.TAB &&
-                        $(this).autocomplete("instance").menu.active) {
-                        event.preventDefault();
-                    }
-                })
-                .autocomplete({
-                    minLength: 0,
+{##}
+{##}
+{#    <script>#}
+{#        $(function () {#}
+{##}
+{#            function split(val) {#}
+{#                return val.split(/,\s*/);#}
+{#            }#}
+{##}
+{#            function extractLast(term) {#}
+{#                return split(term).pop();#}
+{#            }#}
+{##}
+{##}
+{#            $("#users")#}
+{#            // don't navigate away from the field on tab when selecting an item#}
+{#                .on("keydown", function (event) {#}
+{#                    if (event.keyCode === $.ui.keyCode.TAB &&#}
+{#                        $(this).autocomplete("instance").menu.active) {#}
+{#                        event.preventDefault();#}
+{#                    }#}
+{#                })#}
+{#                .autocomplete({#}
+{#                    minLength: 0,#}
                     {#                        source: function (request, response) {#}
                     {#                            // delegate back to autocomplete, but extract the last term#}
                     {#                            response($.ui.autocomplete.filter(#}
                     {#                                    availableTags, extractLast(request.term)));#}
                     {#                        },#}
-                    source: function (request, response) {
-                        $.ajax({
-                            url: "/identityManager/imuser/autocompleteUsers",
-                            dataType: "jsonp",
-                            data: {
-                                term: extractLast(request.term)
-                            },
-                            success: function (data) {
-                                console.log($.map(data, function (value, key) {
-                                    console.log(value.username);
-                                    return {
-                                        value: value.username
-                                    }
-                                }));
-                                response($.map(data, function (value, key) {
-                                    console.log(value.username);
-                                    return {
-                                        label: value.username,
-                                        value: value.username
-                                    }
-                                }));
-                            }
-                        });
-                    },
-                    focus: function () {
-                        // prevent value inserted on focus
-                        return false;
-                    },
-                    appendTo: "#memberUserAddModal",
-                    // Asagidaki kisim istegin icerigi ile ilgili kisim; donen cevap success kisminda
-                    select: function (event, ui) {
-                        var terms = split(this.value);
-
-                        // remove the current input
-                        terms.pop();
-
-                        // add the selected item
-                        terms.push(ui.item.value);
-                        // add placeholder to get the comma-and-space at the end
-                        terms.push("");
-                        this.value = terms.join(", ");
-                        return false;
-                    }
-                });
-
-            $("#groups")
-            // don't navigate away from the field on tab when selecting an item
-                .on("keydown", function (event) {
-                    if (event.keyCode === $.ui.keyCode.TAB &&
-                        $(this).autocomplete("instance").menu.active) {
-                        event.preventDefault();
-                    }
-                })
-                .autocomplete({
-                    minLength: 0,
+{#                    source: function (request, response) {#}
+{#                        $.ajax({#}
+{#                            url: "/identityManager/imuser/autocompleteUsers",#}
+{#                            dataType: "jsonp",#}
+{#                            data: {#}
+{#                                term: extractLast(request.term)#}
+{#                            },#}
+{#                            success: function (data) {#}
+{#                                console.log($.map(data, function (value, key) {#}
+{#                                    console.log(value.username);#}
+{#                                    return {#}
+{#                                        value: value.username#}
+{#                                    }#}
+{#                                }));#}
+{#                                response($.map(data, function (value, key) {#}
+{#                                    console.log(value.username);#}
+{#                                    return {#}
+{#                                        label: value.username,#}
+{#                                        value: value.username#}
+{#                                    }#}
+{#                                }));#}
+{#                            }#}
+{#                        });#}
+{#                    },#}
+{#                    focus: function () {#}
+{#                        // prevent value inserted on focus#}
+{#                        return false;#}
+{#                    },#}
+{#                    appendTo: "#memberUserAddModal",#}
+{#                    // Asagidaki kisim istegin icerigi ile ilgili kisim; donen cevap success kisminda#}
+{#                    select: function (event, ui) {#}
+{#                        var terms = split(this.value);#}
+{##}
+{#                        // remove the current input#}
+{#                        terms.pop();#}
+{##}
+{#                        // add the selected item#}
+{#                        terms.push(ui.item.value);#}
+{#                        // add placeholder to get the comma-and-space at the end#}
+{#                        terms.push("");#}
+{#                        this.value = terms.join(", ");#}
+{#                        return false;#}
+{#                    }#}
+{#                });#}
+{##}
+{#            $("#groups")#}
+{#            // don't navigate away from the field on tab when selecting an item#}
+{#                .on("keydown", function (event) {#}
+{#                    if (event.keyCode === $.ui.keyCode.TAB &&#}
+{#                        $(this).autocomplete("instance").menu.active) {#}
+{#                        event.preventDefault();#}
+{#                    }#}
+{#                })#}
+{#                .autocomplete({#}
+{#                    minLength: 0,#}
                     {#                        source: function (request, response) {#}
                     {#                            // delegate back to autocomplete, but extract the last term#}
                     {#                            response($.ui.autocomplete.filter(#}
                     {#                                    availableTags, extractLast(request.term)));#}
                     {#                        },#}
-                    source: function (request, response) {
-                        $.ajax({
-                            url: "/identityManager/imgroup/autocompleteGroups",
-                            dataType: "jsonp",
-                            data: {
-                                term: extractLast(request.term)
-                            },
-                            success: function (data) {
-                                response(data);
-                            }
-                        });
-                    },
-                    focus: function () {
-                        // prevent value inserted on focus
-                        return false;
-                    },
-                    appendTo: "#memberGroupAddModal",
-                    select: function (event, ui) {
-                        var terms = split(this.value);
-
-                        // remove the current input
-                        terms.pop();
-                        // add the selected item
-                        terms.push(ui.item.value);
-                        // add placeholder to get the comma-and-space at the end
-                        terms.push("");
-                        this.value = terms.join(", ");
-                        return false;
-                    }
-                });
-
-
-        });
-    </script>
+{#                    source: function (request, response) {#}
+{#                        $.ajax({#}
+{#                            url: "/identityManager/imgroup/autocompleteGroups",#}
+{#                            dataType: "jsonp",#}
+{#                            data: {#}
+{#                                term: extractLast(request.term)#}
+{#                            },#}
+{#                            success: function (data) {#}
+{#                                response(data);#}
+{#                            }#}
+{#                        });#}
+{#                    },#}
+{#                    focus: function () {#}
+{#                        // prevent value inserted on focus#}
+{#                        return false;#}
+{#                    },#}
+{#                    appendTo: "#memberGroupAddModal",#}
+{#                    select: function (event, ui) {#}
+{#                        var terms = split(this.value);#}
+{##}
+{#                        // remove the current input#}
+{#                        terms.pop();#}
+{#                        // add the selected item#}
+{#                        terms.push(ui.item.value);#}
+{#                        // add placeholder to get the comma-and-space at the end#}
+{#                        terms.push("");#}
+{#                        this.value = terms.join(", ");#}
+{#                        return false;#}
+{#                    }#}
+{#                });#}
+{##}
+{##}
+{#        });#}
+{#    </script>#}
 
 {% endblock %}
