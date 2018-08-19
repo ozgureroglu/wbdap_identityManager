@@ -4,23 +4,23 @@ import simplejson
 from django import http
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Permission, User
+from django.contrib.sites.shortcuts import get_current_site
 from django.core import serializers
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import resolve, reverse
+from django.views.decorators.http import require_http_methods
 from django.views.generic import UpdateView
 from formtools.wizard.views import SessionWizardView
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from rest_framework.status import HTTP_500_INTERNAL_SERVER_ERROR, HTTP_200_OK
 
+from applicationManager.models import Application
 from .forms import *
 from .models import IMUser, IMGroup, IMRole, IMUserProfile
-from rest_framework.response import Response
-import django_filters.rest_framework
-from rest_framework import filters
-from rest_framework import viewsets
 
 
 #Get an instance of the logger: Name should be the name of the logger in settings LOGGING field
@@ -68,8 +68,7 @@ def imUser(request):
 
 
     return render(request,
-        'identityManager/index.html',
-        # 'identityManager/index2.html', {'users': users, 'form': AddUserForm}
+        'identityManager/index.html',{}
     )
 
 @login_required()
@@ -116,6 +115,50 @@ def add_imuser(request):
     users = User.objects.all()
     variables = {'form': form, 'users': users}
     return render(request, 'identityManager/modal/addIdentity_ModalContent.html', variables)
+
+
+@login_required()
+def generate_user_data(request):
+    # with open("bin/dataGenerator/names") as names:
+        import string
+        from random import randint
+        from random import choice
+
+        for x in range(1, 5):
+            # with open('/bin/datagenetor/names') as names:
+            #     for line in names:
+            #         print
+            #         line
+            min_char = 3
+            max_char = 14
+            allchar = string.ascii_letters + string.digits
+
+            name = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
+            surname = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
+
+            user = IMUser()
+            user.username = name[0].lower() + surname.lower()
+            print(user.username)
+            user.email = user.username + '@wbdap.test.com'
+            print(user.email)
+            user.first_name = name
+            user.last_name = surname
+            user.password = surname
+            user.is_superuser = False
+            user.save()
+        return redirect('identityManager:imUser')
+
+@login_required()
+def generate_group_data(request):
+    imgroups = IMGroup.objects.all()
+
+
+@login_required()
+def generate_role_data(request):
+    imgroups = IMGroup.objects.all()
+
+
+
 
 @login_required()
 def imGroup(request):
@@ -329,6 +372,53 @@ def autocompletePermissions(request):
 
     return HttpResponse(resp, content_type='application/json', status=200)
 
+
+
+
+def cleandefs(request):
+    #TODO: Find a decoupled solution
+    for app in Application.objects.all():
+        print(app.app_name)
+        IMRole.objects.filter(name=app.app_name+'_app_admin').delete()
+        IMRole.objects.filter(name=app.app_name + '_app_user').delete()
+
+        IMGroup.objects.filter(name=app.app_name + '_app_admins').delete()
+        IMGroup.objects.filter(name=app.app_name + '_app_users').delete()
+
+    return redirect('identityManager:imUser')
+
+def gendefs(request):
+    #TODO: Find a decoupled solution
+    for app in Application.objects.all():
+        print(app.app_name)
+
+        adm_grp, st = IMGroup.objects.get_or_create(name=app.app_name + '_app_admins',
+                                     description='Admin group of ' + app.app_name + ' application', active=True )
+        adm_grp.memberUsers.add(IMUser.objects.get(username='ake'))
+
+        user_grp, st = IMGroup.objects.get_or_create(name=app.app_name + '_app_users',
+                                                    description='User group of ' + app.app_name + ' application',
+                                                    active=True)
+        user_grp.memberUsers.add(IMUser.objects.get(username='ozge'))
+        user_grp.memberGroups.add(adm_grp)
+
+        role, success = IMRole.objects.get_or_create(name=app.app_name+'_app_admin', description='A role with full privileges on '+app.app_name+' application')
+        role.assigned_users.add(IMUser.objects.get(username='ozgur'))
+        role.assigned_groups.add(user_grp)
+
+        for x in Permission.objects.filter(content_type__app_label=app.app_name):
+            role.permissions.add(x)
+
+        role, success = IMRole.objects.get_or_create(name=app.app_name + '_app_user', description='A role with least privileges on '+app.app_name+' application')
+        role.assigned_users.add(IMUser.objects.get(username='ozgur'))
+
+        for x in Permission.objects.filter(content_type__app_label=app.app_name, content_type__permission__codename__contains='read'):
+            role.permissions.add(x)
+
+        role.assigned_groups.add(user_grp)
+
+    return redirect('identityManager:imRole')
+
 @login_required()
 def add_group(request):
     if request.method == 'POST':
@@ -454,9 +544,27 @@ def make_staff(request,pk):
     return HttpResponseRedirect('/identityManager/user/')
 
 @login_required()
+@require_http_methods(['POST'])
 def changePassword(request):
-    variables = {'users': User.objects.all()}
-    return render(request,'user_list.html', variables)
+    from django.contrib.auth.forms import PasswordChangeForm
+    from django.contrib.auth import update_session_auth_hash
+
+    if request.method == 'POST':
+        print(request.POST)
+        user = User.objects.get(id = request.POST['user_id'])
+        passwd = request.POST['passwd']
+
+        try:
+            user.set_password(passwd)
+            user.save()
+            update_session_auth_hash(request, user)  # Important!
+            message = 'Your password was successfully updated!'
+            data = {'status': 'true', 'message': message}
+            return JsonResponse(data, status=HTTP_200_OK)
+        except Exception as e:
+            data = {'status': 'false', 'message': e}
+            return JsonResponse(data, status=HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 @login_required()
 def delete_user(request, pk):
@@ -474,11 +582,15 @@ def user_edit_profile(request, id):
 @login_required
 def dashboard(request):
 
+    print(get_current_site(request))
     if request.user.is_authenticated:
         loggedInUser = request.user
 
         variables = {
             'username': loggedInUser.username,
+            'users': IMUser.objects.count(),
+            'groups': IMGroup.objects.count(),
+            'roles': IMRole.objects.count(),
         }
 
         return render(request, 'identityManager/dashboard.html', variables)
@@ -499,8 +611,6 @@ def view_user_profile(request, pk):
     if request.user.is_authenticated:
 
         requestingUser = request.user
-        # requestingImUser = requestingUser.im_user
-        # print(requestingImUser.id)
 
         # Eger url'e herhangi bir pk degeri gecmemisse kullanicinin  kendi sayfasina donelim.
         if(pk is None):
@@ -515,19 +625,7 @@ def view_user_profile(request, pk):
             messages.add_message(request, messages.ERROR, mess)
             return render(request, 'identityManager/dashboard.html')
 
-
-        # Eger userprofile var ise
-        if(IMUserProfile.objects.filter(owner_id=pk).exists()):
-
-            logger.info("User has profile")
-            # Lets create a profile for this user, however it should already have one while registering
-            profile = profile_owner.user_profile
-
-        else:
-            # If user does not have a profile create one; first of all it should have an IMUser correspondence
-            logger.warning("User has no profile; creating")
-            profile = IMUserProfile(owner_id=pk)
-            profile.save()
+        profile, created = IMUserProfile.objects.get_or_create(owner_id=pk)
 
         educationalRec = profile.education_set.all()
         workExperienceRec = profile.workexperience_set.all()
@@ -563,12 +661,10 @@ FORMS = [("address", AddressForm),
 
 
 TEMPLATES = {"address": "identityManager/forms/wizard_form.html",
-           "education": "identityManager/forms/addressForm.html",
-           "experience": "identityManager/forms/addressForm.html",
-           "projects": "identityManager/forms/addressForm.html"}
+           "education": "identityManager/forms/wizard_form.html",
+           "experience": "identityManager/forms/wizard_form.html",
+           "projects": "identityManager/forms/wizard_form.html"}
 
-def prot(ProfileWizard):
-    pass
 
 class ProfileWizard(SessionWizardView):
     # form_list = [ProfileForm1,ProfileForm2,ProfileForm3,ProfileForm4]

@@ -1,9 +1,55 @@
 {% extends "identityManager/identityManager_app_template.html" %}
 {% load i18n %}
+{% load staticfiles %}
 
 {% block title %}{{ file }}{% endblock %}
 
+
+{% block application_head_stylesheet %}
+    {{ block.super }}
+
+    <style>
+        td.details-control {
+            background: url('{{ STATIC_URL }}identityManager/images/details_open.png') no-repeat center center;
+            cursor: pointer;
+        }
+
+        tr.shown td.details-control {
+            background: url('{{ STATIC_URL }}identityManager/images/details_close.png') no-repeat center center;
+        }
+
+    </style>
+{% endblock %}
+
+
+
 {% block modals %}
+    <div class="modal fade" id="passwdChangeModal" tabindex="-1" role="dialog" aria-labelledby="passwdChangeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="passwdChangeModalLabel">New Password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="passwd_change_form">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="user-id" name="user-id">
+                            <label for="message-text" class="col-form-label">Password:</label>
+                            <input type="text" class="form-control" id="password" name="password"></input>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="password_change_submit">Change Password</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Large EDIT modal -->
     <div class="modal fade" id="user-list-lg-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
@@ -43,9 +89,6 @@
     </div>
 {% endblock %}
 
-
-
-
 {% block page_content %}
     {{ block.super }}
     {% csrf_token %}
@@ -73,7 +116,6 @@
             </div>
         </div>
     </div>
-
 {% endblock %}
 
 
@@ -81,73 +123,136 @@
     {{ block.super }}
     <script src="{{ STATIC_URL }}identityManager/jscript/identityManager.js"></script>
 
+    <script>
+        $(document).ready(function () {
+
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+                },
+            });
+
+
+            $('#passwdChangeModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var recipient = button.data('user-id') // Extract info from data-* attributes
+                // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                var modal = $(this)
+                modal.find('.modal-body #user-id').val(recipient)
+            })
+
+
+            $(document).on("click", "#password_change_submit", function () {
+                var id = $('#passwd_change_form #user-id').val();
+                var password = $('#passwd_change_form #password').val();
+
+                $.post("{% url 'identityManager:changepassword' %}", {
+                    'user_id': id,
+                    'passwd': password
+                }, function (data, status) {
+                    $('#passwdChangeModal').modal('toggle');
+                    show_snackbar('top_snackbar', data.message);
+                    $('#passwd_change_form').trigger("reset");
+                }, "json");
+            });
+
+
+        })
+    </script>
+
 
     <script>
         $(document).ready(function () {
             var csrftoken = $("input[name='csrfmiddlewaretoken']").attr('value');
 
 
-            $('#wbdap_imuser_list_table').wbdap_api_backed_datatable({
-                table: '#wbdap_imuser_list_table',
-                list_url: "/api/v1/identityManager/imusers/?format=json",
-                create_url: "/api/v1/identityManager/imusers/",
-                edit_url: "/api/v1/identityManager/imusers/_id_/",
-                remove_url: "/api/v1/identityManager/imusers/_id_/",
-                table_columns: [
-                    {
-                        data: null,
-                        defaultContent: '',
-                        className: 'select-checkbox not_editable',
-                        orderable: false
-                    },
-                    {
-                        "data": "username",
-                        render: function (data, type, row) {
-                            if (type === 'display') {
-                                return '<a href="/identityManager/profile/' + row.id + '/">' + row.username + '</a>';
-                            }
-                            return data;
-                        },
-                    },
-                    {"data": "first_name"},
-                    {"data": "last_name"},
-                    {"data": "email"},
-                    {
-                        "data": "is_superuser",
-                        render: function (data, type, row) {
-                            if (type === 'display') {
-                                return '<input type="checkbox" class="datatable-is_superuser">';
-                            }
-                            return data;
-                        },
-                        className: "dt-body-center"
-                    },
-                    {
-                        data: "is_staff",
-                        render: function (data, type, row) {
-                            if (type === 'display') {
-                                return '<input type="checkbox" class="datatable-is_staff">';
-                            }
-                            return data;
-                        },
-                        className: "dt-body-center"
-                    },
-                    {
-                        data: "is_active",
-                        render: function (data, type, row) {
-                            if (type === 'display') {
-                                return '<input type="checkbox" class="datatable-is_active">';
-                            }
-                            return data;
-                        },
-                        className: "dt-body-center"
-                    },
+            /* Formatting function for row details - modify as you need */
+            function format(d) {
+                // `d` is the original data object for the row
+                return '<small><table class="table table-hover text-muted" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+                    '<tr>' +
+                    '<td>Email:</td>' +
+                    '<td>' + d.email + '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td>Last login:</td>' +
+                    '<td>' + d.last_login + '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td>Extra info:</td>' +
+                    '<td>And any further details here (images etc)...</td>' +
+                    '</tr>' +
+                    '</table></small>';
+            }
 
-                    {"data": "last_login", className: "not_editable"},
 
-                ],
-                editor_fields: [
 
+            {#------------------------------------------------------------------------------------------------------#}
+
+
+            imuser_editor = new $.fn.dataTable.Editor({
+
+                ajax: {
+                    create: {
+                        type: 'POST',
+                        url: '/api/v1/identityManager/imusers/',
+                        headers: {
+                            'X-CSRFToken': csrftoken
+                        },
+                        contentType: 'application/json',
+                        data: function (d) {
+                            var keys = Object.keys(d.data);
+                            ndata = JSON.stringify(d.data[keys[0]]);
+                            return ndata;
+                        },
+                    },
+                    edit: {
+                        type: 'PUT',
+                        url: '/api/v1/identityManager/imusers/_id_/',
+                        headers: {
+                            'X-CSRFToken': csrftoken
+                        },
+                        contentType: 'application/json',
+                        data: function (d) {
+                            {#console.log(d)#}
+                            var row_id = Object.keys(d.data)
+                            var jdata = d.data[row_id]
+
+                            var jdata_keys = Object.keys(jdata);
+                            $.each(jdata_keys, function (k, v) {
+                                if (v.startsWith('is_')) {
+                                    if (jdata[v] === "") {
+                                        // alert(v+" is empty valued")
+                                        delete jdata[v];
+                                        jdata[v] = 'false';
+                                    }
+                                }
+                            })
+
+                            ndata = JSON.stringify(jdata);
+                            return ndata;
+                        },
+
+                    },
+                    remove: {
+                        type: 'DELETE',
+                        url: '/api/v1/identityManager/imusers/_id_/',
+                        headers: {
+                            'X-CSRFToken': csrftoken
+                        },
+                        {#contentType: 'application/json',#}
+                        {#data: function (d) {#}
+                        {#    var keys = Object.keys(d.data);#}
+                        {#    ndata = JSON.stringify(d.data[keys[0]]);#}
+                        {#    console.log(ndata);#}
+                        {#    return ndata;#}
+                        //    {#},#}
+                    }
+                },
+                table: "#wbdap_imuser_list_table",
+                idSrc: 'id',
+                fields: [
                     {
                         label: "Username:",
                         name: "username"
@@ -180,7 +285,6 @@
 
                         options: [
                             {label: '', value: true},
-                            {#{label: '', value: false},#}
                         ]
                     }, {
                         label: "Active:",
@@ -191,11 +295,205 @@
 
                         options: [
                             {label: '', value: true},
-                            {#{label: '', value: false},#}
+
                         ]
+
                     }
                 ]
             });
+
+
+            imuser_editor.on('remove', function (e, json) {
+
+                if (json.error == "") {
+                    show_snackbar('top_snackbar', 'Row has been removed');
+                }
+                alert('Row deleted');
+            });
+
+
+            imuser_editor.on('edit', function (e, json, data) {
+                if (json.error == "") {
+                    show_snackbar('top_snackbar', 'Row has been updated');
+                }
+            });
+
+
+            imuser_table = $('#wbdap_imuser_list_table').DataTable({
+                "scrollY": "500px",
+                "scrollCollapse": true,
+                "dom": 'Bfrtip',
+                "paging": true,
+                "select": true,
+                "info": false,
+                "ordering": true,
+                "processing": true,
+                "serverSide": true,
+                {#"order": [[ 1, 'asc' ], [ 2, 'asc' ]],#}
+                "ajax": {
+                    url: "/api/v1/identityManager/imusers/?format=json",
+                    dataSrc: 'results',
+                    data: function (d) {
+                        var keys = Object.keys(d);
+
+                        var offset = d["start"];
+                        var limit = d["length"];
+                        var search = d["search"];
+                        var ordering = d["order"][0]["column"];
+                        var order_val = d.columns[ordering]['data'];
+
+                        d["offset"] = offset;
+                        d["limit"] = limit;
+                        d["order"][0]["column"] = order_val;
+                        delete d["start"];
+                        delete d["length"];
+                    },
+                    dataFilter: function (d) {
+                        var json = jQuery.parseJSON(d);
+                        json.recordsTotal = json.count;
+                        json.recordsFiltered = json.count;
+                        json.data = json.results;
+
+                        return JSON.stringify(json); // return JSON string
+                    }
+                },
+                "columns": [
+                    {#{#}
+                    {#    data: null,#}
+                    {#    defaultContent: '',#}
+                    {#    className: 'select-checkbox not_editable',#}
+                    {#    orderable: false#}
+                    //{#},#}
+                    {
+                        "className": 'details-control',
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": ''
+                    },
+                    {
+                        "data": "username",
+                        render: function (data, type, row) {
+                            if (type === 'display') {
+                                return '<a href="/identityManager/profile/' + row.id + '/">' + row.username + '</a>';
+                            }
+                            return data;
+                        },
+                    },
+                    {"data": "first_name"},
+                    {"data": "last_name"},
+                    {#{"data": "email"},#}
+                    {
+                        "data": "is_superuser",
+                        render: function (data, type, row) {
+                            if (type === 'display') {
+                                return '<input type="checkbox" class="datatable-is_superuser">';
+                            }
+                            return data;
+                        },
+                        className: "dt-body-center "
+                    },
+                    {
+                        data: "is_staff",
+                        render: function (data, type, row) {
+                            if (type === 'display') {
+                                return '<input type="checkbox" class="datatable-is_staff">';
+                            }
+                            return data;
+                        },
+                        className: "dt-body-center"
+                    },
+                    {
+                        data: "is_active",
+                        render: function (data, type, row) {
+                            if (type === 'display') {
+                                return '<input type="checkbox" class="datatable-is_active">';
+                            }
+                            return data;
+                        },
+                        className: "dt-body-center"
+                    },
+
+                    {#{"data": "last_login", className: "not_editable"},#}
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            html_code = '{% spaceless %}{% include 'identityManager/operations_button.html' %}{% endspaceless %}';
+                            cleaned = html_code.replace(/(\r\n\t|\n|\r\t)/gm, "");
+                            return '<div class="btn-group">\n' +
+                                '  <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>\n' +
+                                '  <div class="dropdown-menu">\n' +
+                                '    <a class="dropdown-item passwd_change" href="#" data-toggle="modal" data-target="#passwdChangeModal" data-user-id="' + row.id + '">Change Password</a>\n' +
+                                '    <a class="dropdown-item" href="#">Another action</a>\n' +
+                                '    <a class="dropdown-item" href="#">Something else here</a>\n' +
+                                '    <div class="dropdown-divider"></div>\n' +
+                                '    <a class="dropdown-item" href="#">Separated link</a>\n' +
+                                '  </div>\n' +
+                                '</div>';
+
+                        },
+
+                        className: "not_editable"
+                    },
+
+
+                ],
+                {#"order": [[1, 'asc']],#} //orders the table wrt first col.
+                {#select: true#}
+                select: {
+                    style: 'os',
+                    selector: 'td:not(:first-child)' // no row selection on last column
+                },
+                buttons: [
+                    {extend: "create", editor: imuser_editor},
+                    {extend: "edit", editor: imuser_editor},
+                    {extend: "remove", editor: imuser_editor}
+                ],
+                rowCallback: function (row, data) {
+                    // Set the checked state of the checkbox in the table
+                    $('input.datatable-is_active', row).prop('checked', data.is_active == 1);
+                    $('input.datatable-is_superuser', row).prop('checked', data.is_superuser == 1);
+                    $('input.datatable-is_staff', row).prop('checked', data.is_staff == 1);
+                }
+            });
+
+
+              // Add event listener for opening and closing details
+            $('#wbdap_imuser_list_table tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = imuser_table.row(tr);
+
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    // Open this row
+                    row.child(format(row.data())).show();
+                    tr.addClass('shown');
+                }
+            });
+
+
+            $('#wbdap_imuser_list_table').on('click', "input:checkbox", function () {
+                // console.log( $( this ).attr('class') );
+
+                var type = $(this).attr('class').split("-")[1];
+                objs[ename]
+                // asagidaki ilk satirdaki false, edit modali gosterme demektir.
+                // .edit(table.rows({ selected: true}), false)
+                    .edit($(this).closest('tr'), false)
+                    .set(type, $(this).prop('checked') ? true : false)
+                    .submit();
+            });
+            {##}
+            {#$('#wbdap_imuser_list_table').on('click', 'tbody td:not(:has(input)):not(.not_editable)', function (e) {#}
+            {##}
+            {#    // alert($(this).html());#}
+            {#    objs[ename].inline(this, {#}
+            {#        submit: 'allIfChanged'#}
+            {#    });#}
+         //   {#});#}
 
 
             {#------------------------------------------------------------------------------------------------------#}
@@ -224,7 +522,7 @@
                         },
                         contentType: 'application/json',
                         data: function (d) {
-                            console.log(d)
+                            {#console.log(d)#}
                             var row_id = Object.keys(d.data)
                             var jdata = d.data[row_id]
 
@@ -266,7 +564,7 @@
                     label: "Description:",
                     name: "description"
                 }, {
-                    label: "Staus:",
+                    label: "Status:",
                     type: "checkbox",
                     name: "active",
                     unselectedValue: "false",
@@ -380,7 +678,7 @@
                         },
                         contentType: 'application/json',
                         data: function (d) {
-                            console.log(d)
+                            {#console.log(d)#}
                             var row_id = Object.keys(d.data)
                             var jdata = d.data[row_id]
 
@@ -493,13 +791,19 @@
                 ]
             });
 
-            {#-------------------------------------------------------------------------------------------------------------------#}
+            {#------------------------------------------------------------------------------------------------------#}
             {% if messageType == "Exception" %}
                 $.notify("{{ message }}", "error");
             {% endif %}
-        });
+
+
+
+
+        })
+        ;
 
     </script>
 
 {% endblock %}
+
 

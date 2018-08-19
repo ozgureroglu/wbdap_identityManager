@@ -23,7 +23,12 @@
             <p class="card-text text-muted" >Authorized roles can manage identities on this platform. You will be redirected to login application if needed.</p>
             <a href="{% url 'identityManager:dashboard' %}" class="btn btn-primary">Enter</a>
         </div>
-
     </div>
+
+
+    <button onclick="show_snackbar('right_snackbar','testing right')">Show R Snackbar</button>
+    <button onclick="show_snackbar('left_snackbar', 'testing left')">Show L Snackbar</button>
+    <button onclick="show_snackbar('top_snackbar')">Show T Snackbar</button>
+    <button onclick="show_snackbar('bottom_snackbar')">Show B Snackbar</button>
 
 {% endblock %}

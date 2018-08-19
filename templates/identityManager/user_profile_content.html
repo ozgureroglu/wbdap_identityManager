@@ -1,64 +1,17 @@
-{#<div id="page-wrapper">#}
-{#    <div class="row mb-4">#}
-{#        <div class="col-lg-12">#}
-{#            <h3 class="page-header">Profile page#}
-{#                of {{ profileOwner.first_name | capfirst }} {{ profileOwner.last_name | capfirst }}</h3>#}
-{#        </div>#}
-{#        <!-- /.col-lg-12 -->#}
-{#    </div>#}
-{#    <!-- /.row -->#}
-{##}
-{#    <div class="mb-4">#}
-{##}
-{#        <a href="#educationDiv" class="mr-3 togglerButton" data-target-divid="educationDiv">#}
-{#            <i class="fa fa-graduation-cap fa-3x pull-left" title="Educational Details"></i></a>#}
-{##}
-{#        <a href="#workExperienceDiv" class="mr-3 togglerButton" data-target-divid="workExperienceDiv">#}
-{#            <i class="fa fa-briefcase fa-3x pull-left" title="Working Experience"></i></a>#}
-{##}
-{#        <a href="#personalTimeLineDiv" class="mr-3 togglerButton" data-target-divid="personalTimeLineDiv">#}
-{#            <i class="fa fa-history fa-3x pull-left" title="Personal Time Line"></i></a>#}
-{##}
-{#        <a href="#" class="mr-3 togglerButton" data-target-divid="personalDetailsDiv">#}
-{#            <i class="fa fa-camera-retro fa-3x  pull-left" title="Details"></i></a>#}
-{##}
-{#    </div>#}
-{##}
-{#    <div class="row">#}
-{#        {% include "identityManager/summary.html" %}#}
-{##}
-{#    </div>#}
-{##}
-{##}
-{#    <div class="row">#}
-{##}
-{##}
-{# Edit Modal #}
-{#        {% include "identityManager/modal/edit_personal_details_Modal.html" %}#}
-{##}
-{#        {% include "identityManager/personal_time_line.html" %}#}
-{#        {% include "identityManager/education.html" %}#}
-{#        {% include "identityManager/workExperience.html" %}#}
-{##}
-{##}
-{#        <!-- /.row -->#}
-{#    </div>#}
-{#</div>#}
-
 <div class="container">
     <div class="row">
         <div class="col-lg-3">
 
-            <div class="card" id="profilecard">
-                <img src="{{ STATIC_URL }}identityManager/images/woman_profile.jpg" alt="John" style="width:100%">
-                <h1>John Doe</h1>
+            <div class="card text-center" id="profilecard">
+                <img class="img-fluid rounded-circle mx-auto d-block" src="{{ STATIC_URL }}identityManager/images/woman_profile.jpg" alt="John">
+                <h1 class="profile_owner_name">{{ profileOwner.first_name| capfirst }} {{ profileOwner.last_name| capfirst }}</h1>
                 <p class="profiletitle">CEO & Founder, Example</p>
                 <p>Harvard University</p>
                 <div style="margin: 24px 0;">
-                    <a href="#"><i class="fas fa-dribbble"></i></a>
-                    <a href="#"><i class="fas fa-twitter"></i></a>
-                    <a href="#"><i class="fas fa-linkedin"></i></a>
-                    <a href="#"><i class="fas fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-dribbble"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
                 </div>
                 <p>
                     <button class="profilebutton">Contact</button>

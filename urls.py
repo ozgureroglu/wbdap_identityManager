@@ -28,6 +28,7 @@ urlpatterns = [
     # path('',index_page,name='index'),
     path('', landing_page, name='landing-page'),
     path('imuser/', imUser, name='imUser'),
+    path('imuser/gen/', generate_user_data, name=' generate-user-data'),
     path('imuser/add/', add_imuser, name='addUser'),
     path('imuser/make_superuser/<int:pk>/', make_superuser, name='make_superuser'),
     path('imuser/make_staff/<int:pk>/', make_staff, name='make_staff'),
@@ -38,6 +39,7 @@ urlpatterns = [
     # ------------------------------------------------------------
 
     path('imgroup/', imGroup, name='imGroup'),
+    path('imuser/gen/', generate_group_data, name=' generate-group-data'),
     path('imgroup/<int:pk>/', imgroup_home, name='imgroup_home'),
     path('imgroup/<int:pk>/memberUser/add/', addMemberUser, name='addMemberUser'),
     path('imgroup/<int:pk>/memberUser/remove/<int:id>/', removeMemberUser, name='removeMemberUser'),
@@ -50,6 +52,7 @@ urlpatterns = [
 
     path('imrole/', imRole, name='imRole'),
     path('imrole/<int:pk>/', imRole_home, name='imRole_home'),
+    path('imuser/gen/', generate_role_data, name=' generate-role-data'),
     path('imrole/<int:pk>/assignedUser/add', assignUsersToRole, name='assignUsersToRole'),
     path('imrole/<int:pk>/assignedGroup/add', assignGroupsToRole, name='assignGroupsToRole'),
     path('imrole/<int:pk>/permission/add', addPermissionToRole, name='addPermissionToRole'),
@@ -57,6 +60,8 @@ urlpatterns = [
     path('imrole/add/', add_imrole, name='add_imrole '),
     path('imrole/delete/<int:pk>/', delete_imrole, name='deleteIMRole'),
     path('imrole/autocompletePermissions/', autocompletePermissions, name='autocompletePermissions'),
+
+
 
     # ------------------------------------------------------------
     path('permission/autocompletePermissions/', autocompletePermissions,name='autocompletePermissions'),
@@ -78,6 +83,11 @@ urlpatterns = [
     # ------------------------------------------------------------
 
     path('profile/<int:pk>/', view_user_profile, name='profileView'),
-    path('profile/<int:pk>/edit/', ProfileWizard.as_view(FORMS), name='edit-profile')
+    path('profile/<int:pk>/edit/', ProfileWizard.as_view(FORMS), name='edit-profile'),
+
+
+    path('cleandefs/', cleandefs, name='cleandefs'),
+    path('gendefs/', gendefs, name='gendefs'),
+
 
 ]

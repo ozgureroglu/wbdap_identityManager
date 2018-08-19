@@ -1,9 +1,8 @@
 <div class="card mb-2" id="profile_component">
-
+    <div class="card-header"><h3>Summary</h3></div>
     <div class="card-body">
-        <h1>Summary</h1>
 
-        <table class="table table-hover">
+        <table class="table table-hover table-striped">
             <tr>
                 <td><b>Name :</b></td>
                 <td>{{ profileOwner.first_name }}</td>
@@ -20,7 +19,6 @@
                 <td><b>Gender :</b></td>
                 <td>{{ userProfile.gender }}</td>
             </tr>
-
             <tr>
                 <td><b>Email :</b></td>
                 <td>{{ profileOwner.email }}</td>
@@ -31,30 +29,23 @@
             </tr>
             <tr>
                 <td><b>Address :</b></td>
-                <td><address>{{ userProfile.address }}</address></td>
+                <td>
+                    <address>{{ userProfile.address }}</address>
+                </td>
             </tr>
-
         </table>
-        <a href="{% url 'identityManager:edit-profile' profileOwner.id %}" type="button"
-           class="btn btn-primary btn-sm" data-toggle="edit_profile_modal"
-           data-target="#editProfile">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit
-        </a>
 
-
-{#        <div class="col-lg-12">#}
-{#            <div class="panel panel-default panel-default" style="border: 0">#}
-{#                <div class="card-body">#}
-{#                    <u><h3>Studied@{{ educationalRec.count }} schools</h3> <br></u>#}
-{#                    {% for record in educationalRec %}#}
-{#                        <strong>{{ record.school }},</strong> {{ record.degree }},{{ record.grade }}<br>#}
-{#                    {% endfor %}#}
-{#                </div>#}
-{#                {% include "identityManager/modal/edit_personal_details_Modal.html" %}#}
-{#            </div>#}
-{#        </div>#}
 
     </div>
+         <div class="card-footer">
+        <a href="{% url 'identityManager:edit-profile'  profileOwner.id %}">
+            <button type="button"
+                    class="btn btn-primary btn-sm" data-toggle="edit_profile_modal"
+                    data-target="#editProfile">
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit
+            </button>
+        </a>
+            </div>
 
     <!-- /.panel-body -->
 </div>

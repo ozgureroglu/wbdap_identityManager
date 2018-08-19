@@ -70,9 +70,26 @@ class AddRoleForm(ModelForm):
 
 class AddressForm(ModelForm):
 
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        # self.helper.layout = Layout(
+        #     # Fieldset(('Edit User Data'), 'first_name', 'last_name', 'email'),
+        #     ButtonHolder(
+        #         Submit('save', ('Submit'), css_class='btn btn-primary '),
+        #         Reset('reset', ('Cancel'), css_class='btn')
+        #     )
+        # )
+        self.helper.add_input(Submit('submit', 'Submit', css_class='btn btn-primary'))
+        #
+        super(AddressForm, self).__init__(*args, **kwargs)
+
+
+
+
     class Meta:
         model = Address
-        exclude = ('is_staff', 'is_superuser', 'last_login', 'date_joined', 'groups', 'user_permissions')
+        exclude = ('profile',)
 
 
 
@@ -80,14 +97,14 @@ class EducationForm(ModelForm):
 
     class Meta:
         model = Education
-        exclude = ('is_staff', 'is_superuser', 'last_login', 'date_joined', 'groups', 'user_permissions')
+        exclude = ('profile',)
 
 
 class ExperienceForm(ModelForm):
 
     class Meta:
         model = WorkExperience
-        exclude = ('is_staff', 'is_superuser', 'last_login', 'date_joined', 'groups', 'user_permissions')
+        exclude = ('profile',)
 
 
 class CompletedProjectsForm(ModelForm):
@@ -95,7 +112,7 @@ class CompletedProjectsForm(ModelForm):
 
     class Meta:
         model = CompletedProject
-        exclude = ('is_staff', 'is_superuser', 'last_login', 'date_joined', 'groups', 'user_permissions')
+        exclude = ('user',)
 
 
 class SimpleUserUpdate(ModelForm):

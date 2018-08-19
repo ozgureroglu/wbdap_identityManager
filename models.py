@@ -10,8 +10,12 @@ from django.db import models
 # Dolayisi ile bu alanin dumpi her alindiginda user listesi dump'ida alinmalidir.
 class IMUser(User):
     ss = models.CharField(max_length=10, blank=True)
+    generated = models.BooleanField(null=False, blank=True, default=False)
 
     def __str__(self):
+        return self.first_name
+
+    def __unicode__(self):
         return self.first_name
 
     class Meta(User.Meta):
@@ -136,9 +140,9 @@ class DegreeAdmin(admin.ModelAdmin):
 
 
 class School(models.Model):
-    name = models.CharField(max_length=100, null=False, blank=False)
-    abbreviation = models.CharField(max_length=50, null=True, blank=True)
-    country = models.CharField(max_length=50, null=True, blank=True)
+    name = models.CharField(max_length=50, null=False, blank=False)
+    abbreviation = models.CharField(max_length=20, null=True, blank=True)
+    country = models.CharField(max_length=20, null=True, blank=True)
     description = models.TextField(max_length=80, null=True, blank=True)
 
     def __str__(self):
@@ -154,12 +158,12 @@ class SchoolAdmin(admin.ModelAdmin):
 
 
 class Address(models.Model):
-    name = models.CharField( "Full name", max_length=1024, default='home address' )
+    name = models.CharField("Full name", max_length=1024, default='home address' )
     address1 = models.CharField("Address line 1", max_length=1024, default='address1')
-    address2 = models.CharField( "Address line 2", max_length=1024, default='address2')
+    address2 = models.CharField("Address line 2", max_length=1024, default='address2')
     zip_code = models.CharField("ZIP / Postal code", max_length=12, default='0000')
-    city = models.CharField( "City", max_length=1024,default='ankara')
-    country = models.CharField("Country", max_length=3, default= 'turkey')
+    city = models.CharField("City", max_length=1024,default='ankara')
+    country = models.CharField("Country", max_length=20, default='turkey')
     profile = models.ForeignKey(IMUserProfile, on_delete=models.CASCADE, )
 
     class Meta:

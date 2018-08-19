@@ -1,0 +1,87 @@
+<!-- /#sidebar-wrapper -->
+<ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+        <a class="nav-link" href="{% url 'identityManager:dashboard' %}">
+            <i class="fas fa-tachometer-alt"></i>
+            <span class="nav-link-text">Dashboard</span>
+        </a>
+    </li>
+    {#    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Charts">#}
+    {#        <a class="nav-link" href="charts.html">#}
+    {#            <i class="fas fa-chart-area"></i>#}
+    {#            <span class="nav-link-text">Charts</span>#}
+    {#        </a>#}
+    {#    </li>#}
+    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="User List">
+        <a class="nav-link" href="{% url 'identityManager:imUser' %}">
+            <i class="fas fa-user"></i>
+            <span class="nav-link-text">Users</span>
+        </a>
+    </li>
+
+
+    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Group List">
+        <a class="nav-link" href="{% url 'identityManager:imGroup' %}">
+            <i class="fas fa-users"></i>
+            <span class="nav-link-text">Groups</span>
+        </a>
+    </li>
+
+    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Role List">
+        <a class="nav-link" href="{% url 'identityManager:imRole' %}">
+            <i class="fas fa-user-astronaut"></i>
+            <span class="nav-link-text">Roles</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti"
+           data-parent="#exampleAccordion">
+            <i class="fa fa-fw fa-cogs"></i>
+            <span class="nav-link-text">Settings</span>
+        </a>
+        <ul class="sidenav-second-level collapse" id="collapseMulti">
+            <li>
+                <a class="nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti2">Data Generator</a>
+                <ul class="sidenav-third-level collapse" id="collapseMulti2">
+                    <li>
+                        <a href="{% url 'identityManager: generate-user-data' %}">Generate Users</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'identityManager: generate-group-data' %}">Generate Groups</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'identityManager: generate-role-data' %}">Generate Roles</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a class="nav-link-collapse collapsed" data-toggle="collapse" href="#defaults">Defaults</a>
+                <ul class="sidenav-third-level collapse" id="defaults">
+
+                    <li>
+                        <a href="{% url 'identityManager:gendefs' %}">Generate Defaults</a>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'identityManager:cleandefs' %}">Clean Defaults</a>
+                    </li>
+
+                </ul>
+            </li>
+            <li>
+                <a href="#">Second Level Item</a>
+            </li>
+            <li>
+                <a href="#">Second Level Item</a>
+            </li>
+
+        </ul>
+    </li>
+    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
+        <a class="nav-link" href="#">
+            <i class="fa fa-fw fa-link"></i>
+            <span class="nav-link-text">Link</span>
+        </a>
+    </li>
+</ul>
+

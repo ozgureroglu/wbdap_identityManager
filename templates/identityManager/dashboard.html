@@ -30,18 +30,37 @@
 
 {% block page_content %}
     {{ block.super }}
-    <div class="card">
-        <div class="card-header clearfix">
-            <div class="card-title">
-                Dashboard
-
-            </div>
-
-
-        </div>
+    <div class="card mt-4 text-center">
+{#        <div class="card-header clearfix">#}
+{#            <div class="card-title">#}
+{#                Dashboard#}
+{#            </div>#}
+{#        </div>#}
         <div class="card-body">
+            <div class="card-deck">
 
+                <div class="card border-info mb-3 mx-auto" style="max-width: 18rem;">
 
+                    <div class="card-body text-info">
+                        <h5 class="card-title"><a href="{% url 'identityManager:imUser' %}">Users</a></h5>
+                        <p class="card-text">{{ users }}</p>
+                    </div>
+                </div>
+                <div class="card border-info mb-3 mx-auto" style="max-width: 18rem;">
+
+                    <div class="card-body text-info">
+                        <h5 class="card-title"><a href="{% url 'identityManager:imGroup' %}">Groups</a></h5>
+                        <p class="card-text">{{ groups }}</p>
+                    </div>
+                </div>
+                <div class="card border-info mb-3 mx-auto" style="max-width: 18rem;">
+
+                    <div class="card-body text-info">
+                        <h5 class="card-title"><a href="{% url 'identityManager:imRole' %}">Roles</a></h5>
+                        <p class="card-text">{{ roles }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
