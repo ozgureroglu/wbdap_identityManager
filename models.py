@@ -122,6 +122,25 @@ class IMUserProfileAdmin(admin.ModelAdmin):
     list_display = ('owner',)
 
 
+
+class IMUserEmailAddresses(models.Model):
+    # Bir user olusturuldugunda profili olusmaz
+    owner = models.OneToOneField(IMUser, related_name='registered_user_email_addresses', on_delete=models.CASCADE)
+    email_username = models.CharField(max_length=50, null=True, blank=True)
+    email_password = models.CharField(max_length=50, null=True, blank=True)
+
+    def __str__(self):
+        return self.owner.first_name
+
+
+@admin.register(IMUserEmailAddresses)
+class IMUserEmailAddressesAdmin(admin.ModelAdmin):
+    list_display = ('owner',)
+
+
+
+
+
 class Degree(models.Model):
     name = models.CharField(max_length=150, null=False, blank=False)
     abbreviation = models.CharField(max_length=50, null=True, blank=True)
