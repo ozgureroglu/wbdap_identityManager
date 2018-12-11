@@ -18,7 +18,6 @@ twistd.pid
 __pycache__/
 __pycache__/*
 *.py[cod]
-*.pyc
 
 # Django stuff:
 *.log
@@ -47,6 +46,7 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+*.pyc
 =======
 
 # No databases
@@ -54,3 +54,5 @@ var/
 
 static_root/
 staticroot/
+migrations/__pycache__/
+migrations/__pycache__/*
