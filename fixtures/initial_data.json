@@ -1,40 +1,129 @@
 [
 {
   "model": "identityManager.imuser",
-  "pk": 21,
+  "pk": 4,
   "fields": {
     "ss": "",
+    "generated": false,
     "groups": [],
     "user_permissions": []
   }
 },
 {
-  "model": "identityManager.imgroup",
-  "pk": 64,
+  "model": "identityManager.imuser",
+  "pk": 5,
   "fields": {
-    "name": "sdfg",
-    "description": "sdf",
-    "active": false,
-    "memberGroups": [],
-    "memberUsers": []
+    "ss": "",
+    "generated": false,
+    "groups": [],
+    "user_permissions": []
   }
 },
 {
-  "model": "identityManager.imrole",
-  "pk": 57,
+  "model": "identityManager.imuser",
+  "pk": 6,
   "fields": {
-    "name": "wer",
-    "description": "wer",
-    "assigned_groups": [],
-    "assigned_users": [],
-    "permissions": []
+    "ss": "",
+    "generated": false,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 7,
+  "fields": {
+    "ss": "",
+    "generated": false,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 8,
+  "fields": {
+    "ss": "",
+    "generated": false,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 9,
+  "fields": {
+    "ss": "",
+    "generated": false,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 10,
+  "fields": {
+    "ss": "",
+    "generated": false,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 11,
+  "fields": {
+    "ss": "",
+    "generated": false,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 12,
+  "fields": {
+    "ss": "",
+    "generated": false,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 13,
+  "fields": {
+    "ss": "",
+    "generated": false,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 14,
+  "fields": {
+    "ss": "",
+    "generated": false,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "identityManager.imuser",
+  "pk": 15,
+  "fields": {
+    "ss": "",
+    "generated": false,
+    "groups": [],
+    "user_permissions": []
   }
 },
 {
   "model": "identityManager.imuserprofile",
-  "pk": 1,
+  "pk": 2,
   "fields": {
-    "owner": 21,
+    "owner": 4,
     "jobTitle": null,
     "dateOfBirth": null,
     "aboutMe": null,

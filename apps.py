@@ -32,10 +32,10 @@ class UserManagementAppConfig(AppConfig):
 
         import identityManager.signals.handlers
 
-        if not self.db_table_exists('identityManager_'):
-            try:
-                call_command('migrate', 'identityManager')
-                call_command('loaddata', 'identityManager/fixtures/initial_data.json')
-            except:
-                logger.fatal('unable to migrate blog app ')
-
+        # if not self.db_table_exists('identityManager_'):
+        #     try:
+        #         call_command('migrate', 'identityManager')
+        #         call_command('loaddata', 'identityManager/fixtures/initial_data.json')
+        #     except:
+        #         logger.fatal('unable to migrate blog app ')
+        #
