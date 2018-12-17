@@ -1,5 +1,6 @@
 {% extends "identityManager/identityManager_app_template.html" %}
 {% load i18n %}
+{% load static %}
 
 {% block title %}{{ file }}{% endblock %}
 
@@ -70,6 +71,6 @@
 
 {% block application_body_jscript %}
     {{ block.super }}
-    <script src="{{ STATIC_URL }}identityManager/jscript/identityManager.js"></script>
+    <script src="{% static "identityManager/jscript/identityManager.js" %}"></script>
 
 {% endblock %}

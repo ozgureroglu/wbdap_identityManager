@@ -91,7 +91,7 @@
 
 {% block application_body_jscript %}
     {{ block.super }}
-    <script src="{{ STATIC_URL }}identityManager/jscript/identityManager.js"></script>
+    <script src="{% static "identityManager/jscript/identityManager.js"></script>
 
     <script>
         $(document).ready(function () {

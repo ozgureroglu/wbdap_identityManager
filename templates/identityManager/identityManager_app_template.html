@@ -1,21 +1,21 @@
 {% extends "projectCore/template_level_400_application_interface.html" %}
 
 {% load i18n %}
-{% load staticfiles %}
+{% load static %}
 
 {% block title %}{{ file }}{% endblock %}
 
 {% block head_stylesheet %}
         {{ block.super }}
-        <link href="{{ STATIC_URL }}identityManager/css/identityManager.css" rel="stylesheet">
+        <link href="{% static "identityManager/css/identityManager.css" %}" rel="stylesheet">
 {% endblock %}
 
 
 
 {% block application_body_jscript %}
     {{ block.super }}
-    <script src="{{ STATIC_URL }}identityManager/jscript/csrfUtil.js" ></script>
-    <script src="{{ STATIC_URL }}identityManager/jscript/table_ops.js" ></script>
+    <script src="{% static "identityManager/jscript/csrfUtil.js" %}" ></script>
+    <script src="{% static "identityManager/jscript/table_ops.js" %}" ></script>
 {% endblock %}
 
 

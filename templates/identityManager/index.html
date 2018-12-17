@@ -10,12 +10,12 @@
 
     <style>
         td.details-control {
-            background: url('{{ STATIC_URL }}identityManager/images/details_open.png') no-repeat center center;
+            background: url('{% static "identityManager/images/details_open.png" %}') no-repeat center center;
             cursor: pointer;
         }
 
         tr.shown td.details-control {
-            background: url('{{ STATIC_URL }}identityManager/images/details_close.png') no-repeat center center;
+            background: url('{% static "identityManager/images/details_close.png" %}') no-repeat center center;
         }
 
     </style>
@@ -121,7 +121,7 @@
 
 {% block application_body_jscript %}
     {{ block.super }}
-    <script src="{{ STATIC_URL }}identityManager/jscript/identityManager.js"></script>
+    <script src="{% static "identityManager/jscript/identityManager.js"  %}"></script>
 
     <script>
         $(document).ready(function () {
