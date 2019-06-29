@@ -3,15 +3,74 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework import filters, viewsets, status
+from rest_framework.generics import (
+    CreateAPIView,
+    ListAPIView,
+    RetrieveAPIView,
+    UpdateAPIView,
+    RetrieveUpdateAPIView,
+    DestroyAPIView
+)
 from rest_framework.response import Response
 
 
 from identityManager.models import IMUser, IMGroup, IMRole
-from identityManager.serializers import IMUserSerializer, IMGroupSerializer, IMRoleSerializer, IMPermissionSerializer
+from .serializers import (
+    IMUserListSerializer,
+    IMUserDetailSerializer,
+    IMUserCreateSerializer,
+    IMGroupSerializer,
+    IMRoleSerializer,
+    IMPermissionSerializer,
+)
+
 from projectCore.datatable_viewset import ModifiedViewSet
 import logging
 
 logger = logging.getLogger("api.views")
+
+
+# Instead of using ViewSets (below tis section) we can create all CRUD views seperately and manualy :
+# these views are accessed by Router Based Paths in api.urls.py instead of routers which provide the
+# necessary paths automatically (which enables us to access views in a predefined path structrue)
+# -----------------------------------------
+
+class IMUserCreateAPIView(CreateAPIView):
+    queryset = IMUser.objects.all()
+    serializer_class = IMUserCreateSerializer
+
+
+class IMUserListAPIView(ListAPIView):
+    queryset = IMUser.objects.all()
+    serializer_class = IMUserListSerializer
+
+
+class IMUserDetailAPIView(RetrieveAPIView):
+    queryset = IMUser.objects.all()
+    serializer_class = IMUserDetailSerializer
+    # Asagidakileri degistirince urls icinde de abc pattern ile search yapilmasi gerekir
+    # lookup_field = 'slug'
+    # lookup_url_kwarg = 'abc'
+
+
+class IMUserUpdateAPIView(RetrieveUpdateAPIView):
+    queryset = IMUser.objects.all()
+    serializer_class = IMUserDetailSerializer
+    # Asagidakileri degistirince urls icinde de abc pattern ile search yapilmasi gerekir
+    # lookup_field = 'slug'
+    # lookup_url_kwarg = 'abc'
+
+
+class IMUserDeleteAPIView(DestroyAPIView):
+    queryset = IMUser.objects.all()
+    serializer_class = IMUserDetailSerializer
+    # Asagidakileri degistirince urls icinde de abc pattern ile search yapilmasi gerekir
+    # lookup_field = 'slug'
+    # lookup_url_kwarg = 'abc'
+
+
+# -----------------------------------------
+
 
 class IMUserViewSet(ModifiedViewSet):
     """
@@ -20,7 +79,7 @@ class IMUserViewSet(ModifiedViewSet):
     `update` and `destroy` actions.
     """
     queryset = IMUser.objects.all()
-    serializer_class = IMUserSerializer
+    serializer_class = IMUserListSerializer
     filter_backends = (filters.OrderingFilter, filters.SearchFilter)
     search_fields = ('username','first_name','last_name','email',)
     ordering_fields = ('username','first_name','last_name','email','is_superuser','is_staff','is_active')
@@ -28,7 +87,9 @@ class IMUserViewSet(ModifiedViewSet):
 
 class IMGroupViewSet(ModifiedViewSet):
     """
-    API endpoint that allows users to view existing exams
+    API endpoint that allows users to view existing exams. In fact this viewset
+    allows us to do all CRUD operations on the object defined in the queryset
+    parameter.
     """
     queryset = IMGroup.objects.all()
     serializer_class = IMGroupSerializer
@@ -43,7 +104,7 @@ class IMGroupViewSet(ModifiedViewSet):
 
 
 class IMGroupMemberUserViewSet(viewsets.ModelViewSet):
-    serializer_class = IMUserSerializer
+    serializer_class = IMUserListSerializer
 
     def get_queryset(self):
         grp_id =self.kwargs['imgroup_pk']
@@ -157,7 +218,7 @@ class IMRoleViewSet(viewsets.ModelViewSet):
 
 
 class IMRoleAssignedUserViewSet(viewsets.ModelViewSet):
-    serializer_class = IMUserSerializer
+    serializer_class = IMUserListSerializer
 
     def get_queryset(self):
         role_id =self.kwargs['imrole_pk']

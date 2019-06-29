@@ -1,31 +1,77 @@
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.hashers import make_password
 
 from identityManager.models import IMRole, IMGroup, IMUser
 
 __author__ = 'ozgur'
 
-from rest_framework import serializers
+from rest_framework.serializers import HyperlinkedModelSerializer, HyperlinkedIdentityField, ModelSerializer
+
+
+# --------- CRUD Serializers -----------------------------
+# https://www.youtube.com/watch?v=dfIB-LthIpE&list=PLEsfXFp6DpzTOcOVdZF-th7BS_GYGguAS&index=9
 
 
 
-class IMUserSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name="identityManager-api:imuser-detail")
+class IMUserCreateSerializer(ModelSerializer):
 
     class Meta:
-        model=IMUser
-        fields = ('id', 'url', 'username', 'first_name', 'last_name', 'email', 'last_login', 'is_superuser', 'is_active', 'is_staff')
+        model = IMUser
+        fields = ('username', 'first_name', 'last_name', 'email', 'password')
+        # Following kwarg avoids the password to be returned
+        extra_kwargs = {'password': {'write_only': True}}
 
-class MemberGroupSerializer(serializers.ModelSerializer):
+    def create(self,validated_data):
+        """
+        This method overrides the ModelSerializers create method, so that model creation behaves differently than
+        the default one. If we want to change the create behaviour at APIView level this method will be defined as
+        perform_create() which overrides the perform_create() method of CreateModelMixin and this method simply calls
+        serializer.save(). So we can pass parameters to save method to override data fields
+        such as serializer.save(user=self.request.user)
+
+        to serializer.save
+        :param validated_data:
+        :return:
+        """
+        user = IMUser.objects.create(
+            username=validated_data['username'],
+            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name'],
+            email=validated_data['email'],
+            password=make_password(validated_data['password'])
+        )
+        return user
+
+
+class IMUserListSerializer(HyperlinkedModelSerializer):
+    url = HyperlinkedIdentityField(view_name="identityManager-api:imuser-detail")
+
+    class Meta:
+        model = IMUser
+        fields = ('id', 'url', 'username', 'first_name', 'last_name', 'email', 'is_superuser', 'is_active', 'is_staff')
+
+
+class IMUserDetailSerializer(ModelSerializer):
+
+    class Meta:
+        model = IMUser
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'date_joined', 'last_login', 'is_superuser', 'is_active', 'is_staff')
+
+
+# ---------------------------------------------------------------
+
+
+class MemberGroupSerializer(ModelSerializer):
     class Meta:
         model=IMGroup
         fields = ('name',)
 
-class IMGroupSerializer(serializers.HyperlinkedModelSerializer):
+class IMGroupSerializer(HyperlinkedModelSerializer):
     # answer = serializers.StringRelatedField(many=True)
-    # memberUsers = IMUserSerializer(read_only=True,many=True)
+    # memberUsers = IMUserListSerializer(read_only=True,many=True)
     # memberGroups = MemberGroupSerializer(read_only=False,many=True)
-    url = serializers.HyperlinkedIdentityField(view_name="identityManager-api:imgroup-detail")
+    url = HyperlinkedIdentityField(view_name="identityManager-api:imgroup-detail")
 
     class Meta:
         model=IMGroup
@@ -34,7 +80,7 @@ class IMGroupSerializer(serializers.HyperlinkedModelSerializer):
         def __str__(self):
             return self.name
 
-class IMRoleSerializer(serializers.HyperlinkedModelSerializer):
+class IMRoleSerializer(HyperlinkedModelSerializer):
     # answer = serializers.StringRelatedField(many=True)
     class Meta:
         model=IMRole
@@ -43,7 +89,7 @@ class IMRoleSerializer(serializers.HyperlinkedModelSerializer):
 
 
 
-class ContentTypeSerializer(serializers.ModelSerializer):
+class ContentTypeSerializer(ModelSerializer):
     class Meta:
         model = ContentType
         fields = ('app_label', 'model')
@@ -51,7 +97,7 @@ class ContentTypeSerializer(serializers.ModelSerializer):
 
 
 
-class IMPermissionSerializer(serializers.ModelSerializer):
+class IMPermissionSerializer(ModelSerializer):
 
     content_type = ContentTypeSerializer(many=False, read_only=True)
     # content_type = serializers.SlugRelatedField(many=False, read_only=True, slug_field='app_label')

@@ -24,7 +24,7 @@ from .models import IMUser, IMGroup, IMRole, IMUserProfile
 
 
 #Get an instance of the logger: Name should be the name of the logger in settings LOGGING field
-from .serializers import *
+
 from projectCore.datatable_viewset import ModifiedViewSet
 
 logger = logging.getLogger('django.request')
