@@ -10,7 +10,7 @@ from rest_framework import serializers
 
 
 class IMUserSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name="api:imuser-detail")
+    url = serializers.HyperlinkedIdentityField(view_name="identityManager-api:imuser-detail")
 
     class Meta:
         model=IMUser
@@ -25,7 +25,7 @@ class IMGroupSerializer(serializers.HyperlinkedModelSerializer):
     # answer = serializers.StringRelatedField(many=True)
     # memberUsers = IMUserSerializer(read_only=True,many=True)
     # memberGroups = MemberGroupSerializer(read_only=False,many=True)
-    url = serializers.HyperlinkedIdentityField(view_name="api-v1:imgroup-detail")
+    url = serializers.HyperlinkedIdentityField(view_name="identityManager-api:imgroup-detail")
 
     class Meta:
         model=IMGroup
