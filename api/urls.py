@@ -5,7 +5,17 @@ from .views import (
     IMUserListAPIView,
     IMUserDetailAPIView,
     IMUserUpdateAPIView,
-    IMUserDeleteAPIView
+    IMUserDeleteAPIView,
+    IMGroupCreateAPIView,
+    IMGroupListAPIView,
+    IMGroupDetailAPIView,
+    IMGroupUpdateAPIView,
+    IMGroupDeleteAPIView,
+    IMRoleCreateAPIView,
+    IMRoleListAPIView,
+    IMRoleDetailAPIView,
+    IMRoleUpdateAPIView,
+    IMRoleDeleteAPIView
 )
 
 from .views import IMUserViewSet,IMGroupViewSet, IMRoleViewSet
@@ -43,4 +53,18 @@ urlpatterns = [
     path('imuser/<int:pk>/', IMUserDetailAPIView.as_view(), name="imuser-detail"),
     path('imuser/<int:pk>/edit/', IMUserUpdateAPIView.as_view(), name="imuser-edit"),
     path('imuser/<int:pk>/delete/', IMUserDeleteAPIView.as_view(), name="imuser-delete"),
+
+    # Following paths are just for imgroup API
+    path('imgroup/', IMGroupListAPIView.as_view(), name='imgroup-list'),
+    path('imgroup/create/', IMGroupCreateAPIView.as_view(), name='imgroup-create'),
+    path('imgroup/<int:pk>/', IMGroupDetailAPIView.as_view(), name="imgroup-detail"),
+    path('imgroup/<int:pk>/edit/', IMGroupUpdateAPIView.as_view(), name="imgroup-edit"),
+    path('imgroup/<int:pk>/delete/', IMGroupDeleteAPIView.as_view(), name="imgroup-delete"),
+
+    # Following paths are just for imrole API
+    path('imrole/', IMRoleListAPIView.as_view(), name='imrole-list'),
+    path('imrole/create/', IMRoleCreateAPIView.as_view(), name='imrole-create'),
+    path('imrole/<int:pk>/', IMRoleDetailAPIView.as_view(), name="imrole-detail"),
+    path('imrole/<int:pk>/edit/', IMRoleUpdateAPIView.as_view(), name="imrole-edit"),
+    path('imrole/<int:pk>/delete/', IMRoleDeleteAPIView.as_view(), name="imrole-delete"),
 ]

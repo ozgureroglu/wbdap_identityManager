@@ -196,7 +196,7 @@
                 ajax: {
                     create: {
                         type: 'POST',
-                        url: '/api/v1/identityManager/imusers/',
+                        url: '/api/v1/identityManager/imuser/create/',
                         headers: {
                             'X-CSRFToken': csrftoken
                         },
@@ -209,7 +209,7 @@
                     },
                     edit: {
                         type: 'PUT',
-                        url: '/api/v1/identityManager/imusers/_id_/',
+                        url: '/api/v1/identityManager/imuser/_id_/edit/',
                         headers: {
                             'X-CSRFToken': csrftoken
                         },
@@ -237,7 +237,7 @@
                     },
                     remove: {
                         type: 'DELETE',
-                        url: '/api/v1/identityManager/imusers/_id_/',
+                        url: '/api/v1/identityManager/imuser/_id_/delete/',
                         headers: {
                             'X-CSRFToken': csrftoken
                         },
@@ -331,7 +331,7 @@
                 "serverSide": true,
                 {#"order": [[ 1, 'asc' ], [ 2, 'asc' ]],#}
                 "ajax": {
-                    url: "/api/v1/identityManager/imusers/?format=json",
+                    url: "/api/v1/identityManager/imuser/?format=json",
                     dataSrc: 'results',
                     data: function (d) {
                         var keys = Object.keys(d);
@@ -503,7 +503,7 @@
                 ajax: {
                     create: {
                         type: 'POST',
-                        url: '/api/v1/identityManager/imgroups/',
+                        url: '/api/v1/identityManager/imgroup/create/',
                         headers: {
                             'X-CSRFToken': csrftoken
                         },
@@ -516,7 +516,7 @@
                     },
                     edit: {
                         type: 'PUT',
-                        url: '/api/v1/identityManager/imgroups/_id_/',
+                        url: '/api/v1/identityManager/imgroup/_id_/edit/',
                         headers: {
                             'X-CSRFToken': csrftoken
                         },
@@ -544,7 +544,7 @@
                     },
                     remove: {
                         type: 'DELETE',
-                        url: '/api/v1/identityManager/imgroups/_id_/',
+                        url: '/api/v1/identityManager/imgroup/_id_/delete/',
                         headers: {
                             'X-CSRFToken': csrftoken
                         }, contentType: 'application/json',
@@ -590,7 +590,7 @@
                 "serverSide": true,
                 {#"order": [[ 1, 'asc' ], [ 2, 'asc' ]],#}
                 "ajax": {
-                    url: "/api/v1/identityManager/imgroups/?format=json",
+                    url: "/api/v1/identityManager/imgroup/?format=json",
                     dataSrc: 'results',
                     data: function (d) {
                         var keys = Object.keys(d);
@@ -659,7 +659,7 @@
                 ajax: {
                     create: {
                         type: 'POST',
-                        url: '/api/v1/identityManager/imroles/',
+                        url: '/api/v1/identityManager/imrole/create/',
                         headers: {
                             'X-CSRFToken': csrftoken
                         },
@@ -672,7 +672,7 @@
                     },
                     edit: {
                         type: 'PUT',
-                        url: '/api/v1/identityManager/imroles/_id_/',
+                        url: '/api/v1/identityManager/imrole/_id_/edit/',
                         headers: {
                             'X-CSRFToken': csrftoken
                         },
@@ -700,7 +700,7 @@
                     },
                     remove: {
                         type: 'DELETE',
-                        url: '/api/v1/identityManager/imroles/_id_/',
+                        url: '/api/v1/identityManager/imrole/_id_/delete',
                         headers: {
                             'X-CSRFToken': csrftoken
                         }, contentType: 'application/json',
@@ -736,7 +736,7 @@
                 "serverSide": true,
                 {#"order": [[ 1, 'asc' ], [ 2, 'asc' ]],#}
                 "ajax": {
-                    url: "/api/v1/identityManager/imroles/?format=json",
+                    url: "/api/v1/identityManager/imrole/?format=json",
                     dataSrc: 'results',
                     data: function (d) {
                         var keys = Object.keys(d);
