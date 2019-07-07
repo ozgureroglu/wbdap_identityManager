@@ -67,9 +67,15 @@ def imUser(request):
     # print(perms)
 
 
+    # return render(request,
+    #     'identityManager/index.html',{}
+    # )
+
     return render(request,
-        'identityManager/index.html',{}
+        'identityManager/imuser.html',{}
     )
+
+
 
 @login_required()
 def add_imuser(request):
@@ -172,7 +178,7 @@ def imGroup(request):
     #
 
     return render(request,
-        'identityManager/index.html', {'imgroups':imgroups}
+        'identityManager/imgroup.html', {'imgroups':imgroups}
     )
 
 @login_required()
@@ -197,21 +203,21 @@ def imRole_home(request, pk):
                   {'imrole':imrole, })
 
 @login_required()
-def addMemberUser(request,pk):
+def addMemberUser(request, pk):
 
     if request.method=='POST':
 
         imgroup = IMGroup.objects.get(id=pk)
 
-        users=request.POST['users']
+        users = request.POST['users']
 
-        user_list=str(users).strip(' ').strip(',')
-        user_list=user_list.split(',')
+        user_list = str(users).strip(' ').strip(',')
+        user_list = user_list.split(',')
 
         for user in user_list:
             user_data=(user.strip()).split(' ')
             if user_data.__len__() == 2:
-                imgroup.memberUsers.add(IMUser.objects.get(first_name=user_data[0],last_name=user_data[1]))
+                imgroup.memberUsers.add(IMUser.objects.get(first_name=user_data[0], last_name=user_data[1]))
             elif user_data.__len__() > 2:
                 imgroup.memberUsers.add(IMUser.objects.get(first_name=user_data[0]+" "+user_data[1], last_name=user_data[2]))
             else:
@@ -455,7 +461,7 @@ def add_group(request):
 def imRole(request):
     imroles = IMRole.objects.all()
     return render(request,
-        'identityManager/index.html', {'imroles':imroles}
+        'identityManager/imrole.html', {'imroles':imroles}
     )
 
 @login_required()
