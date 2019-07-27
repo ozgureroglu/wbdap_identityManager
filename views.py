@@ -47,7 +47,7 @@ def landing_page(request):
 @login_required()
 def imUser(request):
     user_list = IMUser.objects.all()
-    paginator=Paginator(user_list, 30)
+    paginator = Paginator(user_list, 30)
     page = request.GET.get('page')
 
     try:

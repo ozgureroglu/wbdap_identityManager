@@ -14,7 +14,7 @@ class IMUserCreateSerializer(ModelSerializer):
 
     class Meta:
         model = IMUser
-        fields = ('username', 'first_name', 'last_name', 'email', 'password')
+        fields = ('username', 'first_name', 'last_name', 'email', 'password', 'is_active', 'is_staff', 'is_superuser')
         # Following kwarg avoids the password to be returned
         extra_kwargs = {'password': {'write_only': True}}
 
@@ -35,6 +35,9 @@ class IMUserCreateSerializer(ModelSerializer):
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
             email=validated_data['email'],
+            is_active=validated_data['is_active'],
+            is_staff=validated_data['is_staff'],
+            is_superuser=validated_data['is_superuser'],
             password=make_password(validated_data['password'])
         )
         return user
@@ -45,7 +48,7 @@ class IMUserListSerializer(HyperlinkedModelSerializer):
 
     class Meta:
         model = IMUser
-        fields = ('id', 'url', 'username', 'first_name', 'last_name', 'email', 'is_superuser', 'is_active', 'is_staff')
+        fields = ('id', 'url', 'username', 'first_name', 'last_name', 'email', 'is_superuser', 'is_staff', 'is_active')
 
 
 class IMUserDetailSerializer(ModelSerializer):

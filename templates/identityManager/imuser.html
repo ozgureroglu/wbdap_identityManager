@@ -1,18 +1,11 @@
 {% extends 'projectCore/sb_admin2_index_template.html' %}
 {% load staticfiles %}
 
-{% block head %}
-    {{ block.super }}
-
-    <link href="{% static "projectCore/startbootstrap-sb-admin-2-gh-pages/vendor/datatables/dataTables.bootstrap4.min.css" %}" rel="stylesheet">
-
-    <!-- DATATABLES -->
-    <link rel="stylesheet" href="{% static "projectCore/Editor-1.7.4/css/editor.dataTables.css" %}">
-
-{% endblock %}
-
 
 {% block page_content %}
+
+        {% csrf_token %}
+
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
@@ -33,22 +26,13 @@
                         <th>Username</th>
                         <th>Name</th>
                         <th>Surname</th>
-                        <th>Admin</th>
+                        <th>Email</th>
+                        <th>Superuser</th>
                         <th>Staff</th>
                         <th>State</th>
                         <th>Operations</th>
                     </tr>
                   </thead>
-{#                  <tfoot>#}
-{#                    <tr>#}
-{#                      <th>Name</th>#}
-{#                      <th>Position</th>#}
-{#                      <th>Office</th>#}
-{#                      <th>Age</th>#}
-{#                      <th>Start date</th>#}
-{#                      <th>Salary</th>#}
-{#                    </tr>#}
-{#                  </tfoot>#}
 
                 </table>
               </div>
@@ -62,13 +46,10 @@
 
 {% block body__jscript %}
     {{ block.super }}
-    <script src="{% static "projectCore/startbootstrap-sb-admin-2-gh-pages/vendor/datatables/jquery.dataTables.min.js" %}"></script>
-    <script src="{% static "projectCore/startbootstrap-sb-admin-2-gh-pages/vendor/datatables/dataTables.bootstrap4.min.js" %}"></script>
-    <script src="{% static "projectCore/startbootstrap-sb-admin-2-gh-pages/js/demo/datatables-demo.js" %}"></script>
+
     <script>
         $(document).ready(function () {
             var csrftoken = $("input[name='csrfmiddlewaretoken']").attr('value');
-
 
             /* Formatting function for row details - modify as you need */
             function format(d) {
@@ -89,10 +70,7 @@
                     '</table></small>';
             }
 
-
-
             {#------------------------------------------------------------------------------------------------------#}
-
 
             imuser_editor = new $.fn.dataTable.Editor({
 
@@ -109,6 +87,10 @@
                             ndata = JSON.stringify(d.data[keys[0]]);
                             return ndata;
                         },
+                        success: function (d) {
+                            console.log('success');
+                            imuser_table.row.add(d).draw(false)
+                        }
                     },
                     edit: {
                         type: 'PUT',
@@ -136,6 +118,10 @@
                             ndata = JSON.stringify(jdata);
                             return ndata;
                         },
+                        success: function (d) {
+                            console.log('success');
+                            imuser_table.row.add(d).draw(false)
+                        }
 
                     },
                     remove: {
@@ -144,13 +130,13 @@
                         headers: {
                             'X-CSRFToken': csrftoken
                         },
-                        {#contentType: 'application/json',#}
-                        {#data: function (d) {#}
-                        {#    var keys = Object.keys(d.data);#}
-                        {#    ndata = JSON.stringify(d.data[keys[0]]);#}
-                        {#    console.log(ndata);#}
-                        {#    return ndata;#}
-                        //    {#},#}
+                        contentType: 'application/json',
+                        data: function (d) {
+                            var keys = Object.keys(d.data);
+                            ndata = JSON.stringify(d.data[keys[0]]);
+                            console.log(ndata);
+                            return ndata;
+                        }
                     }
                 },
                 table: "#wbdap_imuser_list_table",
@@ -169,6 +155,11 @@
                         label: "Email:",
                         name: "email"
                     }, {
+                        label: "Password:",
+                        name: "password",
+                        type: "password"
+                    },
+                    {
                         label: "Superuser:",
                         name: "is_superuser",
                         type: "checkbox",
@@ -198,20 +189,16 @@
 
                         options: [
                             {label: '', value: true},
-
                         ]
-
                     }
                 ]
             });
-
 
             imuser_editor.on('remove', function (e, json) {
 
                 if (json.error == "") {
                     show_snackbar('top_snackbar', 'Row has been removed');
                 }
-                alert('Row deleted');
             });
 
 
@@ -222,7 +209,7 @@
             });
 
 
-            imuser_table = $('#wbdap_imuser_list_table').DataTable({
+            var imuser_table = $('#wbdap_imuser_list_table').DataTable({
                 "scrollY": "500px",
                 "scrollCollapse": true,
                 "dom": 'Bfrtip',
@@ -267,12 +254,12 @@
                     {#    className: 'select-checkbox not_editable',#}
                     {#    orderable: false#}
                     //{#},#}
-                    {
-                        "className": 'details-control',
-                        "orderable": false,
-                        "data": null,
-                        "defaultContent": ''
-                    },
+                    {#{#}
+                    {#    "className": 'details-control',#}
+                    {#    "orderable": false,#}
+                    {#    "data": null,#}
+                    {#    "defaultContent": ''#}
+                    //{#},#}
                     {
                         "data": "username",
                         render: function (data, type, row) {
@@ -284,7 +271,7 @@
                     },
                     {"data": "first_name"},
                     {"data": "last_name"},
-                    {#{"data": "email"},#}
+                    {"data": "email"},
                     {
                         "data": "is_superuser",
                         render: function (data, type, row) {
@@ -340,8 +327,6 @@
 
 
                 ],
-                {#"order": [[1, 'asc']],#} //orders the table wrt first col.
-                {#select: true#}
                 select: {
                     style: 'os',
                     selector: 'td:not(:first-child)' // no row selection on last column
@@ -394,14 +379,5 @@
         ;
 
     </script>
-
-
-
-
-    <!-- Datatables Editor -->
-    <script src="{% static "projectCore/Editor-1.7.4/js/dataTables.editor.min.js" %}"></script>
-    <script src="{% static "projectCore/Editor-1.7.4/js/editor.autoComplete.js" %}"></script>
-
-
 
 {% endblock %}

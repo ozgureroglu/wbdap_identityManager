@@ -46,7 +46,7 @@ class IMGroupListSerializer(HyperlinkedModelSerializer):
 
     class Meta:
         model = IMGroup
-        fields = ('id', 'url', 'name', 'description')
+        fields = ('id', 'url', 'name', 'active', 'description')
 
 
 class IMGroupDetailSerializer(ModelSerializer):
