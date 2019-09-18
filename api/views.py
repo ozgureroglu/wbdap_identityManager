@@ -59,7 +59,6 @@ class IMUserDetailAPIView(RetrieveAPIView):
     # lookup_field = 'slug'
     # lookup_url_kwarg = 'abc'
 
-
 class IMUserUpdateAPIView(RetrieveUpdateAPIView):
     queryset = IMUser.objects.all()
     serializer_class = IMUserDetailSerializer
