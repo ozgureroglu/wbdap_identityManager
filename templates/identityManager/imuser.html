@@ -16,11 +16,14 @@
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Users</h6>
+              <h6 class="m-0 font-weight-bold text-primary">
+                      <span class="icon">
+                      <i class="fas fa-user"></i>
+                    </span>Users</h6>
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-bordered display" id="wbdap_imuser_list_table" width="100%" cellspacing="0">
+                <table class="table table-bordered table-hover" id="wbdap_imuser_list_table" width="100%" cellspacing="0">
                   <thead>
                     <tr>
                         <th>Username</th>
@@ -210,15 +213,16 @@
 
 
             var imuser_table = $('#wbdap_imuser_list_table').DataTable({
-                "scrollY": "500px",
+                {#"scrollY": "500px",#}
                 "scrollCollapse": true,
                 "dom": 'Bfrtip',
                 "paging": true,
-                "select": true,
+                {#"select": true,#}
                 "info": false,
                 "ordering": true,
                 "processing": true,
                 "serverSide": true,
+                {#"responsive": true,#}
                 {#"order": [[ 1, 'asc' ], [ 2, 'asc' ]],#}
                 "ajax": {
                     url: "/api/v1/identityManager/imuser/?format=json",
@@ -332,9 +336,17 @@
                     selector: 'td:not(:first-child)' // no row selection on last column
                 },
                 buttons: [
-                    {extend: "create", editor: imuser_editor},
-                    {extend: "edit", editor: imuser_editor},
-                    {extend: "remove", editor: imuser_editor}
+                    //https://datatables.net/forums/discussion/30295/editor-form-title
+                    // add icon to datatables button
+                    // add title to datatables button
+                    {
+                        extend: "create",
+                        text: '<i class="fas fa-user-plus"></i>',
+                        editor: imuser_editor,
+                        formTitle: "Create New User"
+                    },
+                    {extend: "edit",text: '<i class="fas fa-user-edit"></i>', editor: imuser_editor, formTitle: "Edit User"},
+                    {extend: "remove", text: '<i class="fas fa-user-minus"></i>', editor: imuser_editor, formTitle: "Delete User"}
                 ],
                 rowCallback: function (row, data) {
                     // Set the checked state of the checkbox in the table
@@ -369,7 +381,7 @@
                 var type = $(this).attr('class').split("-")[1];
                 objs[ename]
                 // asagidaki ilk satirdaki false, edit modali gosterme demektir.
-                // .edit(table.rows({ selected: true}), false)
+                    {#.edit(table.rows({ selected: true}), false)#}
                     .edit($(this).closest('tr'), false)
                     .set(type, $(this).prop('checked') ? true : false)
                     .submit();
