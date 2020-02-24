@@ -15,6 +15,7 @@ from rest_framework.response import Response
 
 
 from identityManager.models import IMUser, IMGroup, IMRole
+from .imgroup_serializer import IMGroupMemberUserListSerializer, IMGroupMemberUserCreateSerializer
 from .serializers import (
     IMUserListSerializer,
     IMUserDetailSerializer,
@@ -37,19 +38,26 @@ import logging
 logger = logging.getLogger("api.views")
 
 
-# Instead of using ViewSets (below tis section) we can create all CRUD views seperately and manualy :
+# Instead of using ViewSets (below of this paragraph) we can create all CRUD views separately and manually :
 # these views are accessed by Router Based Paths in api.urls.py instead of routers which provide the
-# necessary paths automatically (which enables us to access views in a predefined path structrue)
+# necessary paths automatically (which enables us to access views in a predefined path structure )
 # ----------- IMUSER ------------------------------
 
-class IMUserCreateAPIView(CreateAPIView):
-    queryset = IMUser.objects.all()
-    serializer_class = IMUserCreateSerializer
+
+# Asagidaki Class Based View ile bir veri seti (queryset) olsuturulmakta ve sonrasinda
+# serialize edilmesi icin kullanilacak olan serializer sinifi belirtilir. Her CRUD
+# icin kullanilabilecek olan ayri bir Serializer sinifi olusturulmasi bu yolla
+# kolaylasmaktadir.
 
 
 class IMUserListAPIView(ListAPIView):
     queryset = IMUser.objects.all()
     serializer_class = IMUserListSerializer
+
+
+class IMUserCreateAPIView(CreateAPIView):
+    queryset = IMUser.objects.all()
+    serializer_class = IMUserCreateSerializer
 
 
 class IMUserDetailAPIView(RetrieveAPIView):
@@ -76,6 +84,7 @@ class IMUserDeleteAPIView(DestroyAPIView):
 
 
 # ----------- IMGROUP ------------------------------
+
 
 class IMGroupCreateAPIView(CreateAPIView):
     queryset = IMGroup.objects.all()
@@ -111,7 +120,39 @@ class IMGroupDeleteAPIView(DestroyAPIView):
     # lookup_url_kwarg = 'abc'
 
 
+class IMGroupMemberUserListAPIView(ListAPIView):
+    # queryset = IMUser.objects.filter()
+    serializer_class = IMGroupMemberUserListSerializer
+
+    def get_queryset(self):
+        return IMGroup.objects.get(id=self.kwargs['pk']).memberUsers
+
+
+class IMGroupMemberUserCreateAPIView(CreateAPIView):
+    # queryset = IMGroup.objects.all()
+    serializer_class = IMGroupMemberUserCreateSerializer
+
+    def create(self, request, *args, **kwargs):
+        print(request.data)
+        # for i in self.request.data:
+        #     print(i)
+        #     print(request.data[i])
+
+
+        for username in self.request.data['username']:
+            print(username)
+            IMUser.objects.get(username=username).groups.add(IMGroup.objects.get(id=self.kwargs['pk']))
+
+
+class IMGroupMemberUserDeleteAPIView(DestroyAPIView):
+    queryset = IMGroup.objects.all()
+    serializer_class = IMGroupDetailSerializer
+    # Asagidakileri degistirince urls icinde de abc pattern ile search yapilmasi gerekir
+    # lookup_field = 'slug'
+    # lookup_url_kwarg = 'abc'
+
 # ----------- IMROLE ------------------------------
+
 
 class IMRoleCreateAPIView(CreateAPIView):
     queryset = IMRole.objects.all()

@@ -181,26 +181,29 @@ def imGroup(request):
         'identityManager/imgroup.html', {'imgroups':imgroups}
     )
 
+
 @login_required()
 def delete_imgroup(request, pk):
     imgroup = IMGroup.objects.get(id=pk)
     imgroup.delete()
     return http.HttpResponseRedirect('/identityManager/imgroup/')
 
+
 @login_required()
 def imgroup_home(request, pk):
     imgroup = IMGroup.objects.get(id=pk)
 
-
     return render(request, 'identityManager/imgroup_home.html',
                   {'imgroup':imgroup,
                    })
+
 
 @login_required()
 def imRole_home(request, pk):
     imrole = IMRole.objects.get(id=pk)
     return render(request, 'identityManager/imrole_home.html',
                   {'imrole':imrole, })
+
 
 @login_required()
 def addMemberUser(request, pk):
@@ -227,6 +230,7 @@ def addMemberUser(request, pk):
         pass
     return HttpResponseRedirect('/identityManager/imgroup/'+str(pk)+"/")
 
+
 @login_required()
 def assignUsersToRole(request,pk):
     if request.method=='POST':
@@ -245,6 +249,7 @@ def assignUsersToRole(request,pk):
     else:
         pass
     return HttpResponseRedirect('/identityManager/role/'+str(pk)+"/")
+
 
 @login_required()
 def assignGroupsToRole(request,pk):
@@ -265,6 +270,7 @@ def assignGroupsToRole(request,pk):
         pass
     return HttpResponseRedirect('/identityManager/role/'+str(pk)+"/")
 
+
 @login_required()
 def addMemberGroup(request,pk):
     if request.method=='POST':
@@ -284,6 +290,7 @@ def addMemberGroup(request,pk):
     else:
         pass
     return HttpResponseRedirect('/identityManager/imgroup/'+str(pk)+"/")
+
 
 @login_required()
 def addPermissionToRole(request,pk):
@@ -307,6 +314,7 @@ def addPermissionToRole(request,pk):
         pass
     return HttpResponseRedirect('/identityManager/role/'+str(pk)+"/")
 
+
 @login_required()
 def removePermissionFromRole(request,pk,id):
     try:
@@ -315,6 +323,7 @@ def removePermissionFromRole(request,pk,id):
     except:
         logger.warning("Unable to remove permission from role")
     return HttpResponseRedirect('/identityManager/role/'+str(pk)+"/")
+
 
 @login_required()
 def removeMemberUser(request,pk,id):
@@ -325,6 +334,7 @@ def removeMemberUser(request,pk,id):
         logger.warning("Unable to remove users from group")
     return HttpResponseRedirect('/identityManager/imgroup/'+str(pk)+"/")
 
+
 @login_required()
 def removeMemberGroup(request,pk,id):
     try:
@@ -333,6 +343,7 @@ def removeMemberGroup(request,pk,id):
     except:
         logger.warning("Unable to remove group from group")
     return HttpResponseRedirect('/identityManager/imgroup/'+str(pk)+"/")
+
 
 @login_required()
 def autocompleteUsers(request):
@@ -350,6 +361,7 @@ def autocompleteUsers(request):
 
     return HttpResponse(resp, content_type='application/json')
 
+
 @login_required()
 def autocompleteGroups(request):
     search_qs = IMGroup.objects.filter(name__startswith=request.GET['term'])
@@ -362,6 +374,7 @@ def autocompleteGroups(request):
 
     resp = request.GET['callback'] + '(' + simplejson.dumps(results) + ');'
     return HttpResponse(resp, content_type='application/json')
+
 
 @login_required()
 def autocompletePermissions(request):
@@ -380,7 +393,6 @@ def autocompletePermissions(request):
 
 
 
-
 def cleandefs(request):
     #TODO: Find a decoupled solution
     for app in Application.objects.all():
@@ -392,6 +404,7 @@ def cleandefs(request):
         IMGroup.objects.filter(name=app.app_name + '_app_users').delete()
 
     return redirect('identityManager:imUser')
+
 
 def gendefs(request):
     #TODO: Find a decoupled solution
@@ -493,11 +506,13 @@ def add_imrole(request):
     variables = {'form': form, 'roles': imroles}
     return render(request, 'identityManager/modal/addIdentity_ModalContent.html', variables)
 
+
 @login_required()
 def delete_imrole(request, pk):
     imrole = IMRole.objects.get(id=pk)
     imrole.delete()
     return http.HttpResponseRedirect('/identityManager/role/')
+
 
 @login_required()
 def get_user_list(request):
@@ -514,6 +529,7 @@ def get_user_list(request):
         'identityManager/user_list.html',{'users':users}
     )
 
+
 @login_required()
 def lock(request,pk):
     user = User.objects.get(id=pk)
@@ -524,6 +540,7 @@ def lock(request,pk):
         user.is_active = False
     user.save()
     return HttpResponseRedirect('/identityManager/user/')
+
 
 @login_required()
 def make_superuser(request,pk):
@@ -537,6 +554,7 @@ def make_superuser(request,pk):
     user.save()
     return HttpResponseRedirect('/identityManager/user/')
 
+
 @login_required()
 def make_staff(request,pk):
     user = User.objects.get(id=pk)
@@ -548,6 +566,7 @@ def make_staff(request,pk):
             user.is_staff = False
     user.save()
     return HttpResponseRedirect('/identityManager/user/')
+
 
 @login_required()
 @require_http_methods(['POST'])
@@ -578,12 +597,14 @@ def delete_user(request, pk):
     user.delete()
     return http.HttpResponseRedirect('/identityManager/user/')
 
+
 @login_required()
 def user_edit_profile(request, id):
     user = User.objects.get(id=id)
     form = AddUserForm()
     variables={'user':user,'form':form}
     return render(request,'user_profile.html',variables)
+
 
 @login_required
 def dashboard(request):

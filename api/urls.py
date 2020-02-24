@@ -15,8 +15,8 @@ from .views import (
     IMRoleListAPIView,
     IMRoleDetailAPIView,
     IMRoleUpdateAPIView,
-    IMRoleDeleteAPIView
-)
+    IMRoleDeleteAPIView,
+    IMGroupMemberUserListAPIView, IMGroupMemberUserCreateAPIView, IMGroupMemberUserDeleteAPIView)
 
 from .views import IMUserViewSet,IMGroupViewSet, IMRoleViewSet
 
@@ -47,6 +47,8 @@ urlpatterns = [
     # path('', include(identitymanager_router.urls)),
 
     # --------- Custom paths -------------------
+    # Asagidaki yontem ile API olusturulmasi islemi Class Based Generic View'ler
+    # araciligi ile API olusturulmasini sagliyor.
     # Following paths are just for imuser API
     path('imuser/', IMUserListAPIView.as_view(), name='imuser-list'),
     path('imuser/create/', IMUserCreateAPIView.as_view(), name='imuser-create'),
@@ -60,6 +62,16 @@ urlpatterns = [
     path('imgroup/<int:pk>/', IMGroupDetailAPIView.as_view(), name="imgroup-detail"),
     path('imgroup/<int:pk>/edit/', IMGroupUpdateAPIView.as_view(), name="imgroup-edit"),
     path('imgroup/<int:pk>/delete/', IMGroupDeleteAPIView.as_view(), name="imgroup-delete"),
+
+    path('imgroup/<int:pk>/memberuser/', IMGroupMemberUserListAPIView.as_view(), name="imgroup-users"),
+    path('imgroup/<int:pk>/memberuser/add/', IMGroupMemberUserCreateAPIView.as_view(), name="imgroup-user-add"),
+    path('imgroup/<int:pk>/memberuser/<int:userpk>/remove/', IMGroupMemberUserDeleteAPIView.as_view(), name="imgroup-user-remove"),
+
+    path('imgroup/<int:pk>/membergroup/', IMGroupMemberUserListAPIView.as_view(), name="imgroup-users"),
+    path('imgroup/<int:pk>/membergroup/add/', IMGroupMemberUserCreateAPIView.as_view(), name="imgroup-user-add"),
+    path('imgroup/<int:pk>/membergroup/<int:grouppk>/remove/', IMGroupMemberUserDeleteAPIView.as_view(),
+         name="imgroup-user-remove"),
+
 
     # Following paths are just for imrole API
     path('imrole/', IMRoleListAPIView.as_view(), name='imrole-list'),

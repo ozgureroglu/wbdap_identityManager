@@ -1,5 +1,5 @@
 from rest_framework.serializers import HyperlinkedModelSerializer, HyperlinkedIdentityField, ModelSerializer
-from identityManager.models import IMRole, IMGroup, IMGroup
+from identityManager.models import IMRole, IMGroup, IMGroup, IMUser
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -9,16 +9,14 @@ from django.contrib.contenttypes.models import ContentType
 # https://www.youtube.com/watch?v=dfIB-LthIpE&list=PLEsfXFp6DpzTOcOVdZF-th7BS_GYGguAS&index=9
 
 
-
 class IMGroupCreateSerializer(ModelSerializer):
-
     class Meta:
         model = IMGroup
         fields = ('name', 'description', 'active')
         # Following kwarg avoids the password to be returned
         # extra_kwargs = {'password': {'write_only': True}}
 
-    def create(self,validated_data):
+    def create(self, validated_data):
         """
         This method overrides the ModelSerializers create method, so that model creation behaves differently than
         the default one. If we want to change the create behaviour at APIView level this method will be defined as
@@ -58,11 +56,19 @@ class IMGroupDetailSerializer(ModelSerializer):
 
 # ---------------------------------------------------------------
 
-
-class MemberGroupSerializer(ModelSerializer):
+# Serializer to serialize the member users of a group
+class IMGroupMemberUserListSerializer(ModelSerializer):
     class Meta:
-        model=IMGroup
-        fields = ('name',)
+        model = IMUser
+        fields = ('username',)
+
+
+# Serializer to serialize the member users of a group
+class IMGroupMemberUserCreateSerializer(ModelSerializer):
+    class Meta:
+        model = IMUser
+        fields = ('username',)
+
 
 class IMGroupSerializer(HyperlinkedModelSerializer):
     # answer = serializers.StringRelatedField(many=True)
@@ -71,19 +77,18 @@ class IMGroupSerializer(HyperlinkedModelSerializer):
     url = HyperlinkedIdentityField(view_name="identityManager-api:imgroup-detail")
 
     class Meta:
-        model=IMGroup
+        model = IMGroup
         fields = ('id', 'url', 'name', 'description', 'active')
 
         def __str__(self):
             return self.name
 
+
 class IMRoleSerializer(HyperlinkedModelSerializer):
     # answer = serializers.StringRelatedField(many=True)
     class Meta:
-        model=IMRole
+        model = IMRole
         fields = ('id', 'name', 'description')
-
-
 
 
 class ContentTypeSerializer(ModelSerializer):
@@ -92,15 +97,11 @@ class ContentTypeSerializer(ModelSerializer):
         fields = ('app_label', 'model')
 
 
-
-
 class IMPermissionSerializer(ModelSerializer):
-
     content_type = ContentTypeSerializer(many=False, read_only=True)
     # content_type = serializers.SlugRelatedField(many=False, read_only=True, slug_field='app_label')
 
     class Meta:
         model = Permission
         fields = ('name', 'content_type')
-
 
