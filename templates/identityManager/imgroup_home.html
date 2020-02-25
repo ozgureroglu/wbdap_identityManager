@@ -38,16 +38,16 @@
 
                         </div>
                         <div class="card-body">
-                            <table id="wbdap_imgroup_member_user_list_table" class="display">
+                            <table id="wbdap_imgroup_member_user_list_table" class="display table table-hover table-striped">
                                 <thead>
-                                <tr style="text-align: center">
+                                <tr>
                                     <th></th>
                                     <th>Username</th>
                                     <th>Name</th>
                                     <th>Surname</th>
                                     <th>Email</th>
                                     <th>Superuser</th>
-                                    <th style="column-span: 4;text-align: center">Operations</th>
+                                    <th style="column-span: 4;">Operations</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -56,20 +56,16 @@
 
                     <div class="card mt-3 border-left-primary shadow">
                         <div class="card-header">
-
                                 Member Groups
-
-
                         </div>
                         <div class="card-body">
-                            <table id="wbdap_imgroup_member_group_list_table" class="display">
+                            <table id="wbdap_imgroup_member_group_list_table" class="display table table-hover table-striped">
                                 <thead>
-                                <tr style="text-align: center">
+                                <tr>
                                     <th></th>
                                     <th>Group Name</th>
                                     <th>Description</th>
-
-                                    <th style="column-span: 4;text-align: center">Operations</th>
+                                    <th style="column-span: 4;">Operations</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -102,7 +98,7 @@
                 return split(term).pop();
             }
 
-            imgroup_memberuser_editor = new $.fn.dataTable.Editor({
+            var imgroup_memberuser_editor = new $.fn.dataTable.Editor({
                 ajax: {
                     create: {
                         type: 'POST',
@@ -116,6 +112,10 @@
                             ndata = JSON.stringify(d.data[keys[0]]);
                             return ndata;
                         },
+                        success: function (d) {
+                            console.log('success');
+                            imgroup_users_table.row.add(d).draw(false)
+                        }
                     },
                     edit: {
                         type: 'PUT',
@@ -147,7 +147,7 @@
                     },
                     remove: {
                         type: 'DELETE',
-                        url: '/api/v1/identityManager/imgroup/{{ imgroup.id }}/memberuser/_id_/',
+                        url: '/api/v1/identityManager/imgroup/{{ imgroup.id }}/memberuser/_id_/remove/',
                         headers: {
                             'X-CSRFToken': csrftoken
                         }, contentType: 'application/json',
@@ -167,6 +167,8 @@
                     label: "Username:",
                     name: "username",
                     type: "autoComplete",
+                    autoFocus: true,
+
                     opts: {
                         {#source: '/identityManager/user/autocompleteUsers',#}
                         minLength: 0,
@@ -230,6 +232,10 @@
                             // add placeholder to get the comma-and-space at the end
                             terms.push("");
                             this.value = terms.join(", ");
+                            // Geri donecek olan input text sadece virguller ile ayrilmis bir string'dir.
+                            // inputu alan noktada bu string virgulleri kullanarak bir array haline donusturmek
+                            // gerekir.
+                            console.log(this.value)
                             return false;
                         }
                     }
@@ -281,7 +287,7 @@
                         json.recordsTotal = json.count;
                         json.recordsFiltered = json.count;
                         json.data = json.results;
-
+                        console.log(json.data);
                         return JSON.stringify(json); // return JSON string
                     }
                 },
@@ -301,7 +307,7 @@
                             if (row.is_superuser) {
                                 return "Superuser"
                             } else {
-                                return "Not active"
+                                return "False"
                             }
                         }
                     },
@@ -345,11 +351,11 @@
             });
             {#----------------------------------------------------------------------#}
 
-            imgroup_membergroup_editor = new $.fn.dataTable.Editor({
+            var imgroup_membergroup_editor = new $.fn.dataTable.Editor({
                 ajax: {
                     create: {
                         type: 'POST',
-                        url: '/api/v1/identityManager/imgroup/{{ imgroup.id }}/membergroup/',
+                        url: '/api/v1/identityManager/imgroup/{{ imgroup.id }}/membergroup/add/',
                         headers: {
                             'X-CSRFToken': csrftoken
                         },
@@ -359,6 +365,10 @@
                             ndata = JSON.stringify(d.data[keys[0]]);
                             return ndata;
                         },
+                        success: function (d) {
+                            console.log('success');
+                            imgroup_groups_table.row.add(d).draw(false)
+                        }
                     },
                     edit: {
                         type: 'PUT',
@@ -390,7 +400,7 @@
                     },
                     remove: {
                         type: 'DELETE',
-                        url: '/api/v1/identityManager/imgroup/{{ imgroup.id }}/membergroup/_id_/',
+                        url: '/api/v1/identityManager/imgroup/{{ imgroup.id }}/membergroup/_id_/remove/',
                         headers: {
                             'X-CSRFToken': csrftoken
                         }, contentType: 'application/json',
@@ -466,7 +476,7 @@
                 ]
             });
 
-            $('#wbdap_imgroup_member_group_list_table').DataTable({
+            var imgroup_groups_table= $('#wbdap_imgroup_member_group_list_table').DataTable({
                 "scrollY": "500px",
                 "scrollCollapse": true,
                 "dom": 'Bfrtip',

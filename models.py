@@ -31,8 +31,8 @@ class IMUserAdmin(admin.ModelAdmin):
 class IMGroup(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)
     # A group may be the member of another group, then all users of it will be the member of new group
-    memberGroups = models.ManyToManyField("self", blank=True, symmetrical=False, related_name='member_groups')
-    memberUsers = models.ManyToManyField(IMUser, blank=True, related_name='member_users')
+    memberGroups = models.ManyToManyField("self", blank=True, symmetrical=False, related_name='groups_set')
+    memberUsers = models.ManyToManyField(IMUser, blank=True, related_name='groups_set')
     description = models.CharField(max_length=200, null=False, blank=False)
     active = models.BooleanField(null=False, blank=True, default=False)
     permissions = None

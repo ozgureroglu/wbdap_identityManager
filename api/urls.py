@@ -16,7 +16,8 @@ from .views import (
     IMRoleDetailAPIView,
     IMRoleUpdateAPIView,
     IMRoleDeleteAPIView,
-    IMGroupMemberUserListAPIView, IMGroupMemberUserCreateAPIView, IMGroupMemberUserDeleteAPIView)
+    IMGroupMemberUserListAPIView, IMGroupMemberUserCreateAPIView, IMGroupMemberUserDeleteAPIView,
+    IMGroupMemberGroupCreateAPIView, IMGroupMemberGroupListAPIView, IMGroupMemberGroupDeleteAPIView)
 
 from .views import IMUserViewSet,IMGroupViewSet, IMRoleViewSet
 
@@ -67,9 +68,9 @@ urlpatterns = [
     path('imgroup/<int:pk>/memberuser/add/', IMGroupMemberUserCreateAPIView.as_view(), name="imgroup-user-add"),
     path('imgroup/<int:pk>/memberuser/<int:userpk>/remove/', IMGroupMemberUserDeleteAPIView.as_view(), name="imgroup-user-remove"),
 
-    path('imgroup/<int:pk>/membergroup/', IMGroupMemberUserListAPIView.as_view(), name="imgroup-users"),
-    path('imgroup/<int:pk>/membergroup/add/', IMGroupMemberUserCreateAPIView.as_view(), name="imgroup-user-add"),
-    path('imgroup/<int:pk>/membergroup/<int:grouppk>/remove/', IMGroupMemberUserDeleteAPIView.as_view(),
+    path('imgroup/<int:pk>/membergroup/', IMGroupMemberGroupListAPIView.as_view(), name="imgroup-users"),
+    path('imgroup/<int:pk>/membergroup/add/', IMGroupMemberGroupCreateAPIView.as_view(), name="imgroup-user-add"),
+    path('imgroup/<int:pk>/membergroup/<int:grouppk>/remove/', IMGroupMemberGroupDeleteAPIView.as_view(),
          name="imgroup-user-remove"),
 
 

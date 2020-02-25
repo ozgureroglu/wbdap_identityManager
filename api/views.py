@@ -15,7 +15,8 @@ from rest_framework.response import Response
 
 
 from identityManager.models import IMUser, IMGroup, IMRole
-from .imgroup_serializer import IMGroupMemberUserListSerializer, IMGroupMemberUserCreateSerializer
+from .imgroup_serializer import IMGroupMemberUserListSerializer, IMGroupMemberUserCreateSerializer, \
+    IMGroupMemberGroupListSerializer, IMGroupMemberGroupCreateSerializer
 from .serializers import (
     IMUserListSerializer,
     IMUserDetailSerializer,
@@ -125,7 +126,7 @@ class IMGroupMemberUserListAPIView(ListAPIView):
     serializer_class = IMGroupMemberUserListSerializer
 
     def get_queryset(self):
-        return IMGroup.objects.get(id=self.kwargs['pk']).memberUsers
+        return IMGroup.objects.get(id=self.kwargs['pk']).memberUsers.all()
 
 
 class IMGroupMemberUserCreateAPIView(CreateAPIView):
@@ -133,16 +134,22 @@ class IMGroupMemberUserCreateAPIView(CreateAPIView):
     serializer_class = IMGroupMemberUserCreateSerializer
 
     def create(self, request, *args, **kwargs):
+        # Gelen tum veri asagidaki sekilde alinir.
         print(request.data)
-        # for i in self.request.data:
-        #     print(i)
-        #     print(request.data[i])
+        print(request.data['username'].split(',').__class__)
 
+        usernames = [x for x in self.request.data['username'].split(',') if x]
 
-        for username in self.request.data['username']:
-            print(username)
-            IMUser.objects.get(username=username).groups.add(IMGroup.objects.get(id=self.kwargs['pk']))
+        try:
+            for username in usernames:
+                if username != " ":
+                    print("."+username+".")
+                    IMUser.objects.get(username=username.strip()).groups_set.add(IMGroup.objects.get(id=self.kwargs['pk']))
+        except:
+            logger.fatal("unable to add users")
 
+        data = {}
+        return Response(data, status=status.HTTP_200_OK)
 
 class IMGroupMemberUserDeleteAPIView(DestroyAPIView):
     queryset = IMGroup.objects.all()
@@ -150,6 +157,49 @@ class IMGroupMemberUserDeleteAPIView(DestroyAPIView):
     # Asagidakileri degistirince urls icinde de abc pattern ile search yapilmasi gerekir
     # lookup_field = 'slug'
     # lookup_url_kwarg = 'abc'
+
+
+
+
+class IMGroupMemberGroupListAPIView(ListAPIView):
+    # queryset = IMUser.objects.filter()
+    serializer_class = IMGroupMemberGroupListSerializer
+
+    def get_queryset(self):
+        return IMGroup.objects.get(id=self.kwargs['pk']).memberGroups.all()
+
+
+class IMGroupMemberGroupCreateAPIView(CreateAPIView):
+    # queryset = IMGroup.objects.all()
+    serializer_class = IMGroupMemberGroupCreateSerializer
+
+    def create(self, request, *args, **kwargs):
+        # Gelen tum veri asagidaki sekilde alinir.
+        print(request.data)
+        print(request.data['name'].split(',').__class__)
+
+        try:
+            for name in self.request.data['name'].split(','):
+                print(name.strip())
+                IMGroup.objects.get(name=name.strip()).groups_set.add(IMGroup.objects.get(id=self.kwargs['pk']))
+        except:
+            logger.fatal("unable to add groups")
+
+        data = {}
+        return Response(data, status=status.HTTP_200_OK)
+
+
+
+class IMGroupMemberGroupDeleteAPIView(DestroyAPIView):
+    queryset = IMGroup.objects.all()
+    serializer_class = IMGroupDetailSerializer
+    # Asagidakileri degistirince urls icinde de abc pattern ile search yapilmasi gerekir
+    # lookup_field = 'slug'
+    lookup_url_kwarg = 'grouppk'
+
+
+
+
 
 # ----------- IMROLE ------------------------------
 
