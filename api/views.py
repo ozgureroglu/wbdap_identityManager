@@ -15,8 +15,8 @@ from rest_framework.response import Response
 
 
 from identityManager.models import IMUser, IMGroup, IMRole
-from .imgroup_serializer import IMGroupMemberUserListSerializer, IMGroupMemberUserCreateSerializer, \
-    IMGroupMemberGroupListSerializer, IMGroupMemberGroupCreateSerializer
+from .imgroup_serializer import IMGroupMemberUserListSerializer, \
+    IMGroupMemberGroupListSerializer, IMGroupMemberGroupUpdateSerializer, IMGroupMemberUserUpdateSerializer
 from .serializers import (
     IMUserListSerializer,
     IMUserDetailSerializer,
@@ -129,17 +129,18 @@ class IMGroupMemberUserListAPIView(ListAPIView):
         return IMGroup.objects.get(id=self.kwargs['pk']).memberUsers.all()
 
 
-class IMGroupMemberUserCreateAPIView(CreateAPIView):
-    # queryset = IMGroup.objects.all()
-    serializer_class = IMGroupMemberUserCreateSerializer
+class IMGroupMemberUserUpdateAPIView(UpdateAPIView):
+    queryset = IMGroup.objects.all()
+    serializer_class = IMGroupMemberUserUpdateSerializer
 
-    def create(self, request, *args, **kwargs):
+    def put(self, request, *args, **kwargs):
         # Gelen tum veri asagidaki sekilde alinir.
         print(request.data)
         print(request.data['username'].split(',').__class__)
 
         usernames = [x for x in self.request.data['username'].split(',') if x]
 
+        data = {}
         try:
             for username in usernames:
                 if username != " ":
@@ -148,17 +149,20 @@ class IMGroupMemberUserCreateAPIView(CreateAPIView):
         except:
             logger.fatal("unable to add users")
 
-        data = {}
-        return Response(data, status=status.HTTP_200_OK)
+        return Response(self.get_serializer().data, status=status.HTTP_200_OK)
+
 
 class IMGroupMemberUserDeleteAPIView(DestroyAPIView):
     queryset = IMGroup.objects.all()
     serializer_class = IMGroupDetailSerializer
+
+    def delete(self, request, *args, **kwargs):
+        IMGroup.objects.get(pk=self.kwargs['pk']).memberUsers.remove(IMUser.objects.get(pk=self.kwargs['userpk']))
+        # return super().delete(request, *args, **kwargs)
+        return Response(status=status.HTTP_204_NO_CONTENT)
     # Asagidakileri degistirince urls icinde de abc pattern ile search yapilmasi gerekir
     # lookup_field = 'slug'
     # lookup_url_kwarg = 'abc'
-
-
 
 
 class IMGroupMemberGroupListAPIView(ListAPIView):
@@ -169,11 +173,12 @@ class IMGroupMemberGroupListAPIView(ListAPIView):
         return IMGroup.objects.get(id=self.kwargs['pk']).memberGroups.all()
 
 
-class IMGroupMemberGroupCreateAPIView(CreateAPIView):
-    # queryset = IMGroup.objects.all()
-    serializer_class = IMGroupMemberGroupCreateSerializer
+class IMGroupMemberGroupUpdateAPIView(UpdateAPIView):
+    queryset = IMGroup.objects.all()
+    serializer_class = IMGroupMemberGroupUpdateSerializer
 
-    def create(self, request, *args, **kwargs):
+    def put(self, request, *args, **kwargs):
+
         # Gelen tum veri asagidaki sekilde alinir.
         print(request.data)
         print(request.data['name'].split(',').__class__)
@@ -186,9 +191,8 @@ class IMGroupMemberGroupCreateAPIView(CreateAPIView):
             logger.fatal("unable to add groups")
 
         data = {}
-        return Response(data, status=status.HTTP_200_OK)
-
-
+        # return Response(data, status=status.HTTP_200_OK)
+        return Response(self.get_serializer().data, status=status.HTTP_200_OK)
 
 class IMGroupMemberGroupDeleteAPIView(DestroyAPIView):
     queryset = IMGroup.objects.all()
@@ -197,9 +201,11 @@ class IMGroupMemberGroupDeleteAPIView(DestroyAPIView):
     # lookup_field = 'slug'
     lookup_url_kwarg = 'grouppk'
 
-
-
-
+    def delete(self, request, *args, **kwargs):
+        # Instead of removing the groups itself we will just remove the relation
+        IMGroup.objects.get(pk=self.kwargs['pk']).memberGroups.remove(IMGroup.objects.get(pk=self.kwargs['grouppk']))
+        # return super().delete(request, *args, **kwargs)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 # ----------- IMROLE ------------------------------
 

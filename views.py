@@ -194,7 +194,7 @@ def imgroup_home(request, pk):
     imgroup = IMGroup.objects.get(id=pk)
 
     return render(request, 'identityManager/imgroup_home.html',
-                  {'imgroup':imgroup,
+                  {'imgroup': imgroup,
                    })
 
 
@@ -656,8 +656,6 @@ def view_user_profile(request, pk):
 
         educationalRec = profile.education_set.all()
         workExperienceRec = profile.workexperience_set.all()
-
-
 
         variables =  {
             'username': requestingUser.username,

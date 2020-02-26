@@ -1,11 +1,13 @@
-{% extends "identityManager/identityManager_app_template.html" %}
+{#{% extends "identityManager/identityManager_app_template.html" %}#}
+{% extends "projectCore/sb_admin2_index_template.html" %}
 {#{% extends "projectCore/wide_page_template.html" %}#}
 {% block title %}{{ profileOwner | capfirst }} Profile{% endblock %}
+{% load static %}
 
 
 
 {% block application_head_stylesheet %}
-    {{ block.super }}
+{#    {{ block.super }}#}
     <style>
         #profilecard {
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -58,7 +60,7 @@
 
 
 {% block page_content %}
-    {{ block.super }}
+{#    {{ block.super }}#}
     {% include "identityManager/user_profile_content.html" %}
 {% endblock %}
 

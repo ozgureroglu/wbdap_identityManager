@@ -60,30 +60,28 @@ class IMGroupDetailSerializer(ModelSerializer):
 class IMGroupMemberUserListSerializer(ModelSerializer):
     class Meta:
         model = IMUser
-        fields = ('username', 'first_name', 'last_name', 'email', 'is_superuser','id',)
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'is_superuser',)
 
 
 # Serializer to serialize the member users of a group
-class IMGroupMemberUserCreateSerializer(ModelSerializer):
+class IMGroupMemberUserUpdateSerializer(ModelSerializer):
     class Meta:
         model = IMUser
-        fields = ('username',)
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'is_superuser',)
 
 
 # Serializer to serialize the member users of a group
 class IMGroupMemberGroupListSerializer(ModelSerializer):
     class Meta:
         model = IMGroup
-        fields = ('id', 'name', 'description', )
+        fields = ('id', 'name', 'description',)
 
 
-# Serializer to serialize the member users of a group
-class IMGroupMemberGroupCreateSerializer(ModelSerializer):
+# Serializer to serialize the member groups of a group
+class IMGroupMemberGroupUpdateSerializer(ModelSerializer):
     class Meta:
         model = IMGroup
-        fields = ('name',)
-
-
+        fields = ('id','name', 'description',)
 
 
 class IMGroupSerializer(HyperlinkedModelSerializer):

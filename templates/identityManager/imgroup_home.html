@@ -41,13 +41,13 @@
                             <table id="wbdap_imgroup_member_user_list_table" class="display table table-hover table-striped">
                                 <thead>
                                 <tr>
-                                    <th></th>
+{#                                    <th></th>#}
                                     <th>Username</th>
                                     <th>Name</th>
                                     <th>Surname</th>
                                     <th>Email</th>
                                     <th>Superuser</th>
-                                    <th style="column-span: 4;">Operations</th>
+                                    <th>Operations</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -62,10 +62,10 @@
                             <table id="wbdap_imgroup_member_group_list_table" class="display table table-hover table-striped">
                                 <thead>
                                 <tr>
-                                    <th></th>
+{#                                    <th></th>#}
                                     <th>Group Name</th>
                                     <th>Description</th>
-                                    <th style="column-span: 4;">Operations</th>
+                                    <th>Operations</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -101,7 +101,7 @@
             var imgroup_memberuser_editor = new $.fn.dataTable.Editor({
                 ajax: {
                     create: {
-                        type: 'POST',
+                        type: 'PUT',
                         url: '/api/v1/identityManager/imgroup/{{ imgroup.id }}/memberuser/add/',
                         headers: {
                             'X-CSRFToken': csrftoken
@@ -114,6 +114,7 @@
                         },
                         success: function (d) {
                             console.log('success');
+                            console.log(d);
                             imgroup_users_table.row.add(d).draw(false)
                         }
                     },
@@ -292,12 +293,12 @@
                     }
                 },
                 "columns": [
-                    {
-                        data: null,
-                        defaultContent: '',
-                        className: 'select-checkbox not_editable',
-                        orderable: false
-                    },
+                    {#{#}
+                    {#    data: null,#}
+                    {#    defaultContent: '',#}
+                    {#    className: 'select-checkbox not_editable',#}
+                    {#    orderable: false#}
+//                    {#},#}
                     {"data": "username", orderData: 1, targets: 1},
                     {"data": "first_name", orderData: 1, targets: 1},
                     {"data": "last_name", orderData: 1, targets: 1},
@@ -312,9 +313,9 @@
                         }
                     },
                     {
-                        data: null,
+                        "data": null,
                         "render": function (data, type, row, meta) {
-                            return '<a href="/identityManager/imgroup/' + data.id + '/">Op1</a>';
+                            return '<a href="/identityManager/profile/' + data.id + '/">User Data</a>';
                         },
 
                         orderable: false
@@ -326,8 +327,6 @@
                     {
                         extend: "create",
                         text: "Add User",
-                        editor: imgroup_memberuser_editor,
-                        className: "btn btn-primary",
                         {#action: function (e, node, config) {#}
                         {#Assagidaki sati calisiyor, ancak standart create formunu  kullanmak daha kolay#}
                         {#$('#memberUserAddModal').modal('show')#}
@@ -354,7 +353,7 @@
             var imgroup_membergroup_editor = new $.fn.dataTable.Editor({
                 ajax: {
                     create: {
-                        type: 'POST',
+                        type: 'PUT',
                         url: '/api/v1/identityManager/imgroup/{{ imgroup.id }}/membergroup/add/',
                         headers: {
                             'X-CSRFToken': csrftoken
@@ -366,7 +365,8 @@
                             return ndata;
                         },
                         success: function (d) {
-                            console.log('success');
+                            console.log('ajax query succeeded');
+                            console.log(d);
                             imgroup_groups_table.row.add(d).draw(false)
                         }
                     },
@@ -490,7 +490,12 @@
                 {#"order": [[ 1, 'asc' ], [ 2, 'asc' ]],#}
                 "ajax": {
                     url: "/api/v1/identityManager/imgroup/{{ imgroup.id }}/membergroup/?format=json",
+                    {#Donen json icindeki hangi alandan verileri alacagimizi gosterir, DRF web arayuzunden kontrol edilebilir#}
                     dataSrc: 'results',
+
+                   {#Eger donen veri uzerinde oynamak ve degisiklik yapmak gereikse bu asagidaki gibi yapilabilir.#}
+                   {# Bunun disinda sadece ustteki tek satir dataSrc: 'results' yeterlidir.#}
+                   {# Asagidaki kisim aslinda sadece DRF tarafinda filtreleme yapabilmek amaci ile kullanilabilmektedir#}
                     data: function (d) {
                         var keys = Object.keys(d);
 
@@ -508,29 +513,33 @@
                     },
                     dataFilter: function (d) {
                         var json = jQuery.parseJSON(d);
+                        console.log(JSON.stringify(json));
                         json.recordsTotal = json.count;
                         json.recordsFiltered = json.count;
                         json.data = json.results;
-
+                        console.log(JSON.stringify(json));
                         return JSON.stringify(json); // return JSON string
                     }
                 },
                 "columns": [
+                    {#{#}
+                    {#    data: null,#}
+                    {#    defaultContent: '',#}
+                    {#    className: 'select-checkbox not_editable',#}
+                    {#    orderable: false#}
+//                    {#},#}
+                    {data: "name", orderData: 1, targets: 1},
+                    {data: "description", orderData: 2, targets: 1},
                     {
-                        data: null,
-                        defaultContent: '',
-                        className: 'select-checkbox not_editable',
-                        orderable: false
-                    },
-                    {"data": "name", orderData: 1, targets: 1},
-                    {"data": "description", orderData: 1, targets: 1},
-
-                    {
+                        {#data parametresi asagida herhangi bir json alanina isaret etmedigi icin verinin#}
+                        {#tamamini icermekte, bu yuzden belli bir alana erismek icin json icindeki data.field#}
+                        {#kullanilabilir. Orn: asagida data id kullanilmaktadir. Eger jsonda bir alana baglanmis#}
+                        {#data kullansaydik, dogrudan data parametresi data.id yerine kullanilabilirdi.#}
                         data: null,
                         "render": function (data, type, row, meta) {
+                            console.log("data in data :"+data.id);
                             return '<a href="/identityManager/imgroup/' + data.id + '/">Subgroup Home</a>';
                         },
-
                         orderable: false
                     },
                 ],

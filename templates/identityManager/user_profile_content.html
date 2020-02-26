@@ -1,9 +1,10 @@
+{% load static %}
 <div class="container">
     <div class="row">
         <div class="col-lg-3">
 
-            <div class="card text-center" id="profilecard">
-                <img class="img-fluid rounded-circle mx-auto d-block" src="{% static "identityManager/images/woman_profile.jpg" alt="John">
+            <div class="card text-center shadow" id="profilecard">
+                <img class="img-fluid rounded-circle mx-auto d-block" src="{% static "identityManager/images/woman_profile.jpg" %}" alt="John">
                 <h1 class="profile_owner_name">{{ profileOwner.first_name| capfirst }} {{ profileOwner.last_name| capfirst }}</h1>
                 <p class="profiletitle">CEO & Founder, Example</p>
                 <p>Harvard University</p>

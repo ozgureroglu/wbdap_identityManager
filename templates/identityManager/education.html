@@ -1,7 +1,75 @@
+<!-- Collapsable Card Example -->
+<div class="card shadow mb-4">
+    <!-- Card Header - Accordion -->
+    <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button"
+       aria-expanded="true" aria-controls="collapseCardExample">
+        <h6 class="m-0 font-weight-bold text-primary">Education</h6>
+    </a>
+    <!-- Card Content - Collapse -->
+    <div class="collapse show" id="collapseCardExample">
+        <div class="card-body">
+            This is a collapsable card example using Bootstrap's built in collapse functionality. <strong>Click on the
+            card header</strong> to see the card body collapse and expand!
+
+
+            {% for rec in educationalRec %}
+                <div class="panel panel-default educationalRec">
+                    <div class="card-body">
+                        <div class="row">
+
+                            <div class="col-lg-10">
+                                <div class="school">{{ rec.school }}</div>
+                                <div class="field">{{ rec.degree }}, {{ rec.grade }}/4</div>
+                                <div class="dates">{{ rec.startDate }} - {{ rec.finishDate }}</div>
+                                <hr>
+                                <div class="dates"><p>{{ rec.description }}</p></div>
+                                <div class="dates"><p>{{ rec.activities }}</p></div>
+                            </div>
+                            <div class="col-lg-2">
+                                image
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+
+
+
+            {% for rec in educationalRec %}
+                <div class="panel panel-default educationalRec">
+                    <div class="card-body">
+                        <div class="row">
+
+                            <div class="col-lg-10">
+                                <div class="school">{{ rec.school }}</div>
+                                <div class="field">{{ rec.degree }}, {{ rec.grade }}/4</div>
+                                <div class="dates">{{ rec.startDate }} - {{ rec.finishDate }}</div>
+                                <hr>
+                                <div class="dates"><p>{{ rec.description }}</p></div>
+                                <div class="dates"><p>{{ rec.activities }}</p></div>
+                            </div>
+                            <div class="col-lg-2">
+                                image
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
 <div class="card mb-2" id="profile_component">
     <div class="card-body">
         <h1>Education</h1>
-        <p class="profiletitle">CEO & Founder, Example</p>
+        <p class="profiletitle">{{profile.jobTitle}}</p>
         <p>Harvard University</p>
 
 
