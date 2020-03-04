@@ -122,7 +122,6 @@ class IMUserProfileAdmin(admin.ModelAdmin):
     list_display = ('owner',)
 
 
-
 class IMUserEmailAddresses(models.Model):
     # Bir user olusturuldugunda profili olusmaz
     owner = models.OneToOneField(IMUser, related_name='registered_user_email_addresses', on_delete=models.CASCADE)

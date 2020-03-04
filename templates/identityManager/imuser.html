@@ -23,7 +23,7 @@
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-bordered table-hover" id="wbdap_imuser_list_table" width="100%" cellspacing="0">
+                <table class="table table-bordered table-hover table-striped" id="wbdap_imuser_list_table" width="100%" cellspacing="0">
                   <thead>
                     <tr>
                         <th>Username</th>
@@ -310,20 +310,17 @@
                     {#{"data": "last_login", className: "not_editable"},#}
                     {
                         data: null,
-                        render: function (data, type, row) {
-                            html_code = '{% spaceless %}{% include 'identityManager/operations_button.html' %}{% endspaceless %}';
-                            cleaned = html_code.replace(/(\r\n\t|\n|\r\t)/gm, "");
+                        render: function (data, type, row, meta) {
                             return '<div class="btn-group">\n' +
-                                '  <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>\n' +
-                                '  <div class="dropdown-menu">\n' +
-                                '    <a class="dropdown-item passwd_change" href="#" data-toggle="modal" data-target="#passwdChangeModal" data-user-id="' + row.id + '">Change Password</a>\n' +
-                                '    <a class="dropdown-item" href="#">Another action</a>\n' +
-                                '    <a class="dropdown-item" href="#">Something else here</a>\n' +
+                                '  <button type="button" class="btn btn-sm btn-primary dropdown-toggle" style="border-color: white" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>\n' +
+                                '  <div class="dropdown-menu" >\n' +
+                                '    <a class="dropdown-item passwd_change" style="color: #3a3b45" href="#" data-toggle="modal" data-target="#passwdChangeModal" data-user-id="' + row.id + '">Change Password</a>\n' +
+                                '    <a class="dropdown-item" style="color: #3a3b45" href="#">Another action</a>\n' +
+                                '    <a class="dropdown-item" style="color: #3a3b45" href="#">Something else here</a>\n' +
                                 '    <div class="dropdown-divider"></div>\n' +
-                                '    <a class="dropdown-item" href="#">Separated link</a>\n' +
+                                '    <a class="dropdown-item" style="color: #3a3b45" href="#">Separated link</a>\n' +
                                 '  </div>\n' +
                                 '</div>';
-
                         },
 
                         className: "not_editable"
@@ -332,8 +329,10 @@
 
                 ],
                 select: {
-                    style: 'os',
-                    selector: 'td:not(:first-child)' // no row selection on last column
+                    style: 'single',
+                    selector: 'td:not(:first-child)', // no row selection on last column
+                    blurable: true,
+                    class: 'row-selected'
                 },
                 buttons: [
                     //https://datatables.net/forums/discussion/30295/editor-form-title

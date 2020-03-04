@@ -1,55 +1,162 @@
+<!-- Collapsable Card Example -->
+<div class="card shadow mb-4">
+    <!-- Card Header - Accordion -->
+    <a href="#collapseWorkExperienceCard" class="d-block card-header py-3" data-toggle="collapse" role="button"
+       aria-expanded="true" aria-controls="collapseWorkExperienceCard">
+        <h6 class="m-0 font-weight-bold text-primary">Work Experience</h6>
+    </a>
+    <!-- Card Content - Collapse -->
+    <div class="collapse show" id="collapseWorkExperienceCard">
+        <div class="card-body">
+            This is a collapsable card example using Bootstrap's built in collapse functionality. <strong>Click on the
+            card header</strong> to see the card body collapse and expand!
 
-            <div class="card mb-2" id="profile_component">
-                <div class="card-body">
-                    <h1>Work Experience</h1>
-                    <p class="profiletitle">CEO & Founder, Example</p>
-                    <p>Harvard University</p>
-                </div>
 
-            </div>
+            {% for rec in educationalRec %}
+                <div class="panel panel-default educationalRec">
+                    <div class="card-body">
+                        <div class="row">
 
-
-
-<div id="workExperienceDiv" style="display: none;">
-    <div class="col-lg-12">
-        <!-- /.panel -->
-        <div class="card">
-            <div class="panel-heading">
-                <i class="fas fa-briefcase"></i> Work Experience
-
-                 <div class="pull-right">
-                    <!-- Indicates a successful or positive action -->
-                    <button type="button" class="btn btn-xs btn-success" id="addWorkExperienceRecord"><i class="fa fa-plus fa-fw"></i></button>
-                </div>
-            </div>
-            <!-- /.panel-heading -->
-            <div class="card-body">
-
-                {% for rec in workExperienceRec %}
-                    <div class="panel panel-default educationalRec">
-                        <div class="card-body">
-                            <div class="row">
-
-                                <div class="col-lg-10">
-                                    <div class="school">{{ rec.title }}</div>
-                                    <div class="school">{{ rec.company }}</div>
-                                    <div class="field">{{ rec.sector }}, {{ rec.location }}</div>
-                                    <div class="dates">{{ rec.startDate }}-{{ rec.finishDate }}</div>
-                                    <hr>
-                                    <div class="dates">{{ rec.description }}</div>
-                                </div>
-                                <div class="col-lg-2">
-                                    image
-                                </div>
+                            <div class="col-lg-10">
+                                <div class="school">{{ rec.school }}</div>
+                                <div class="field">{{ rec.degree }}, {{ rec.grade }}/4</div>
+                                <div class="dates">{{ rec.startDate }} - {{ rec.finishDate }}</div>
+                                <hr>
+                                <div class="dates"><p>{{ rec.description }}</p></div>
+                                <div class="dates"><p>{{ rec.activities }}</p></div>
+                            </div>
+                            <div class="col-lg-2">
+                                image
                             </div>
                         </div>
                     </div>
-                {% endfor %}
+                </div>
+            {% endfor %}
 
-            </div>
-            <!-- /.panel-body -->
+
+
+
+            {% for rec in educationalRec %}
+                <div class="panel panel-default educationalRec">
+                    <div class="card-body">
+                        <div class="row">
+
+                            <div class="col-lg-10">
+                                <div class="school">{{ rec.school }}</div>
+                                <div class="field">{{ rec.degree }}, {{ rec.grade }}/4</div>
+                                <div class="dates">{{ rec.startDate }} - {{ rec.finishDate }}</div>
+                                <hr>
+                                <div class="dates"><p>{{ rec.description }}</p></div>
+                                <div class="dates"><p>{{ rec.activities }}</p></div>
+                            </div>
+                            <div class="col-lg-2">
+                                image
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+
         </div>
-        <!-- /.panel -->
     </div>
-
 </div>
+
+
+
+{##}
+{##}
+{#<div class="card mb-2" id="profile_component">#}
+{#    <div class="card-body">#}
+{#        <h1>Education</h1>#}
+{#        <p class="profiletitle">{{profile.jobTitle}}</p>#}
+{#        <p>Harvard University</p>#}
+{##}
+{##}
+{#            {% for rec in educationalRec %}#}
+{#                <div class="panel panel-default educationalRec">#}
+{#                    <div class="card-body">#}
+{#                        <div class="row">#}
+{##}
+{#                            <div class="col-lg-10">#}
+{#                                <div class="school">{{ rec.school }}</div>#}
+{#                                <div class="field">{{ rec.degree }}, {{ rec.grade }}/4</div>#}
+{#                                <div class="dates">{{ rec.startDate }} - {{ rec.finishDate }}</div>#}
+{#                                <hr>#}
+{#                                <div class="dates"><p>{{ rec.description }}</p></div>#}
+{#                                <div class="dates"><p>{{ rec.activities }}</p></div>#}
+{#                            </div>#}
+{#                            <div class="col-lg-2">#}
+{#                                image#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            {% endfor %}#}
+{##}
+{#    </div>#}
+{#</div>#}
+{##}
+{##}
+{#<div class="col-lg-12" id="educationDiv" style="display: none;">#}
+{#    <!-- /.panel -->#}
+{#    <div class="card">#}
+{#        <div class="card-header">#}
+{##}
+{#            <nav class="navbar navbar-expand-lg navbar-light bg-light">#}
+{#                <a class="navbar-brand" href="#"><i class="fas fa-graduation-cap"></i> Education Details</a>#}
+{##}
+{#                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"#}
+{#                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">#}
+{#                    <span class="navbar-toggler-icon"></span>#}
+{#                </button>#}
+{#                <div class="collapse navbar-collapse" id="navbarNav">#}
+{#                    <ul class="navbar-nav">#}
+{#                        <li class="nav-item active">#}
+{#                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>#}
+{#                        </li>#}
+{#                        <li class="nav-item">#}
+{#                            <a class="nav-link" href="#">Features</a>#}
+{#                        </li>#}
+{#                        <li class="nav-item">#}
+{#                            <a class="nav-link" href="#">Pricing</a>#}
+{#                        </li>#}
+{#                        <li class="nav-item">#}
+{#                            <a class="nav-link disabled" href="#">Disabled</a>#}
+{#                        </li>#}
+{#                    </ul>#}
+{#                </div>#}
+{#            </nav>#}
+{##}
+{##}
+{#        </div>#}
+{#        <!-- /.panel-heading -->#}
+{#        <div class="card-body">#}
+{##}
+{#            {% for rec in educationalRec %}#}
+{#                <div class="panel panel-default educationalRec">#}
+{#                    <div class="card-body">#}
+{#                        <div class="row">#}
+{##}
+{#                            <div class="col-lg-10">#}
+{#                                <div class="school">{{ rec.school }}</div>#}
+{#                                <div class="field">{{ rec.degree }}, {{ rec.grade }}/4</div>#}
+{#                                <div class="dates">{{ rec.startDate }} - {{ rec.finishDate }}</div>#}
+{#                                <hr>#}
+{#                                <div class="dates"><p>{{ rec.description }}</p></div>#}
+{#                                <div class="dates"><p>{{ rec.activities }}</p></div>#}
+{#                            </div>#}
+{#                            <div class="col-lg-2">#}
+{#                                image#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            {% endfor %}#}
+{##}
+{#        </div>#}
+{#        <!-- /.panel-body -->#}
+{#    </div>#}
+{#    <!-- /.panel -->#}
+{#</div>#}
+{##}
