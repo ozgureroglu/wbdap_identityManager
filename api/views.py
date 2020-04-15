@@ -31,6 +31,7 @@ from .serializers import (
     IMGroupSerializer,
     IMRoleSerializer,
     IMPermissionSerializer,
+    IMRolePermissionListSerializer,
 )
 
 from projectCore.datatable_viewset import ModifiedViewSet
@@ -242,6 +243,170 @@ class IMRoleDeleteAPIView(DestroyAPIView):
     # Asagidakileri degistirince urls icinde de abc pattern ile search yapilmasi gerekir
     # lookup_field = 'slug'
     # lookup_url_kwarg = 'abc'
+
+class IMRolePermissionListAPIView(ListAPIView):
+
+    serializer_class = IMRolePermissionListSerializer
+
+    def get_queryset(self):
+        role_id = self.kwargs['pk']
+        role = IMRole.objects.get(id=role_id)
+        queryset = role.permissions.all()
+        print(queryset)
+        return queryset
+
+
+class IMRolePermissionCreateAPIView(CreateAPIView):
+    serializer_class = IMRolePermissionListSerializer
+
+    def create(self, request, *args, **kwargs):
+        try:
+            imrole=IMRole.objects.get(id=self.kwargs['pk'])
+            perms = request.data['perm']
+            print(perms)
+
+            perm_list = str(perms).strip(' ').strip(',')
+            print(perm_list)
+            perm_list = perm_list.split(',')
+
+            for perm in perm_list:
+                print(perm)
+                perm_parts = perm.strip(' ').split(':')
+                print(perm_parts)
+                imrole.permissions.add(Permission.objects.get(name=perm_parts[2], content_type__model=perm_parts[1],content_type__app_label=perm_parts[0]))
+
+        except Exception as e:
+            logger.fatal(e);
+            logger.fatal('unable to add permission to role')
+
+        permissions = IMRole.objects.get(id=self.kwargs['pk']).permissions.all()
+        serializer = self.get_serializer(permissions, many=True)
+        headers = self.get_success_headers(serializer.data)
+
+        return Response({'data': serializer.data})
+
+
+
+class IMRolePermissionDeleteAPIView(DestroyAPIView):
+    serializer_class = IMRolePermissionListSerializer
+
+
+
+    # Removes the user from group
+    def destroy(self, request, *args, **kwargs):
+
+        print(self.kwargs)
+        IMRole.objects.get(id=self.kwargs['pk']).permissions.remove(Permission.objects.get(id=self.kwargs['id']))
+
+        permissions = IMRole.objects.get(id=self.kwargs['pk']).memberGroups.all()
+        serializer = self.get_serializer(permissions, many=True)
+
+        return Response({'data': serializer.data})
+
+
+class IMRoleAssignedUserListAPIView(ListAPIView):
+
+    serializer_class = IMUserListSerializer
+
+    def get_queryset(self):
+        role_id = self.kwargs['pk']
+        role = IMRole.objects.get(id=role_id)
+        queryset = role.assigned_users.all()
+        print(queryset)
+        return queryset
+
+
+class IMRoleAssignedUserCreateAPIView(CreateAPIView):
+    serializer_class = IMUserListSerializer
+
+    def create(self, request, *args, **kwargs):
+        try:
+            imrole=IMRole.objects.get(id=self.kwargs['pk'])
+            usernames = request.data['username']
+
+            usernames_list = str(usernames).strip(' ').strip(',')
+            usernames = usernames_list.rstrip(', ').split(',')
+
+            for username in usernames:
+                imrole.assigned_users.add(IMUser.objects.get(username=username))
+
+        except Exception as e:
+            logger.fatal(e);
+            logger.fatal('unable to add users to role')
+
+        assigned_users = IMRole.objects.get(id=self.kwargs['pk']).assigned_users.all()
+        serializer = self.get_serializer(assigned_users, many=True)
+
+        return Response({'data': serializer.data})
+
+
+class IMRoleAssignedUserDeleteAPIView(DestroyAPIView):
+    serializer_class = IMUserListSerializer
+
+    def destroy(self, request, *args, **kwargs):
+        print(self.kwargs)
+        IMRole.objects.get(id=self.kwargs['pk']).assigned_users.remove(IMUser.objects.get(id=self.kwargs['id']))
+
+        users = IMRole.objects.get(id=self.kwargs['pk']).assigned_users.all()
+        serializer = self.get_serializer(users, many=True)
+
+        return Response({'data': serializer.data})
+
+
+
+
+class IMRoleAssignedGroupListAPIView(ListAPIView):
+
+    serializer_class = IMGroupListSerializer
+
+    def get_queryset(self):
+        role_id = self.kwargs['pk']
+        role = IMRole.objects.get(id=role_id)
+        queryset = role.assigned_groups.all()
+        print(queryset)
+        return queryset
+
+
+class IMRoleAssignedGroupCreateAPIView(CreateAPIView):
+    serializer_class = IMGroupListSerializer
+
+    def create(self, request, *args, **kwargs):
+        try:
+            imrole=IMRole.objects.get(id=self.kwargs['pk'])
+            print(request.data['name'])
+            groups_list = request.data['name']
+            print(groups)
+            groups = groups_list.rstrip(', ').split(',')
+            print(groups)
+            for group in groups:
+                print(group)
+                imrole.assigned_groups.add(IMGroup.objects.get(name=group))
+
+        except Exception as e:
+            logger.fatal(e);
+            logger.fatal('unable to add groups to role')
+
+        groups = IMRole.objects.get(id=self.kwargs['pk']).assigned_groups.all()
+        serializer = self.get_serializer(groups, many=True)
+
+
+        return Response({'data': serializer.data})
+
+
+class IMRoleAssignedGroupDeleteAPIView(DestroyAPIView):
+    serializer_class = IMGroupListSerializer
+
+    def destroy(self, request, *args, **kwargs):
+        print(self.kwargs)
+        IMRole.objects.get(id=self.kwargs['pk']).assigned_groups.remove(IMGroup.objects.get(id=self.kwargs['id']))
+
+        groups = IMRole.objects.get(id=self.kwargs['pk']).assigned_groups.all()
+        serializer = self.get_serializer(groups, many=True)
+
+        return Response({'data': serializer.data})
+
+
+
 
 
 # -----------------------------------------

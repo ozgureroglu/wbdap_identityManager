@@ -50,13 +50,13 @@
 //     // This is the easiest way to have default options.
 //
 //     var tablebody = this;
-//     var settings = $.extend({
+//     var custom_settings = $.extend({
 //         // These are the defaults.
 //         url: null,
 //     }, options);
 //
 //     $.ajax({
-//         url: settings.url,
+//         url: custom_settings.url,
 //         context: document.body,
 //         success: function (data) {
 //

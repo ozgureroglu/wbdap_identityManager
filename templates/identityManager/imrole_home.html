@@ -1,57 +1,73 @@
-{% extends "identityManager/identityManager_app_template.html" %}
+{% extends 'projectCore/startbootstrap-sb-admin-2-gh-pages/sb_admin2_index_template.html' %}
 {% load i18n %}
+{% load static %}
 
-{% block title %}{{ file }}{% endblock %}
+
+{% block head__stylesheet %}
+    {{ block.super }}
+      <style>
+  .ui-autocomplete {
+    max-height: 100px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+  }
+  /* IE 6 doesn't support max-height
+   * we use height instead, but this forces the menu to always be this tall
+   */
+  * html .ui-autocomplete {
+    height: 100px;
+  }
+  </style>
+{% endblock %}
+
+
+
 
 {% block page_content %}
 
-    {{ block.super }}
     <div class="container-fluid">
         <div class="row">
 
-            {% include "identityManager/modal/addIdentityObjectModal.html" %}
+            {#            {% include "identityManager/modal/addIdentityObjectModal.html" %}#}
             {% csrf_token %}
 
 
             {# Nesne listelerini goster#}
             <div class="col-lg-12">
 
-                <div class="card">
-                    <div class="card-header"><h3>Role: {{ imrole.name }}</h3></div>
+                <div class="card mt-4 shadow">
+                    <div class="card-header bg-primary text-gray-100">Role: {{ imrole.name }}</div>
                     <div class="card-body">
                         <p><b>Description :</b> {{ imrole.description }}</p>
 
                         <div class="row">
-                            <div class="col-sm"><h3><span
-                                    class="label label-primary">{{ imrole.assigned_groups.count }} Groups</span></h3>
+                            <div class="col-sm"><span
+                                    class="label label-primary">{{ imrole.assigned_groups.count }} Groups</span>
                             </div>
-                            <div class="col-sm"><h3><span
-                                    class="label label-primary">{{ imrole.assigned_users.count }} Users</span></h3>
+                            <div class="col-sm"><span
+                                    class="label label-primary">{{ imrole.assigned_users.count }} Users</span>
                             </div>
-                            <div class="col-sm"><h3><span
-                                    class="label label-primary">{{ imrole.permissions.count }} Permissions</span></h3>
+                            <div class="col-sm"><span
+                                    class="label label-primary">{{ imrole.permissions.count }} Permissions</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
 
-                <div class="card mt-4">
+                <div class="card mt-4 border-left-primary shadow">
                     <div class="card-header">
-                        <div class="card-title">
-                            <h7>Permissions</h7>
-                        </div>
-
+                        Permissions
                     </div>
                     <div class="card-body">
-                        <table id="wbdap_imrole_permissions_list_table" class="display">
+                        <table id="wbdap_imrole_permissions_list_table" class="display table table-hover table-striped">
                             <thead>
-                            <tr style="text-align: center">
+                            <tr>
                                 <th></th>
                                 <th>Application Name</th>
                                 <th>Model</th>
                                 <th>Permission</th>
-
                                 <th style="column-span: 4;text-align: center">Operations</th>
                             </tr>
                             </thead>
@@ -60,18 +76,15 @@
                 </div>
 
 
-                <div class="card mt-4">
+                <div class="card mt-4 border-left-primary shadow">
                     <div class="card-header">
-                        <div class="card-title">
-                            <h7>Assigned Users</h7>
-                        </div>
-
+                        Assigned Users
                     </div>
                     <div class="card-body">
 
-                        <table id="wbdap_imrole_assigned_user_list_table" class="display">
+                        <table id="wbdap_imrole_assigned_user_list_table" class="display table table-hover table-striped">
                             <thead>
-                            <tr style="text-align: center">
+                            <tr>
                                 <th></th>
                                 <th>Username</th>
                                 <th>Name</th>
@@ -85,17 +98,14 @@
                     </div>
                 </div>
 
-                <div class="card mt-4">
+                <div class="card mt-4 border-left-primary shadow">
                     <div class="card-header">
-                        <div class="card-title">
-                            <h7>Member Groups</h7>
-                        </div>
-
+                        Member Groups
                     </div>
                     <div class="card-body">
-                        <table id="wbdap_imrole_assigned_group_list_table" class="display">
+                        <table id="wbdap_imrole_assigned_group_list_table" class="display table table-hover table-striped">
                             <thead>
-                            <tr style="text-align: center">
+                            <tr>
                                 <th></th>
 
                                 <th>Name</th>
@@ -107,14 +117,14 @@
                     </div>
                 </div>
             </div>
-             
+
         </div>
     </div>
 
 
 {% endblock %}
 
-{% block application_body_jscript %}
+{% block body__jscript %}
     {{ block.super }}
 
     <script>
@@ -131,11 +141,11 @@
             }
 
 
-            imrole_permission_editor = new $.fn.dataTable.Editor({
+            var imrole_permission_editor = new $.fn.dataTable.Editor({
                 ajax: {
                     create: {
                         type: 'POST',
-                        url: '/api/v1/identityManager/imroles/{{ imrole.id }}/permissions/',
+                        url: '/api/v1/identityManager/imrole/{{ imrole.id }}/permission/add/',
                         headers: {
                             'X-CSRFToken': csrftoken
                         },
@@ -148,7 +158,7 @@
                     },
                     edit: {
                         type: 'PUT',
-                        url: '/api/v1/identityManager/imroles/{{ imrole.id }}/permissions/_id_/',
+                        url: '/api/v1/identityManager/imrole/{{ imrole.id }}/permission/_id_/',
                         headers: {
                             'X-CSRFToken': csrftoken
                         },
@@ -176,7 +186,7 @@
                     },
                     remove: {
                         type: 'DELETE',
-                        url: '/api/v1/identityManager/imroles/{{ imrole.id }}/permissions/_id_/',
+                        url: '/api/v1/identityManager/imrole/{{ imrole.id }}/permission/_id_/delete/',
                         headers: {
                             'X-CSRFToken': csrftoken
                         }, contentType: 'application/json',
@@ -190,70 +200,6 @@
                 table: "#wbdap_imrole_permissions_list_table",
                 idSrc: 'id',
                 fields: [{
-                    {#    id: "appname",#}
-                    {#    label: "Application Name:",#}
-                    {#    name: "appname",#}
-                    {#    type: "autoComplete",#}
-                    {#    opts: {#}
-                    {##}
-                    {#        minLength: 0,#}
-                    {#        autoFocus: false,#}
-                    {#        autocomplete: true,#}
-                    {#        source: function (request, response) {#}
-                    {#            $.ajax({#}
-                    {#                url: "/applicationManager/autocompleteAppnames",#}
-                    {#                dataType: "jsonp",#}
-                    {#                data: {#}
-                    {#                    term: extractLast(request.term)#}
-                    {#                },#}
-                    {#                success: function (data) {#}
-                    {#                    #}
-                    {#                    response($.map(data, function (value, key) {#}
-                    {##}
-                    {#                        return {#}
-                    {#                            label: value.appname + ": " + value.description,#}
-                    {#                            value: value.appname#}
-                    {#                        }#}
-                    {#                    }));#}
-                    {#                }#}
-                    {#            });#}
-                    {#        },#}
-                    {#        create: function () {#}
-                    {#            $(this).data('ui-autocomplete')._renderMenu = function (ul, items) {#}
-                    {#                var that = this;#}
-                    {#                $.each(items, function (index, item) {#}
-                    {#                    that._renderItemData(ul, item);#}
-                    {#                });#}
-                    {#                $(ul).find("li:odd").addClass("odd_auto_complete");#}
-                    {#            }#}
-                    {##}
-                    {#        },#}
-                    {##}
-                    {#        focus: function () {#}
-                    {#            // prevent value inserted on focus#}
-                    {#            return false;#}
-                    {#        },#}
-                    {#        appendTo: "body",#}
-                    {#        // Asagidaki kisim istegin icerigi ile ilgili kisim; donen cevap success kisminda#}
-                    {#        select: function (event, ui) {#}
-                    {#            var terms = split(this.value);#}
-                    {#            // remove the current input#}
-                    {#            terms.pop();#}
-                    {##}
-                    {#            // add the selected item#}
-                    {#            terms.push(ui.item.value);#}
-                    {#            // add placeholder to get the comma-and-space at the end#}
-                    {#            terms.push("");#}
-                    {#            this.value = terms.join(", ");#}
-                    {#            return false;#}
-                    {#        }#}
-                    {#    }#}
-                    //               {#}, {#}
-                    {#    id: "codename",#}
-                    {#    label: "Perm:",#}
-                    {#    name: "codename",#}
-                    {#    type: "autoComplete",#}
-                    //             {#}, {#}
                     id: "perm",
                     label: "Perm:",
                     name: "perm",
@@ -334,7 +280,7 @@
             {#    {show: ['position', 'office', 'extn', 'start_date', 'salary']};#}
 //            {#});#}
 
-            $('#wbdap_imrole_permissions_list_table').DataTable({
+            var imrole_peermissions_table= $('#wbdap_imrole_permissions_list_table').DataTable({
                 "scrollY": "500px",
                 "scrollCollapse": true,
                 "dom": 'Bfrtip',
@@ -347,7 +293,7 @@
                 "responsive": true,
                 {#"order": [[ 1, 'asc' ], [ 2, 'asc' ]],#}
                 "ajax": {
-                    url: "/api/v1/identityManager/imroles/{{ imrole.id }}/permissions/?format=json",
+                    url: "/api/v1/identityManager/imrole/{{ imrole.id }}/permission/?format=json",
                     dataSrc: 'results',
                     data: function (d) {
                         var keys = Object.keys(d);
@@ -383,8 +329,6 @@
                     {"data": "content_type.app_label", orderData: 1, targets: 1},
                     {"data": "content_type.model", orderData: 2, targets: 2},
                     {"data": "name", orderData: 3, targets: 3},
-
-
                     {
                         data: null,
                         "render": function (data, type, row, meta) {
@@ -411,11 +355,11 @@
 
             {#---------------------------------------------------------------------------------------#}
 
-            imrole_assigneduser_editor = new $.fn.dataTable.Editor({
+            var imrole_assigneduser_editor = new $.fn.dataTable.Editor({
                 ajax: {
                     create: {
                         type: 'POST',
-                        url: '/api/v1/identityManager/imroles/{{ imrole.id }}/assignedusers/',
+                        url: '/api/v1/identityManager/imrole/{{ imrole.id }}/user/add/',
                         headers: {
                             'X-CSRFToken': csrftoken
                         },
@@ -428,7 +372,7 @@
                     },
                     edit: {
                         type: 'PUT',
-                        url: '/api/v1/identityManager/imroles/{{ imrole.id }}/assignedusers/_id_/',
+                        url: '/api/v1/identityManager/imrole/{{ imrole.id }}/user/_id_/edit/',
                         headers: {
                             'X-CSRFToken': csrftoken
                         },
@@ -456,7 +400,7 @@
                     },
                     remove: {
                         type: 'DELETE',
-                        url: '/api/v1/identityManager/imroles/{{ imrole.id }}/assignedusers/_id_/',
+                        url: '/api/v1/identityManager/imrole/{{ imrole.id }}/user/_id_/delete/',
                         headers: {
                             'X-CSRFToken': csrftoken
                         }, contentType: 'application/json',
@@ -545,7 +489,7 @@
                 "responsive": true,
                 {#"order": [[ 1, 'asc' ], [ 2, 'asc' ]],#}
                 "ajax": {
-                    url: "/api/v1/identityManager/imroles/{{ imrole.id }}/assignedusers/?format=json",
+                    url: "/api/v1/identityManager/imrole/{{ imrole.id }}/user/?format=json",
                     dataSrc: 'results',
                     data: function (d) {
                         var keys = Object.keys(d);
@@ -615,7 +559,7 @@
                 ajax: {
                     create: {
                         type: 'POST',
-                        url: '/api/v1/identityManager/imroles/{{ imrole.id }}/assignedgroups/',
+                        url: '/api/v1/identityManager/imrole/{{ imrole.id }}/group/add/',
                         headers: {
                             'X-CSRFToken': csrftoken
                         },
@@ -628,7 +572,7 @@
                     },
                     edit: {
                         type: 'PUT',
-                        url: '/api/v1/identityManager/imroles/{{ imrole.id }}/assignedgroups/_id_/',
+                        url: '/api/v1/identityManager/imrole/{{ imrole.id }}/group/_id_/',
                         headers: {
                             'X-CSRFToken': csrftoken
                         },
@@ -656,7 +600,7 @@
                     },
                     remove: {
                         type: 'DELETE',
-                        url: '/api/v1/identityManager/imroles/{{ imrole.id }}/assignedgroups/_id_/',
+                        url: '/api/v1/identityManager/imrole/{{ imrole.id }}/group/_id_/delete/',
                         headers: {
                             'X-CSRFToken': csrftoken
                         }, contentType: 'application/json',
@@ -745,7 +689,7 @@
                 "responsive": true,
                 {#"order": [[ 1, 'asc' ], [ 2, 'asc' ]],#}
                 "ajax": {
-                    url: "/api/v1/identityManager/imroles/{{ imrole.id }}/assignedgroups/?format=json",
+                    url: "/api/v1/identityManager/imrole/{{ imrole.id }}/group/?format=json",
                     dataSrc: 'results',
                     data: function (d) {
                         var keys = Object.keys(d);

@@ -17,7 +17,10 @@ from .views import (
     IMRoleUpdateAPIView,
     IMRoleDeleteAPIView,
     IMGroupMemberUserListAPIView, IMGroupMemberUserUpdateAPIView, IMGroupMemberUserDeleteAPIView,
-    IMGroupMemberGroupUpdateAPIView, IMGroupMemberGroupListAPIView, IMGroupMemberGroupDeleteAPIView)
+    IMGroupMemberGroupUpdateAPIView, IMGroupMemberGroupListAPIView, IMGroupMemberGroupDeleteAPIView,
+    IMRolePermissionListAPIView, IMRolePermissionCreateAPIView, IMRoleAssignedUserListAPIView,
+    IMRoleAssignedGroupListAPIView, IMRoleAssignedUserCreateAPIView, IMRoleAssignedGroupCreateAPIView,
+    IMRoleAssignedUserDeleteAPIView, IMRoleAssignedGroupDeleteAPIView, IMRolePermissionDeleteAPIView)
 
 from .views import IMUserViewSet,IMGroupViewSet, IMRoleViewSet
 
@@ -80,4 +83,20 @@ urlpatterns = [
     path('imrole/<int:pk>/', IMRoleDetailAPIView.as_view(), name="imrole-detail"),
     path('imrole/<int:pk>/edit/', IMRoleUpdateAPIView.as_view(), name="imrole-edit"),
     path('imrole/<int:pk>/delete/', IMRoleDeleteAPIView.as_view(), name="imrole-delete"),
+
+
+    path('imrole/<int:pk>/permission/', IMRolePermissionListAPIView.as_view(), name="imrole-permission-list"),
+    path('imrole/<int:pk>/permission/add/', IMRolePermissionCreateAPIView.as_view(), name="imrole-permission-create"),
+    # path('imrole/<int:pk>/permission/<int:perm_id>/', IMRolePermissionListAPIView.as_view(), name="imrole-permission-list"),
+    # path('imrole/<int:pk>/permission/<int:perm_id>/edit/', IMRolePermissionListAPIView.as_view(), name="imrole-permission-list"),
+    path('imrole/<int:pk>/permission/<int:id>/delete/', IMRolePermissionDeleteAPIView.as_view(), name="imrole-permission-list"),
+
+
+    path('imrole/<int:pk>/user/', IMRoleAssignedUserListAPIView.as_view(), name="imrole-assigneduser-list"),
+    path('imrole/<int:pk>/user/add/', IMRoleAssignedUserCreateAPIView.as_view(), name="imrole-assigneduser-create"),
+    path('imrole/<int:pk>/user/<int:id>/delete/', IMRoleAssignedUserDeleteAPIView.as_view(), name="imrole-assigneduser-delete"),
+
+    path('imrole/<int:pk>/group/', IMRoleAssignedGroupListAPIView.as_view(), name="imrole-assignedgroup-list"),
+    path('imrole/<int:pk>/group/add/', IMRoleAssignedGroupCreateAPIView.as_view(), name="imrole-assignedgroup-create"),
+    path('imrole/<int:pk>/group/<int:id>/delete/', IMRoleAssignedGroupDeleteAPIView.as_view(), name="imrole-assignedgroup-delete"),
 ]

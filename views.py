@@ -23,7 +23,7 @@ from .forms import *
 from .models import IMUser, IMGroup, IMRole, IMUserProfile
 
 
-#Get an instance of the logger: Name should be the name of the logger in settings LOGGING field
+#Get an instance of the logger: Name should be the name of the logger in custom_settings LOGGING field
 
 from projectCore.datatable_viewset import ModifiedViewSet
 

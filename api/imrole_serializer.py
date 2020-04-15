@@ -50,10 +50,45 @@ class IMRoleListSerializer(HyperlinkedModelSerializer):
 
 
 class IMRoleDetailSerializer(ModelSerializer):
-
     class Meta:
         model = IMRole
         fields = ('id', 'name', 'description')
+
+
+class ContentTypeSerializer(ModelSerializer):
+    class Meta:
+        model = ContentType
+        fields = ('app_label', 'model')
+
+
+class IMRolePermissionListSerializer(ModelSerializer):
+    content_type = ContentTypeSerializer(many=False, read_only=True)
+    # content_type = serializers.SlugRelatedField(many=False, read_only=True, slug_field='app_label')
+
+    class Meta:
+        model = Permission
+        fields = ('name', 'content_type')
+
+
+# class IMRoleAssignedUserListSerializer(ModelSerializer):
+#     content_type = ContentTypeSerializer(many=False, read_only=True)
+#     # content_type = serializers.SlugRelatedField(many=False, read_only=True, slug_field='app_label')
+#
+#     class Meta:
+#         model = Permission
+#         fields = ('name', 'content_type')
+#
+#
+#
+# class IMRoleAssignedGroupListSerializer(ModelSerializer):
+#     content_type = ContentTypeSerializer(many=False, read_only=True)
+#     # content_type = serializers.SlugRelatedField(many=False, read_only=True, slug_field='app_label')
+#
+#     class Meta:
+#         model = Permission
+#         fields = ('name', 'content_type')
+
+
 
 
 # ---------------------------------------------------------------
@@ -82,25 +117,5 @@ class IMRoleSerializer(HyperlinkedModelSerializer):
     class Meta:
         model=IMRole
         fields = ('id', 'name', 'description')
-
-
-
-
-class ContentTypeSerializer(ModelSerializer):
-    class Meta:
-        model = ContentType
-        fields = ('app_label', 'model')
-
-
-
-
-class IMPermissionSerializer(ModelSerializer):
-
-    content_type = ContentTypeSerializer(many=False, read_only=True)
-    # content_type = serializers.SlugRelatedField(many=False, read_only=True, slug_field='app_label')
-
-    class Meta:
-        model = Permission
-        fields = ('name', 'content_type')
 
 
