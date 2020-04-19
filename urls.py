@@ -29,6 +29,7 @@ urlpatterns = [
     path('', landing_page, name='landing-page'),
     path('imuser/', imUser, name='imUser'),
     path('imuser/gen/', generate_user_data, name=' generate-user-data'),
+    path('imuser/delgen/', delete_generated_user_data, name='delete-generated-user-data'),
     path('imuser/add/', add_imuser, name='addUser'),
     path('imuser/make_superuser/<int:pk>/', make_superuser, name='make_superuser'),
     path('imuser/make_staff/<int:pk>/', make_staff, name='make_staff'),

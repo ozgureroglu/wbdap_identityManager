@@ -1,30 +1,5 @@
 <div class="row mb-4">
-    <div class="col-sm">
-        <!-- Dropdown Card Example -->
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">About Me</h6>
-                <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                         aria-labelledby="dropdownMenuLink">
-                        <div class="dropdown-header">Dropdown Header:</div>
-                        <a class="dropdown-item" href="#">Edit</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Card Body -->
-            <div class="card-body">
-                {{ profile.aboutMe }}
-            </div>
-        </div>
-    </div>
+
     <div class="col-sm">
 
         <div class="card mb-2 shadow" id="profile_component">
@@ -57,11 +32,11 @@
                     </tr>
                     <tr>
                         <td><b>Date Of Birth :</b></td>
-                        <td>{{ userProfile.dateOfBirth }}</td>
+                        <td>{{ profile.dateOfBirth }}</td>
                     </tr>
                     <tr>
                         <td><b>Gender :</b></td>
-                        <td>{{ userProfile.gender }}</td>
+                        <td>{{ profile.gender }}</td>
                     </tr>
                     <tr>
                         <td><b>Email :</b></td>
@@ -69,12 +44,20 @@
                     </tr>
                     <tr>
                         <td><b>Phone Number :</b></td>
-                        <td>{{ userProfile.cellularPhone }}</td>
+                        <td>{{ profile.cellularPhone }}</td>
                     </tr>
                     <tr>
                         <td><b>Address :</b></td>
                         <td>
-                            <address>{{ userProfile.address }}</address>
+                            {% with address=profile.currentAddress %}
+                            <address>
+                                {{ address.name }}<br>
+                                {{ address.address1 }}<br>
+                                {{ address.address2 }}<br>
+                                {{ address.zip_code }}<br>
+                                {{ address.city }}-{{ address.country }}
+                            </address>
+                            {% endwith %}
                         </td>
                     </tr>
                 </table>
@@ -94,6 +77,32 @@
             <!-- /.panel-body -->
         </div>
         <!-- /.panel .chat-panel -->
+    </div>
+    <div class="col-sm">
+        <!-- Dropdown Card Example -->
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">About Me</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                         aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header">Dropdown Header:</div>
+                        <a class="dropdown-item" href="#">Edit</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                {{ profile.aboutMe }}
+            </div>
+        </div>
     </div>
 </div>
 

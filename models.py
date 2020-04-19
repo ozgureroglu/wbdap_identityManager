@@ -10,6 +10,7 @@ from django.db import models
 # Dolayisi ile bu alanin dumpi her alindiginda user listesi dump'ida alinmalidir.
 class IMUser(User):
     ss = models.CharField(max_length=10, blank=True)
+    dummy = models.BooleanField(default=False, null=False,blank=False)
     generated = models.BooleanField(null=False, blank=True, default=False)
 
     def __str__(self):
@@ -104,14 +105,21 @@ class IMRoleAdmin(admin.ModelAdmin):
 class IMUserProfile(models.Model):
     # Bir user olusturuldugunda profili olusmaz
     owner = models.OneToOneField(IMUser, related_name='user_profile', on_delete=models.CASCADE)
-    jobTitle = models.CharField(max_length=25, null=True, blank=True)
+    # jobTitle = models.CharField(max_length=100, null=True, blank=True)
     dateOfBirth = models.DateField(null=True, blank=True)
     aboutMe = models.TextField(max_length=500, null=True, blank=True)
     # address = models.TextField(max_length=500, null=True, blank=True)
     cellularPhone = models.TextField(max_length=500, null=True, blank=True)
     siteUrl = models.URLField(max_length=50, null=True, blank=True)
-    company = models.URLField(max_length=50, null=True, blank=True)
+    # company = models.URLField(max_length=50, null=True, blank=True)
     gender = models.NullBooleanField(blank=True)
+
+
+    def currentAddress(self):
+        return self.address_set.get(default=True)
+
+    def currentJob(self):
+        return self.workexperience_set.get(current=True)
 
     def __str__(self):
         return self.owner.first_name
@@ -124,7 +132,7 @@ class IMUserProfileAdmin(admin.ModelAdmin):
 
 class IMUserEmailAddresses(models.Model):
     # Bir user olusturuldugunda profili olusmaz
-    owner = models.OneToOneField(IMUser, related_name='registered_user_email_addresses', on_delete=models.CASCADE)
+    owner = models.OneToOneField(IMUserProfile, related_name='registered_user_email_addresses', on_delete=models.CASCADE)
     email_username = models.CharField(max_length=50, null=True, blank=True)
     email_password = models.CharField(max_length=50, null=True, blank=True)
 
@@ -135,9 +143,6 @@ class IMUserEmailAddresses(models.Model):
 @admin.register(IMUserEmailAddresses)
 class IMUserEmailAddressesAdmin(admin.ModelAdmin):
     list_display = ('owner',)
-
-
-
 
 
 class Degree(models.Model):
@@ -158,9 +163,9 @@ class DegreeAdmin(admin.ModelAdmin):
 
 
 class School(models.Model):
-    name = models.CharField(max_length=50, null=False, blank=False)
+    name = models.CharField(max_length=80, null=False, blank=False)
     abbreviation = models.CharField(max_length=20, null=True, blank=True)
-    country = models.CharField(max_length=20, null=True, blank=True)
+    country = models.CharField(max_length=50, null=True, blank=True)
     description = models.TextField(max_length=80, null=True, blank=True)
 
     def __str__(self):
@@ -176,13 +181,27 @@ class SchoolAdmin(admin.ModelAdmin):
 
 
 class Address(models.Model):
-    name = models.CharField("Full name", max_length=1024, default='home address' )
-    address1 = models.CharField("Address line 1", max_length=1024, default='address1')
-    address2 = models.CharField("Address line 2", max_length=1024, default='address2')
+    name = models.CharField("Full name", max_length=1024, default='home address')
+    default = models.BooleanField(default=False)
+    address1 = models.CharField("Address line 1", max_length=1024, default='address1',blank=False,null=False)
+    address2 = models.CharField("Address line 2", max_length=1024, default='address2',blank=True,null=True)
     zip_code = models.CharField("ZIP / Postal code", max_length=12, default='0000')
-    city = models.CharField("City", max_length=1024,default='ankara')
-    country = models.CharField("Country", max_length=20, default='turkey')
+    city = models.CharField("City", max_length=1024, default='ankara')
+    country = models.CharField("Country", max_length=50, default='turkey')
     profile = models.ForeignKey(IMUserProfile, on_delete=models.CASCADE, )
+
+    def save(self, *args, **kwargs):
+        if self.default:
+            try:
+                temp = Address.objects.get(default=True)
+                if self != temp:
+                    temp.default = False
+                    temp.save()
+            except Address.DoesNotExist:
+                pass
+        super(Address, self).save(*args, **kwargs)
+
+
 
     class Meta:
         verbose_name = "Shipping Address"
@@ -234,6 +253,7 @@ class WorkExperience(models.Model):
         ('BACHELOR_SCIENCE', 'Bachelor of Science (B.S.)'),
     )
     company = models.CharField(max_length=60, null=False, blank=False)
+    current = models.BooleanField(default=False)
     sector = models.CharField(max_length=60, null=False, blank=False)
     location = models.CharField(max_length=60, null=False, blank=False)
     title = models.CharField(max_length=50, choices=TITLE_CHOICES, default=TITLE_CHOICES[0])

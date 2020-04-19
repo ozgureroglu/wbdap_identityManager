@@ -4,46 +4,62 @@
 
 {% block page_content %}
 
-        {% csrf_token %}
+    {% csrf_token %}
 
-        <!-- Begin Page Content -->
-        <div class="container-fluid">
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
 
-          <!-- Page Heading -->
-          <h1 class="h3 mb-2 text-gray-800">Identity Manager</h1>
-          <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p>
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">Identity Manager</h1>
+        <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more
+            information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official
+                DataTables documentation</a>.</p>
 
-          <!-- DataTales Example -->
-          <div class="card shadow mb-4">
+
+        {% if request.user.is_superuser %}
+            <div class="row mb-4">
+                <div class="col"><p>Bu alanda sadece superuser islemleri yapilabilir.</p></div>
+                <div class="w-100"></div>
+                <div class="col">
+                    <a href="{% url 'identityManager: generate-user-data' %}" type="button" class="btn btn-success">Create dummy users</a>
+                    <a href="{% url 'identityManager:delete-generated-user-data' %}" type="button" class="btn btn-danger">Delete Dummy Users</a>
+                </div>
+            </div>
+
+        {% endif %}
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">
+                <h6 class="m-0 font-weight-bold text-primary">
                       <span class="icon">
                       <i class="fas fa-user"></i>
                     </span>Users</h6>
             </div>
             <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-bordered table-hover table-striped" id="wbdap_imuser_list_table" width="100%" cellspacing="0">
-                  <thead>
-                    <tr>
-                        <th>Username</th>
-                        <th>Name</th>
-                        <th>Surname</th>
-                        <th>Email</th>
-                        <th>Superuser</th>
-                        <th>Staff</th>
-                        <th>State</th>
-                        <th>Operations</th>
-                    </tr>
-                  </thead>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped" id="wbdap_imuser_list_table"
+                           width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Name</th>
+                            <th>Surname</th>
+                            <th>Email</th>
+                            <th>Superuser</th>
+                            <th>Staff</th>
+                            <th>State</th>
+                            <th>Operations</th>
+                        </tr>
+                        </thead>
 
-                </table>
-              </div>
+                    </table>
+                </div>
             </div>
-          </div>
-
         </div>
-        <!-- /.container-fluid -->
+
+    </div>
+    <!-- /.container-fluid -->
 {% endblock %}
 
 
@@ -344,8 +360,18 @@
                         editor: imuser_editor,
                         formTitle: "Create New User"
                     },
-                    {extend: "edit",text: '<i class="fas fa-user-edit"></i>', editor: imuser_editor, formTitle: "Edit User"},
-                    {extend: "remove", text: '<i class="fas fa-user-minus"></i>', editor: imuser_editor, formTitle: "Delete User"}
+                    {
+                        extend: "edit",
+                        text: '<i class="fas fa-user-edit"></i>',
+                        editor: imuser_editor,
+                        formTitle: "Edit User"
+                    },
+                    {
+                        extend: "remove",
+                        text: '<i class="fas fa-user-minus"></i>',
+                        editor: imuser_editor,
+                        formTitle: "Delete User"
+                    }
                 ],
                 rowCallback: function (row, data) {
                     // Set the checked state of the checkbox in the table
@@ -356,7 +382,7 @@
             });
 
 
-              // Add event listener for opening and closing details
+            // Add event listener for opening and closing details
             $('#wbdap_imuser_list_table tbody').on('click', 'td.details-control', function () {
                 var tr = $(this).closest('tr');
                 var row = imuser_table.row(tr);
@@ -365,8 +391,7 @@
                     // This row is already open - close it
                     row.child.hide();
                     tr.removeClass('shown');
-                }
-                else {
+                } else {
                     // Open this row
                     row.child(format(row.data())).show();
                     tr.addClass('shown');
@@ -379,7 +404,7 @@
 
                 var type = $(this).attr('class').split("-")[1];
                 objs[ename]
-                // asagidaki ilk satirdaki false, edit modali gosterme demektir.
+                    // asagidaki ilk satirdaki false, edit modali gosterme demektir.
                     {#.edit(table.rows({ selected: true}), false)#}
                     .edit($(this).closest('tr'), false)
                     .set(type, $(this).prop('checked') ? true : false)

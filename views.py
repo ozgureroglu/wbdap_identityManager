@@ -1,18 +1,22 @@
 import logging
+import os
+import random
 
 import simplejson
 from django import http
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Permission, User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import serializers
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import resolve, reverse
 from django.views.decorators.http import require_http_methods
 from django.views.generic import UpdateView
+from faker import Faker
 from formtools.wizard.views import SessionWizardView
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -20,8 +24,7 @@ from rest_framework.status import HTTP_500_INTERNAL_SERVER_ERROR, HTTP_200_OK
 
 from applicationManager.models import Application
 from .forms import *
-from .models import IMUser, IMGroup, IMRole, IMUserProfile
-
+from .models import IMUser, IMGroup, IMRole, IMUserProfile, School, Degree
 
 #Get an instance of the logger: Name should be the name of the logger in custom_settings LOGGING field
 
@@ -131,28 +134,37 @@ def generate_user_data(request):
         from random import choice
 
         for x in range(1, 5):
-            # with open('/bin/datagenetor/names') as names:
-            #     for line in names:
-            #         print
-            #         line
-            min_char = 3
-            max_char = 14
-            allchar = string.ascii_letters + string.digits
+            with open(os.path.join(settings.SITE_ROOT,'bin/dataGenerator/names')) as names:
+                with open(os.path.join(settings.SITE_ROOT, 'bin/dataGenerator/surnames')) as surnames:
+                    name = random.choice(names.readlines()).strip('\n')
+                    surname = random.choice(surnames.readlines()).strip('\n')
+                    print(name)
+                    print(surname)
 
-            name = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
-            surname = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
+                    # min_char = 3
+                    # max_char = 14
+                    # allchar = string.ascii_letters + string.digits
 
-            user = IMUser()
-            user.username = name[0].lower() + surname.lower()
-            print(user.username)
-            user.email = user.username + '@wbdap.test.com'
-            print(user.email)
-            user.first_name = name
-            user.last_name = surname
-            user.password = surname
-            user.is_superuser = False
-            user.save()
+                    # name = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
+                    # surname = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
+
+                    user = IMUser()
+                    user.username = name[0].lower() + surname.lower()
+                    print(user.username)
+                    user.email = user.username + '@wbdap.test.com'
+                    print(user.email)
+                    user.first_name = name
+                    user.last_name = surname
+                    user.password = surname
+                    user.is_superuser = False
+                    user.dummy = True
+                    user.save()
         return redirect('identityManager:imUser')
+
+
+def delete_generated_user_data(request):
+    IMUser.objects.filter(dummy=True).delete()
+    return redirect('identityManager:imUser')
 
 @login_required()
 def generate_group_data(request):
@@ -625,6 +637,80 @@ def dashboard(request):
         return render(request, 'login')
 
 # TODO : Profillerin gorunmesi icin login gerekli olmayabilir: ornegin Linkedin public profile secenegi var.
+
+
+def fillprofile(profile: IMUserProfile):
+    """
+    Generate Fake Profile Data
+    """
+    faker = Faker()
+
+    profile.aboutMe = faker.text()
+    profile.cellularPhone = faker.phone_number()
+    # profile.company = faker.company()
+    profile.gender = random.choice([True, False, None])
+    profile.dateOfBirth = faker.date()
+    # profile.jobTitle = faker.job()
+    profile.siteUrl = faker.domain_name()
+    print(profile)
+
+    for i in range(3):
+        address = Address()
+        address.profile = profile
+        address.default =True
+        address.name = random.choice(['home','work','school'])
+        address.address1 = faker.street_address()
+        address.address2 = None
+        address.zip_code = faker.postcode()
+        address.city = faker.city()
+        address.country = faker.country()
+        address.save()
+
+    for i in range(4):
+        wexp = WorkExperience()
+        wexp.profile = profile
+        wexp.company = faker.company()
+        wexp.sector = faker.word()
+        wexp.location = faker.city()
+        wexp.title = faker.job()
+        wexp.technology = faker.text()
+        wexp.startDate = faker.date()
+        wexp.finishDate = faker.date()
+        wexp.description = faker.text()
+        wexp.save()
+
+    for i in range(2):
+        ed = Education()
+        ed.profile = profile
+        with open(os.path.join(settings.SITE_ROOT, 'bin/dataGenerator/uni_en')) as names:
+            sch = School()
+            sch.name = random.choice(names.readlines()).strip('\n')
+            sch.abbreviation = sch.name[0:5].replace(' ','')
+            sch.country = faker.country()
+            sch.description = faker.text()
+            sch.save()
+            ed.school = sch
+
+        with open(os.path.join(settings.SITE_ROOT, 'bin/dataGenerator/degrees')) as names:
+            deg = Degree()
+            deg.name = random.choice(names.readlines()).strip('\n')
+            deg.abbreviation = deg.name[0:4].replace(' ','')
+            deg.save()
+            ed.degree = deg
+            ed.field = ed.degree.name
+
+        ed.grade = random.uniform(0.0,4.0)
+        ed.startDate = faker.date()
+        ed.finishDate = faker.date()
+        ed.activities = random.choice(['ski','painting','football','baseball','riding','stamp collection'])
+        ed.description = faker.text()
+        ed.save()
+
+
+    return profile
+
+
+
 @login_required
 def view_user_profile(request, pk):
 
@@ -639,7 +725,8 @@ def view_user_profile(request, pk):
 
         requestingUser = request.user
 
-        # Eger url'e herhangi bir pk degeri gecmemisse kullanicinin  kendi sayfasina donelim.
+        # Eger url'e herhangi bir pk degeri gecmemisse kullanicinin kendi sayfasina donelim.
+        # Bu ancak kullanici profile sayfasina manuel olarak erismeye calisiyorsa olacaktir.
         if(pk is None):
             pk = requestingUser.id
 
@@ -647,13 +734,19 @@ def view_user_profile(request, pk):
         try:
             profile_owner = IMUser.objects.get(id=pk)
         except Exception as e:
-            print(e)
-            mess = "No profile for the user exists"
-            messages.add_message(request, messages.ERROR, mess)
-            return render(request, 'identityManager/dashboard.html')
+            msg = "Requested user profile does not exist"
+            logger.warning(msg)
+            messages.add_message(request, messages.ERROR, msg)
+            raise Http404(msg)
+            # return render(request, 'identityManager/dashboard.html')
+
 
         profile, created = IMUserProfile.objects.get_or_create(owner_id=pk)
 
+        print("created :"+str(created))
+        if created and profile_owner.dummy :
+            profile = fillprofile(profile)
+            profile.save()
         educationalRec = profile.education_set.all()
         workExperienceRec = profile.workexperience_set.all()
 
