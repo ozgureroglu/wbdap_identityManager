@@ -150,9 +150,16 @@ def generate_user_data(request):
             user.first_name = name
             user.last_name = surname
             user.password = surname
+            user.dummy = True
             user.is_superuser = False
             user.save()
         return redirect('identityManager:imUser')
+
+@login_required()
+def delete_generated_user_data(request):
+    IMUser.objects.filter(dummy=True).delete()
+    return redirect('identityManager:imUser')
+
 
 @login_required()
 def generate_group_data(request):

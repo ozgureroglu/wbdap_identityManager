@@ -13,6 +13,21 @@
           <h1 class="h3 mb-2 text-gray-800">Identity Manager</h1>
           <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p>
 
+
+
+        {% if request.user.is_superuser %}
+            <div class="row mb-4">
+                <div class="col"><p>Bu alanda sadece superuser islemleri yapilabilir.</p></div>
+                <div class="w-100"></div>
+                <div class="col">
+                    <a href="{% url 'identityManager: generate-user-data' %}" type="button" class="btn btn-success">Create dummy users</a>
+                    <a href="{% url 'identityManager:delete-generated-user-data' %}" type="button" class="btn btn-danger">Delete Dummy Users</a>
+                </div>
+            </div>
+
+        {% endif %}
+
+
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">

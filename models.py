@@ -11,6 +11,7 @@ from django.db import models
 class IMUser(User):
     ss = models.CharField(max_length=10, blank=True)
     generated = models.BooleanField(null=False, blank=True, default=False)
+    dummy = models.BooleanField(default=False, null=False, blank=False)
 
     def __str__(self):
         return self.first_name
