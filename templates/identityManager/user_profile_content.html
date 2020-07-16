@@ -7,7 +7,7 @@
 {#                <img class="img-fluid rounded-circle mx-auto d-block" src="{% static "identityManager/images/woman_profile.jpg" %}" alt="John">#}
                 <span class="mt-4 mb-4"><a href="#"><i class="fas fa-user fa-6x"></i></a></span>
                 <h3 class="profile_owner_name">{{ profileOwner.first_name| capfirst }} {{ profileOwner.last_name| capfirst }}</h3>
-                <p class="profiletitle">CEO & Founder, Example</p>
+                <p class="profiletitle">{{profile.currentJob}}</p>
                 <p>Harvard University</p>
                 <div class="mb-4">
                     <a href="#"><i class="fab fa-dribbble"></i></a>
