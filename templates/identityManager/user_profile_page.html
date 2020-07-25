@@ -59,6 +59,15 @@
 {% endblock %}
 
 
+{% block head__jscript %}
+    {{ block.super }}
+
+    <!-- development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+{% endblock %}
+
+
 {% block page_content %}
 {#    {{ block.super }}#}
     {% include "identityManager/user_profile_content.html" %}

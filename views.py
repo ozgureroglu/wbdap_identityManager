@@ -664,7 +664,7 @@ def view_user_profile(request, pk):
         educationalRec = profile.education_set.all()
         workExperienceRec = profile.workexperience_set.all()
 
-        variables =  {
+        variables = {
             'username': requestingUser.username,
 
             'profile': profile,
