@@ -78,11 +78,22 @@ def application_removed(sender, **kwargs):
     print('\n---------------\nApp delete event captured from identity manager')
     app_name = kwargs['application'].app_name
 
-    app_user_group = IMGroup.objects.get(name = app_name+'_users')
-    app_user_group.delete()
+    # Delete idnetites only if they exist
+    try:
+        app_user_group = IMGroup.objects.get(name = app_name+'_users')
+        app_user_group.delete()
+    except IMGroup.DoesNotExist:
+        pass
 
-    app_admin_group = IMGroup.objects.get(name=app_name + '_admins')
-    app_admin_group.delete()
 
-    app_admin_role = IMRole.objects.get(name=app_name + '_admin')
-    app_admin_role.delete()
+    try:
+        app_admin_group = IMGroup.objects.get(name=app_name + '_admins')
+        app_admin_group.delete()
+    except IMGroup.DoesNotExist:
+        pass
+
+    try:
+        app_admin_role = IMRole.objects.get(name=app_name + '_admin')
+        app_admin_role.delete()
+    except IMRole.DoesNotExist:
+        pass
