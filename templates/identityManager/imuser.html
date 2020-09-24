@@ -1,4 +1,4 @@
-{% extends 'projectCore/startbootstrap-sb-admin-2-gh-pages/sb_admin2_index_template.html' %}
+{% extends 'identityManager/base.html' %}
 {% load static %}
 
 
@@ -41,6 +41,7 @@
                 <table class="table table-bordered table-hover table-striped" id="wbdap_imuser_list_table" width="100%" cellspacing="0">
                   <thead>
                     <tr>
+                    <th></th>
                         <th>Username</th>
                         <th>Name</th>
                         <th>Surname</th>
@@ -220,6 +221,14 @@
             });
 
 
+                // Activate an inline edit on click of a table cell
+            $('#wbdap_imuser_list_table').on( 'click', 'tbody td:not(:first-child)', function (e) {
+                imuser_editor.inline( imuser_table.cell(this).index(), {
+                       submit: 'allIfChanged'
+                    } );
+            } );
+
+
             imuser_editor.on('edit', function (e, json, data) {
                 if (json.error == "") {
                     show_snackbar('top_snackbar', 'Row has been updated');
@@ -239,6 +248,10 @@
                 "serverSide": true,
                 {#"responsive": true,#}
                 {#"order": [[ 1, 'asc' ], [ 2, 'asc' ]],#}
+                select: {
+                    style:    'os',
+                    selector: 'td:first-child'
+                },
                 "ajax": {
                     url: "/api/v1/identityManager/imuser/?format=json",
                     dataSrc: 'results',
@@ -267,18 +280,13 @@
                     }
                 },
                 "columns": [
-                    {#{#}
-                    {#    data: null,#}
-                    {#    defaultContent: '',#}
-                    {#    className: 'select-checkbox not_editable',#}
-                    {#    orderable: false#}
-                    //{#},#}
-                    {#{#}
-                    {#    "className": 'details-control',#}
-                    {#    "orderable": false,#}
-                    {#    "data": null,#}
-                    {#    "defaultContent": ''#}
-                    //{#},#}
+
+                    {
+                        data: null,
+                        defaultContent: '',
+                        className: 'select-checkbox',
+                        orderable: false
+                    },
                     {
                         "data": "username",
                         render: function (data, type, row) {
@@ -325,9 +333,10 @@
                     {#{"data": "last_login", className: "not_editable"},#}
                     {
                         data: null,
-                        render: function (data, type, row, meta) {
+                        render: function (data, type, row) {
                             return '<div class="btn-group">\n' +
-                                '  <button type="button" class="btn btn-sm btn-primary dropdown-toggle" style="border-color: white" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>\n' +
+                                '  <a href="settings/'+ row.id +'/">\n' +
+                                '<i class="fas fa-user-cog"></i></a>\n' +
                                 '  <div class="dropdown-menu" >\n' +
                                 '    <a class="dropdown-item passwd_change" style="color: #3a3b45" href="#" data-toggle="modal" data-target="#passwdChangeModal" data-user-id="' + row.id + '">Change Password</a>\n' +
                                 '    <a class="dropdown-item" style="color: #3a3b45" href="#">Another action</a>\n' +
@@ -343,12 +352,7 @@
 
 
                 ],
-                select: {
-                    style: 'single',
-                    selector: 'td:not(:first-child)', // no row selection on last column
-                    blurable: true,
-                    class: 'row-selected'
-                },
+
                 buttons: [
                     //https://datatables.net/forums/discussion/30295/editor-form-title
                     // add icon to datatables button
@@ -390,19 +394,17 @@
 
 
             $('#wbdap_imuser_list_table').on('click', "input:checkbox", function () {
-                // console.log( $( this ).attr('class') );
+                console.log( $( this ).attr('class') );
 
                 var type = $(this).attr('class').split("-")[1];
-                objs[ename]
+                imuser_editor
                 // asagidaki ilk satirdaki false, edit modali gosterme demektir.
                     {#.edit(table.rows({ selected: true}), false)#}
                     .edit($(this).closest('tr'), false)
                     .set(type, $(this).prop('checked') ? true : false)
                     .submit();
             });
-
-        })
-        ;
+        });
 
     </script>
 

@@ -77,6 +77,16 @@ def imUser(request):
 
 
 
+
+@login_required()
+def imUserSettings(request,pk):
+
+    return render(request,
+        'identityManager/imuserSettings.html',{}
+    )
+
+
+
 @login_required()
 def add_imuser(request):
     if request.method == 'POST':

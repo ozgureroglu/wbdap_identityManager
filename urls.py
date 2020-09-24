@@ -28,6 +28,7 @@ urlpatterns = [
     # path('',index_page,name='index'),
     path('', landing_page, name='landing-page'),
     path('imuser/', imUser, name='imUser'),
+    path('imuser/settings/<int:pk>/', imUserSettings, name='imUser-settings'),
     path('imuser/gen/', generate_user_data, name=' generate-user-data'),
     path('imuser/delgen/', delete_generated_user_data, name='delete-generated-user-data'),
     path('imuser/add/', add_imuser, name='addUser'),
@@ -40,7 +41,7 @@ urlpatterns = [
     # ------------------------------------------------------------
 
     path('imgroup/', imGroup, name='imGroup'),
-    path('imuser/gen/', generate_group_data, name=' generate-group-data'),
+    path('imgroup/gen/', generate_group_data, name=' generate-group-data'),
     path('imgroup/<int:pk>/', imgroup_home, name='imgroup_home'),
     path('imgroup/<int:pk>/memberUser/add/', addMemberUser, name='addMemberUser'),
     path('imgroup/<int:pk>/memberUser/remove/<int:id>/', removeMemberUser, name='removeMemberUser'),

@@ -1,10 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'projectCore/startbootstrap-sb-admin-2-gh-pages/sb_admin2_index_template.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block application_links %}
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        {{ current_app_name }}
+    </div>
+
+                                <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseIM"
+           aria-expanded="true" aria-controls="collapseIM">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Identity Management</span>
+        </a>
+        <div id="collapseIM" class="collapse" aria-labelledby="headingTwo"
+             data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Identity Management</h6>
+                <a class="collapse-item" href="{% url 'identityManager:imUser' %}">Users</a>
+                <a class="collapse-item" href="{% url 'identityManager:imGroup' %}">Groups</a>
+                <a class="collapse-item" href="{% url 'identityManager:imRole' %}">Roles</a>
+            </div>
+        </div>
+    </li>
+
+{% endblock %}
+
+
