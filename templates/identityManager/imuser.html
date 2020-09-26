@@ -222,7 +222,7 @@
 
 
                 // Activate an inline edit on click of a table cell
-            $('#wbdap_imuser_list_table').on( 'click', 'tbody td:not(:first-child)', function (e) {
+            $('#wbdap_imuser_list_table').on( 'click', 'tbody td:not(:first-child, :nth-child(2))', function (e) {
                 imuser_editor.inline( imuser_table.cell(this).index(), {
                        submit: 'allIfChanged'
                     } );
