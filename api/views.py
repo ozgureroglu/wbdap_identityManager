@@ -375,7 +375,7 @@ class IMRoleAssignedGroupCreateAPIView(CreateAPIView):
             imrole=IMRole.objects.get(id=self.kwargs['pk'])
             print(request.data['name'])
             groups_list = request.data['name']
-            print(groups)
+            print(groups_list)
             groups = groups_list.rstrip(', ').split(',')
             print(groups)
             for group in groups:
