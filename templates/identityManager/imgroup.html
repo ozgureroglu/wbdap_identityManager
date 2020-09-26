@@ -27,6 +27,7 @@
                            cellspacing="0">
                         <thead>
                         <tr>
+                            <th></th>
                             <th>Name</th>
                             <th>Description</th>
                             <th>Active</th>
@@ -93,7 +94,7 @@
                         },
                         success: function (d) {
                             console.log('success');
-                            table.row.add(d).draw(false)
+                            imgroup_table.row.add(d).draw(false)
                         }
                     },
                     edit: {
@@ -124,7 +125,7 @@
                         },
                         success: function (d) {
                             console.log('success');
-                            table.row.add(d).draw(false)
+                            imgroup_table.row.add(d).draw(false)
                         }
 
                     },
@@ -164,8 +165,15 @@
                 ]
             });
 
+            // Activate an inline edit on click of a table cell
+            $('#wbdap_imgroup_list_table').on('click', 'tbody td:not(:first-child)', function (e) {
+                imgroup_editor.inline(imgroup_table.cell(this).index(),{
+                    submit: 'allIfChanged'
+                });
+            });
 
-            var table = $('#wbdap_imgroup_list_table').DataTable({
+
+            var imgroup_table = $('#wbdap_imgroup_list_table').DataTable({
                 "scrollY": "500px",
                 "scrollCollapse": true,
                 "dom": 'Bfrtip',
@@ -204,12 +212,12 @@
                     }
                 },
                 "columns": [
-                    {#{#}
-                    {#    data: null,#}
-                    {#    defaultContent: '',#}
-                    {#    className: 'select-checkbox not_editable',#}
-                    {#    orderable: false#}
-                    //{#},#}
+                    {
+                        data: null,
+                        defaultContent: '',
+                        className: 'select-checkbox',
+                        orderable: false
+                    },
                     {"data": "name", orderData: 1, targets: 1},
                     {"data": "description", orderData: 2, targets: 2},
                     {
@@ -231,7 +239,10 @@
                         orderable: false
                     },
                 ],
-                select: true,
+                select: {
+                    style: 'os',
+                    selector: 'td:first-child'
+                },
                 buttons: [
                     {extend: "create", editor: imgroup_editor},
                     {extend: "edit", editor: imgroup_editor},
@@ -240,8 +251,6 @@
             });
 
             {#------------------------------------------------------------------------------------------------------#}
-
-
 
 
         })
